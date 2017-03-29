@@ -2,16 +2,20 @@ package simpletable
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
+	"strings"
+
+	//"github.com/davecgh/go-spew/spew"
 )
 
 type Table struct {
-	Header  *Header
-	Body    *Body
-	Footer  *Footer
-	style   *Style
-	rows    []*Row
-	columns []*Column
+	Header   *Header
+	Body     *Body
+	Footer   *Footer
+	style    *Style
+	rows     []*Row
+	columns  []*Column
+	spanned  []*TextCell
+	dividers []*Divider
 }
 
 func (t *Table) SetStyle(style *Style) {
@@ -19,9 +23,17 @@ func (t *Table) SetStyle(style *Style) {
 }
 
 func (t *Table) String() string {
-	t.prepare()
+	t.prepareRows()
+	t.prepareColumns()
+	t.resizeColumns()
 
-	return ""
+	s := []string{}
+
+	for _, r := range t.rows {
+		s = append(s, r.String())
+	}
+
+	return strings.Join(s, "\n")
 }
 
 func (t *Table) Print() {
@@ -30,11 +42,6 @@ func (t *Table) Print() {
 
 func (t *Table) Println() {
 	fmt.Println(t.String())
-}
-
-func (t *Table) prepare() {
-	t.prepareRows()
-	t.prepareColumns()
 }
 
 func (t *Table) prepareRows() {
@@ -64,7 +71,7 @@ func (t *Table) prepareRows() {
 		t.rows = append(t.rows, &Row{
 			Cells: []Cell{
 				&Divider{
-					Span: flen,
+					Span: hlen,
 				},
 			},
 		})
@@ -84,22 +91,41 @@ func (t *Table) prepareColumns() {
 		for _, c := range r.Cells {
 			row = append(row, c)
 			span := 0
-			var p Parent
+			var p Cell
+			var tc *TextCell
 
 			switch v := c.(type) {
 			case *TextCell:
 				span = v.Span
 				p = v
+				tc = v
 			case *Divider:
 				span = v.Span
 				p = v
 			}
 
 			if span > 1 {
+				empty := []*EmptyCell{}
+
 				for i := 1; i < span; i++ {
-					row = append(row, &EmptyCell{
+					empty = append(empty, &EmptyCell{
 						parent: p,
 					})
+				}
+
+				for _, c := range empty {
+					row = append(row, c)
+				}
+
+				if tc != nil {
+					t.spanned = append(t.spanned, tc)
+				}
+
+				switch v := c.(type) {
+				case *TextCell:
+					v.children = empty
+				case *Divider:
+					v.children = empty
 				}
 			}
 		}
@@ -108,7 +134,17 @@ func (t *Table) prepareColumns() {
 	}
 
 	m = t.transposeCells(m)
-	spew.Dump(m)
+	for _, r := range m {
+		c := &Column{
+			Cells: r,
+		}
+
+		for _, cell := range c.Cells {
+			cell.SetColumn(c)
+		}
+
+		t.columns = append(t.columns, c)
+	}
 }
 
 func (t *Table) transposeCells(i [][]Cell) [][]Cell {
@@ -127,6 +163,25 @@ func (t *Table) transposeCells(i [][]Cell) [][]Cell {
 	return r
 }
 
+func (t *Table) resizeColumns() {
+	for _, c := range t.columns {
+		c.Resize()
+	}
+
+	for _, c := range t.spanned {
+		c.Resize()
+	}
+
+	for _, d := range t.dividers {
+		s := t.size()
+		d.SetWidth(s)
+	}
+}
+
+func (t *Table) size() int {
+	return 0
+}
+
 func New() *Table {
 	return &Table{
 		style: StyleDefault,
@@ -139,7 +194,9 @@ func New() *Table {
 		Footer: &Footer{
 			Cells: []Cell{},
 		},
-		rows:    []*Row{},
-		columns: []*Column{},
+		rows:     []*Row{},
+		columns:  []*Column{},
+		spanned:  []*TextCell{},
+		dividers: []*Divider{},
 	}
 }
