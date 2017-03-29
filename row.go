@@ -1,23 +1,27 @@
 package simpletable
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Row struct {
-	columns []*Column
+	Cells []Cell
 }
 
-func (r *Row) AddColumn(c *Column) {
-	r.columns = append(r.columns, c)
-}
+func (r *Row) String() string {
+	s := []string{}
 
-func (r *Row) Columns() []*Column {
-	return r.columns
-}
-
-func (r *Row) Len() int {
-	return len(r.columns)
-}
-
-func newRow() *Row {
-	return &Row{
-		columns: []*Column{},
+	for _, c := range r.Cells {
+		s = append(s, c.String())
 	}
+
+	c := strings.Join(s, " | ")
+
+	switch r.Cells[0].(type) {
+	case *Divider:
+		return c
+	}
+
+	return fmt.Sprintf(" %s ", c)
 }
