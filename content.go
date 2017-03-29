@@ -19,15 +19,18 @@ func (c *Content) Height() int {
 	return len(c.lines)
 }
 
-func (c *Content) String() string {
+func (c *Content) StringSlice(width int) []string {
 	s := []string{}
+	if c.maxLineWidth > width {
+		width = c.maxLineWidth
+	}
 
 	for _, l := range c.lines {
 		w := utf8.RuneCountInString(l)
-		s = append(s, fmt.Sprintf("%s%s", l, strings.Repeat(" ", c.maxLineWidth-w)))
+		s = append(s, fmt.Sprintf("%s%s", l, strings.Repeat(" ", width-w)))
 	}
 
-	return strings.Join(s, "\n")
+	return s
 }
 
 func newContent(t string) *Content {
