@@ -1,6 +1,9 @@
 package simpletable
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Row struct {
 	Cells []Cell
@@ -13,5 +16,12 @@ func (r *Row) String() string {
 		s = append(s, c.String())
 	}
 
-	return strings.Join(s, " | ")
+	c := strings.Join(s, " | ")
+
+	switch r.Cells[0].(type) {
+	case *Divider:
+		return c
+	}
+
+	return fmt.Sprintf(" %s ", c)
 }
