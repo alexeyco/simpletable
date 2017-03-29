@@ -1,118 +1,209 @@
 package simpletable
 
 import (
-	"errors"
 	"fmt"
 	"strings"
-)
-
-const(
-	AlignLeft = "left"
-	AlignCenter = "right"
-	AlignRight = "center"
+	"unicode/utf8"
 )
 
 type Table struct {
-	style  *Style
-	align  []string
-	header *Row
-	rows   []*Row
+	Header   *Header
+	Body     *Body
+	Footer   *Footer
+	style    *Style
+	rows     []*Row
+	columns  []*Column
+	spanned  []*TextCell
+	dividers []*Divider
 }
 
 func (t *Table) SetStyle(style *Style) {
 	t.style = style
 }
 
-func (t *Table) SetAlign(align ...string) {
-	t.align = align
-}
-
-func (t *Table) AddRow(columns ...string) error {
-	if len(columns) != t.header.Len() {
-		err := fmt.Sprintf("Row [%s] must contain %d columns", strings.Join(columns, ", "), t.header.Len())
-		return errors.New(err)
-	}
-
-	r := newRow()
-	for _, c := range columns {
-		r.AddColumn(&Column{
-			content: newContent(c),
-		})
-	}
-
-	t.rows = append(t.rows, r)
-	return nil
-}
-
 func (t *Table) String() string {
-	c := []string{}
-	widths := t.widths()
+	t.prepareRows()
+	t.prepareColumns()
+	t.resizeColumns()
 
-	align := []string{}
-	for i := 0; i < t.header.Len(); i++ {
-		align = append(align, AlignCenter)
+	s := []string{}
+
+	for _, r := range t.rows {
+		s = append(s, r.String())
 	}
 
-	c = append(c, t.header.SetAlign(align...).String(widths...))
-	c = append(c, t.line("╪", widths...))
-
-	for _, col := range t.rows {
-		c = append(c, col.SetAlign(t.align...).String(widths...))
-	}
-
-	return strings.Join(c, "\n")
+	return strings.Join(s, "\n")
 }
 
 func (t *Table) Print() {
+	fmt.Print(t.String())
+}
+
+func (t *Table) Println() {
 	fmt.Println(t.String())
 }
 
-func (t *Table) widths() []int {
-	w := []int{}
-	for _, c := range t.header.Columns() {
-		w = append(w, c.Content().Width())
+func (t *Table) prepareRows() {
+	hlen := len(t.Header.Cells)
+	if hlen > 0 {
+		t.rows = append(t.rows, &Row{
+			Cells: t.Header.Cells,
+		})
+
+		d := &Divider{
+			Span: hlen,
+		}
+
+		t.rows = append(t.rows, &Row{
+			Cells: []Cell{
+				d,
+			},
+		})
+
+		t.dividers = append(t.dividers, d)
 	}
 
+	for _, r := range t.Body.Cells {
+		t.rows = append(t.rows, &Row{
+			Cells: r,
+		})
+	}
+
+	flen := len(t.Footer.Cells)
+	if flen > 0 {
+		d := &Divider{
+			Span: hlen,
+		}
+
+		t.rows = append(t.rows, &Row{
+			Cells: []Cell{
+				d,
+			},
+		})
+
+		t.dividers = append(t.dividers, d)
+
+		t.rows = append(t.rows, &Row{
+			Cells: t.Footer.Cells,
+		})
+	}
+}
+
+func (t *Table) prepareColumns() {
+	m := [][]Cell{}
+
 	for _, r := range t.rows {
-		for i, c := range r.Columns() {
-			l := c.Content().Width()
-			if w[i] < l {
-				w[i] = l
+		row := []Cell{}
+
+		for _, c := range r.Cells {
+			row = append(row, c)
+			span := 0
+			var p Cell
+			var tc *TextCell
+
+			switch v := c.(type) {
+			case *TextCell:
+				span = v.Span
+				p = v
+				tc = v
+			case *Divider:
+				span = v.Span
+				p = v
 			}
+
+			if span > 1 {
+				empty := []*EmptyCell{}
+
+				for i := 1; i < span; i++ {
+					empty = append(empty, &EmptyCell{
+						parent: p,
+					})
+				}
+
+				for _, c := range empty {
+					row = append(row, c)
+				}
+
+				if tc != nil {
+					t.spanned = append(t.spanned, tc)
+				}
+
+				switch v := c.(type) {
+				case *TextCell:
+					v.children = empty
+				case *Divider:
+					v.children = empty
+				}
+			}
+		}
+
+		m = append(m, row)
+	}
+
+	m = t.transposeCells(m)
+	for _, r := range m {
+		c := &Column{
+			Cells: r,
+		}
+
+		for _, cell := range c.Cells {
+			cell.SetColumn(c)
+		}
+
+		t.columns = append(t.columns, c)
+	}
+}
+
+func (t *Table) transposeCells(i [][]Cell) [][]Cell {
+	r := [][]Cell{}
+
+	for x := 0; x < len(i[0]); x++ {
+		r = append(r, make([]Cell, len(i)))
+	}
+
+	for x, row := range i {
+		for y, c := range row {
+			r[y][x] = c
 		}
 	}
 
-	return w
+	return r
 }
 
-func (t *Table) line(sep string, widths ...int) string {
-	s := []string{}
-
-	for _, w := range widths {
-		s = append(s, strings.Repeat("═", w))
+func (t *Table) resizeColumns() {
+	for _, c := range t.columns {
+		c.Resize()
 	}
 
-	return fmt.Sprintf("═%s═", strings.Join(s, fmt.Sprintf("═%s═", sep)))
+	for _, c := range t.spanned {
+		c.Resize()
+	}
+
+	for _, d := range t.dividers {
+		s := t.size()
+		d.SetWidth(s)
+	}
 }
 
-func New(headers ...string) *Table {
-	header := &Row{}
-	align := []string{}
+func (t *Table) size() int {
+	return utf8.RuneCountInString(t.rows[0].String())
+}
 
-	for _, h := range headers {
-		header.AddColumn(&Column{
-			content: newContent(h),
-		})
-
-		align = append(align, AlignLeft)
-	}
-
-	header.Capitalize()
-
+func New() *Table {
 	return &Table{
-		style:  StyleSimpleMinimalistic,
-		align:  align,
-		header: header,
-		rows:   []*Row{},
+		style: StyleDefault,
+		Header: &Header{
+			Cells: []Cell{},
+		},
+		Body: &Body{
+			Cells: [][]Cell{},
+		},
+		Footer: &Footer{
+			Cells: []Cell{},
+		},
+		rows:     []*Row{},
+		columns:  []*Column{},
+		spanned:  []*TextCell{},
+		dividers: []*Divider{},
 	}
 }

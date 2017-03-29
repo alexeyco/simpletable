@@ -6,72 +6,22 @@ import (
 )
 
 type Row struct {
-	align   []string
-	columns []*Column
+	Cells []Cell
 }
 
-func (r *Row) AddColumn(c *Column) {
-	r.columns = append(r.columns, c)
-}
-
-func (r *Row) Columns() []*Column {
-	return r.columns
-}
-
-func (r *Row) Len() int {
-	return len(r.columns)
-}
-
-func (r *Row) Height() int {
-	height := 0
-	for _, c := range r.columns {
-		h := c.Content().Height()
-
-		if height < h {
-			height = h
-		}
-	}
-
-	return height
-}
-
-func (r *Row) Capitalize() *Row {
-	for _, c := range r.columns {
-		c.Content().Capitalize()
-	}
-
-	return r
-}
-
-func (r *Row) SetAlign(align ...string) *Row {
-	r.align = align
-	return r
-}
-
-func (r *Row) String(widths ...int) string {
-	d := [][]string{}
-
-	for n, c := range r.columns {
-		d = append(d, c.Content().StringSlice(widths[n], r.align[n]))
-	}
-
+func (r *Row) String() string {
 	s := []string{}
-	for l := 0; l < r.Height(); l++ {
-		t := []string{}
 
-		for _, col := range d {
-			t = append(t, col[l])
-		}
-
-		s = append(s, strings.Join(t, " │ "))
+	for _, c := range r.Cells {
+		s = append(s, c.String())
 	}
 
-	return fmt.Sprintf(" %s ", strings.Join(s, "\n"))
-}
+	c := strings.Join(s, " | ")
 
-func newRow() *Row {
-	return &Row{
-		columns: []*Column{},
-		align:   []string{},
+	switch r.Cells[0].(type) {
+	case *Divider:
+		return c
 	}
+
+	return fmt.Sprintf(" %s ", c)
 }
