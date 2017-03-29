@@ -1,11 +1,12 @@
 package simpletable
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 type Row struct {
+	align   []string
 	columns []*Column
 }
 
@@ -34,11 +35,24 @@ func (r *Row) Height() int {
 	return height
 }
 
+func (r *Row) Capitalize() *Row {
+	for _, c := range r.columns {
+		c.Content().Capitalize()
+	}
+
+	return r
+}
+
+func (r *Row) SetAlign(align ...string) *Row {
+	r.align = align
+	return r
+}
+
 func (r *Row) String(widths ...int) string {
 	d := [][]string{}
 
 	for n, c := range r.columns {
-		d = append(d, c.Content().StringSlice(widths[n]))
+		d = append(d, c.Content().StringSlice(widths[n], r.align[n]))
 	}
 
 	s := []string{}
@@ -58,5 +72,6 @@ func (r *Row) String(widths ...int) string {
 func newRow() *Row {
 	return &Row{
 		columns: []*Column{},
+		align:   []string{},
 	}
 }

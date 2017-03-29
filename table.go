@@ -6,9 +6,25 @@ import (
 	"strings"
 )
 
+const(
+	AlignLeft = "left"
+	AlignCenter = "right"
+	AlignRight = "center"
+)
+
 type Table struct {
+	style  *Style
+	align  []string
 	header *Row
 	rows   []*Row
+}
+
+func (t *Table) SetStyle(style *Style) {
+	t.style = style
+}
+
+func (t *Table) SetAlign(align ...string) {
+	t.align = align
 }
 
 func (t *Table) AddRow(columns ...string) error {
@@ -32,11 +48,16 @@ func (t *Table) String() string {
 	c := []string{}
 	widths := t.widths()
 
-	c = append(c, t.header.String(widths...))
-	c = append(c, t.line(widths...))
+	align := []string{}
+	for i := 0; i < t.header.Len(); i++ {
+		align = append(align, AlignCenter)
+	}
+
+	c = append(c, t.header.SetAlign(align...).String(widths...))
+	c = append(c, t.line("╪", widths...))
 
 	for _, col := range t.rows {
-		c = append(c, col.String(widths...))
+		c = append(c, col.SetAlign(t.align...).String(widths...))
 	}
 
 	return strings.Join(c, "\n")
@@ -64,26 +85,33 @@ func (t *Table) widths() []int {
 	return w
 }
 
-func (t *Table) line(widths ...int) string {
+func (t *Table) line(sep string, widths ...int) string {
 	s := []string{}
 
 	for _, w := range widths {
 		s = append(s, strings.Repeat("═", w))
 	}
 
-	return fmt.Sprintf("═%s═", strings.Join(s, "═╪═"))
+	return fmt.Sprintf("═%s═", strings.Join(s, fmt.Sprintf("═%s═", sep)))
 }
 
 func New(headers ...string) *Table {
 	header := &Row{}
+	align := []string{}
 
 	for _, h := range headers {
 		header.AddColumn(&Column{
 			content: newContent(h),
 		})
+
+		align = append(align, AlignLeft)
 	}
 
+	header.Capitalize()
+
 	return &Table{
+		style:  StyleSimpleMinimalistic,
+		align:  align,
 		header: header,
 		rows:   []*Row{},
 	}

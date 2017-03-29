@@ -19,7 +19,17 @@ func (c *Content) Height() int {
 	return len(c.lines)
 }
 
-func (c *Content) StringSlice(width int) []string {
+func (c *Content) Capitalize() {
+	r := []string{}
+
+	for _, l := range c.lines {
+		r = append(r, strings.ToUpper(l))
+	}
+
+	c.lines = r
+}
+
+func (c *Content) StringSlice(width int, align string) []string {
 	s := []string{}
 	if c.maxLineWidth > width {
 		width = c.maxLineWidth
@@ -27,7 +37,14 @@ func (c *Content) StringSlice(width int) []string {
 
 	for _, l := range c.lines {
 		w := utf8.RuneCountInString(l)
-		s = append(s, fmt.Sprintf("%s%s", l, strings.Repeat(" ", width-w)))
+
+		switch align {
+		case AlignRight:
+			s = append(s, fmt.Sprintf("%s%s", strings.Repeat(" ", width-w), l))
+		case AlignCenter:
+		default:
+			s = append(s, fmt.Sprintf("%s%s", l, strings.Repeat(" ", width-w)))
+		}
 	}
 
 	return s
