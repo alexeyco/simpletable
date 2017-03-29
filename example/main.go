@@ -1,33 +1,57 @@
 package main
 
 import (
-	"log"
-
 	"github.com/alexeyco/simpletable"
 )
 
-var data = [][]string{
-	{"1", "Newton G. Goetz", "252-585-5166", "NewtonGGoetz@dayrep.com"},
-	{"2", "Rebecca R. Edney", "865-475-4171", "RebeccaREdney@armyspy.com"},
-	{"3", "John R. Jackson", "810-325-1417", "JohnRJackson@armyspy.com"},
-	{"4", "Ron J. Gomes", "217-450-8568", "RonJGomes@rhyta.com"},
-	{"5", "Penny R. Lewis", "870-794-1666", "PennyRLewis@rhyta.com"},
-	{"6", "Sofia J. Smith", "770-333-7379", "SofiaJSmith@armyspy.com"},
-	{"7", "Karlene D. Owen", "231-242-4157", "KarleneDOwen@jourrapide.com"},
-	{"8", "Daniel L. Love", "978-210-4178", "DanielLLove@rhyta.com"},
-	{"9", "Julie T. Dial", "719-966-5354", "JulieTDial@jourrapide.com"},
-	{"10", "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com"},
+var data = [][]interface{}{
+	{1, "Newton G. Goetz", "252-585-5166", "NewtonGGoetz@dayrep.com", 10},
+	{2, "Rebecca R. Edney", "865-475-4171", "RebeccaREdney@armyspy.com", 12},
+	{3, "John R. Jackson", "810-325-1417", "JohnRJackson@armyspy.com", 15},
+	{4, "Ron J. Gomes", "217-450-8568", "RonJGomes@rhyta.com", 25},
+	{5, "Penny R. Lewis", "870-794-1666", "PennyRLewis@rhyta.com", 5},
+	{6, "Sofia J. Smith", "770-333-7379", "SofiaJSmith@armyspy.com", 3},
+	{7, "Karlene D. Owen", "231-242-4157", "KarleneDOwen@jourrapide.com", 12},
+	{8, "Daniel L. Love", "978-210-4178", "DanielLLove@rhyta.com", 44},
+	{9, "Julie T. Dial", "719-966-5354", "JulieTDial@jourrapide.com", 8},
+	{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
 }
 
 func main() {
-	table := simpletable.New("#", "Name", "Phone", "Email")
-	table.SetStyle(simpletable.StylePrettyBordered)
-	table.SetAlign(simpletable.AlignRight, simpletable.AlignLeft, simpletable.AlignLeft, simpletable.AlignLeft)
+	table := simpletable.New()
+	table.SetStyle(simpletable.StylePretty)
 
+	table.Header = &simpletable.Header{
+		Columns: []*simpletable.Column{
+			{Content: "#"},
+			{Content: "Name"},
+			{Content: "Phone"},
+			{Content: "Email"},
+			{Content: "Qtty"},
+		},
+	}
+
+	subtotal := 0
 	for _, row := range data {
-		if err := table.AddRow(row...); err != nil {
-			log.Fatalln(err)
+		r := &simpletable.Row{
+			Columns: []*simpletable.Column{
+				{Align: simpletable.AlignRight, Content: row[0]},
+				{Content: row[1]},
+				{Content: row[2]},
+				{Content: row[3]},
+				{Align: simpletable.AlignRight, Content: row[4]},
+			},
 		}
+
+		table.Body.Rows = append(table.Body.Rows, r)
+		subtotal += row[4].(int)
+	}
+
+	table.Footer = &simpletable.Footer{
+		Columns: []*simpletable.Column{
+			{Align: simpletable.AlignRight, Span: 4, Content: "Subtotal"},
+			{Align: simpletable.AlignRight, Content: subtotal},
+		},
 	}
 
 	table.Print()
