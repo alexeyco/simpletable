@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/alexeyco/simpletable"
 )
 
@@ -22,35 +23,33 @@ func main() {
 	table.SetStyle(simpletable.StylePretty)
 
 	table.Header = &simpletable.Header{
-		Columns: []*simpletable.Column{
-			{Content: "#"},
-			{Content: "Name"},
-			{Content: "Phone"},
-			{Content: "Email"},
-			{Content: "Qtty"},
+		Cells: []simpletable.Cell{
+			&simpletable.TextCell{Content: "#"},
+			&simpletable.TextCell{Content: "Name"},
+			&simpletable.TextCell{Content: "Phone"},
+			&simpletable.TextCell{Content: "Email"},
+			&simpletable.TextCell{Content: "Qtty"},
 		},
 	}
 
 	subtotal := 0
 	for _, row := range data {
-		r := &simpletable.Row{
-			Columns: []*simpletable.Column{
-				{Align: simpletable.AlignRight, Content: row[0]},
-				{Content: row[1]},
-				{Content: row[2]},
-				{Content: row[3]},
-				{Align: simpletable.AlignRight, Content: row[4]},
-			},
+		r := []simpletable.Cell{
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", row[0].(int))},
+			&simpletable.TextCell{Content: row[1].(string)},
+			&simpletable.TextCell{Content: row[2].(string)},
+			&simpletable.TextCell{Content: row[3].(string)},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", row[4])},
 		}
 
-		table.Body.Rows = append(table.Body.Rows, r)
+		table.Body.Cells = append(table.Body.Cells, r)
 		subtotal += row[4].(int)
 	}
 
 	table.Footer = &simpletable.Footer{
-		Columns: []*simpletable.Column{
-			{Align: simpletable.AlignRight, Span: 4, Content: "Subtotal"},
-			{Align: simpletable.AlignRight, Content: subtotal},
+		Cells: []simpletable.Cell{
+			&simpletable.TextCell{Align: simpletable.AlignRight, Span: 4, Content: "Subtotal"},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", subtotal)},
 		},
 	}
 

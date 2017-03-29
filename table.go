@@ -2,39 +2,16 @@ package simpletable
 
 import (
 	"fmt"
-	"strings"
+	"github.com/davecgh/go-spew/spew"
 )
 
-type Header struct {
-	Row
-	Columns []*Column
-}
-
-type Body struct {
-	Rows []*Row
-}
-
-func (b *Body) String() string {
-	s := []string{}
-
-	for _, r := range b.Rows {
-		s = append(s, r.String())
-	}
-
-	return strings.Join(s, "\n")
-}
-
-type Footer struct {
-	Row
-	Columns []*Column
-}
-
 type Table struct {
-	style  *Style
-	widths []int
-	Header *Header
-	Body   *Body
-	Footer *Footer
+	Header  *Header
+	Body    *Body
+	Footer  *Footer
+	style   *Style
+	rows    []*Row
+	columns []*Column
 }
 
 func (t *Table) SetStyle(style *Style) {
@@ -42,26 +19,9 @@ func (t *Table) SetStyle(style *Style) {
 }
 
 func (t *Table) String() string {
-	t.resize()
+	t.prepare()
 
-	s := []string{}
-
-	h := t.Header.String()
-	if h != "" {
-		s = append(s, h)
-	}
-
-	b := t.Body.String()
-	if b != "" {
-		s = append(s, b)
-	}
-
-	f := t.Footer.String()
-	if f != "" {
-		s = append(s, f)
-	}
-
-	return strings.Join(s, "\n")
+	return ""
 }
 
 func (t *Table) Print() {
@@ -72,60 +32,114 @@ func (t *Table) Println() {
 	fmt.Println(t.String())
 }
 
-func (t *Table) rows() [][]*Column {
-	rows := [][]*Column{}
-
-	if len(t.Header.Columns) > 0 {
-		rows = append(rows, t.Header.Columns)
-	}
-
-	for _, r := range t.Body.Rows {
-		rows = append(rows, r.Columns)
-	}
-
-	if len(t.Footer.Columns) > 0 {
-		rows = append(rows, t.Footer.Columns)
-	}
-
-	return rows
+func (t *Table) prepare() {
+	t.prepareRows()
+	t.prepareColumns()
 }
 
-func (t *Table) resize() {
-	rows := t.rows()
-	widths := []int{}
+func (t *Table) prepareRows() {
+	hlen := len(t.Header.Cells)
+	if hlen > 0 {
+		t.rows = append(t.rows, &Row{
+			Cells: t.Header.Cells,
+		})
 
-	for _, r := range rows {
-		for n, c := range r {
-			if c.Span < 1 {
-				c.Span = 1
+		t.rows = append(t.rows, &Row{
+			Cells: []Cell{
+				&Divider{
+					Span: hlen,
+				},
+			},
+		})
+	}
+
+	for _, r := range t.Body.Cells {
+		t.rows = append(t.rows, &Row{
+			Cells: r,
+		})
+	}
+
+	flen := len(t.Footer.Cells)
+	if flen > 0 {
+		t.rows = append(t.rows, &Row{
+			Cells: []Cell{
+				&Divider{
+					Span: flen,
+				},
+			},
+		})
+
+		t.rows = append(t.rows, &Row{
+			Cells: t.Footer.Cells,
+		})
+	}
+}
+
+func (t *Table) prepareColumns() {
+	m := [][]Cell{}
+
+	for _, r := range t.rows {
+		row := []Cell{}
+
+		for _, c := range r.Cells {
+			row = append(row, c)
+			span := 0
+			var p Parent
+
+			switch v := c.(type) {
+			case *TextCell:
+				span = v.Span
+				p = v
+			case *Divider:
+				span = v.Span
+				p = v
 			}
 
-			w := c.Width()
-			if len(widths) >= n + 1 {
-				if widths[n] < w {
-					widths[n] = w
+			if span > 1 {
+				for i := 1; i < span; i++ {
+					row = append(row, &EmptyCell{
+						parent: p,
+					})
 				}
-			} else {
-				widths = append(widths, w)
 			}
+		}
+
+		m = append(m, row)
+	}
+
+	m = t.transposeCells(m)
+	spew.Dump(m)
+}
+
+func (t *Table) transposeCells(i [][]Cell) [][]Cell {
+	r := [][]Cell{}
+
+	for x := 0; x < len(i[0]); x++ {
+		r = append(r, make([]Cell, len(i)))
+	}
+
+	for x, row := range i {
+		for y, c := range row {
+			r[y][x] = c
 		}
 	}
 
-	t.widths = widths
+	return r
 }
 
 func New() *Table {
 	return &Table{
 		style: StyleDefault,
-		widths: []int{},
 		Header: &Header{
-			Columns: []*Column{},
+			Cells: []Cell{},
 		},
 		Body: &Body{
-			Rows: []*Row{},
+			Cells: [][]Cell{},
 		},
 		Footer: &Footer{
-			Columns: []*Column{},
+			Cells: []Cell{},
 		},
+		rows:    []*Row{},
+		columns: []*Column{},
 	}
 }
