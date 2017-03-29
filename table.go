@@ -3,8 +3,7 @@ package simpletable
 import (
 	"fmt"
 	"strings"
-
-	//"github.com/davecgh/go-spew/spew"
+	"unicode/utf8"
 )
 
 type Table struct {
@@ -51,13 +50,17 @@ func (t *Table) prepareRows() {
 			Cells: t.Header.Cells,
 		})
 
+		d := &Divider{
+			Span: hlen,
+		}
+
 		t.rows = append(t.rows, &Row{
 			Cells: []Cell{
-				&Divider{
-					Span: hlen,
-				},
+				d,
 			},
 		})
+
+		t.dividers = append(t.dividers, d)
 	}
 
 	for _, r := range t.Body.Cells {
@@ -68,13 +71,17 @@ func (t *Table) prepareRows() {
 
 	flen := len(t.Footer.Cells)
 	if flen > 0 {
+		d := &Divider{
+			Span: hlen,
+		}
+
 		t.rows = append(t.rows, &Row{
 			Cells: []Cell{
-				&Divider{
-					Span: hlen,
-				},
+				d,
 			},
 		})
+
+		t.dividers = append(t.dividers, d)
 
 		t.rows = append(t.rows, &Row{
 			Cells: t.Footer.Cells,
@@ -179,7 +186,7 @@ func (t *Table) resizeColumns() {
 }
 
 func (t *Table) size() int {
-	return 0
+	return utf8.RuneCountInString(t.rows[0].String())
 }
 
 func New() *Table {

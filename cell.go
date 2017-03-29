@@ -61,9 +61,13 @@ func (c *TextCell) Resize() {
 		s += ch.Column().Width()
 	}
 
-	c.SetWidth(s + (len(c.children) * 3))
+	s += len(c.children) * 3
 
-	// TODO: resize columns if it needed
+	if s > c.Len() {
+		c.SetWidth(s)
+	} else {
+		// TODO: resize columns if it needed
+	}
 }
 
 func (c *TextCell) String() string {
