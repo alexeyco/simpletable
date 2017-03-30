@@ -22,6 +22,94 @@ var (
 		},
 		Cell: "|",
 	}
+
+	StyleCompact = &Style{
+		Border: &StyleBorder{
+			TopLeft:            "",
+			Top:                "",
+			TopRight:           "",
+			Right:              "",
+			BottomRight:        "",
+			Bottom:             "",
+			BottomLeft:         "",
+			Left:               "",
+			TopIntersection:    "",
+			BottomIntersection: "",
+		},
+		Divider: &StyleDivider{
+			Left:         "",
+			Center:       "-",
+			Right:        "",
+			Intersection: " ",
+		},
+		Cell: " ",
+	}
+
+	StyleMarkdown = &Style{
+		Border: &StyleBorder{
+			TopLeft:            "",
+			Top:                "",
+			TopRight:           "",
+			Right:              "|",
+			BottomRight:        "",
+			Bottom:             "",
+			BottomLeft:         "",
+			Left:               "|",
+			TopIntersection:    "",
+			BottomIntersection: "",
+		},
+		Divider: &StyleDivider{
+			Left:         "|",
+			Center:       "-",
+			Right:        "|",
+			Intersection: "|",
+		},
+		Cell: "|",
+	}
+
+	StyleRounded = &Style{
+		Border: &StyleBorder{
+			TopLeft:            ".",
+			Top:                "-",
+			TopRight:           ".",
+			Right:              "|",
+			BottomRight:        "'",
+			Bottom:             "-",
+			BottomLeft:         "'",
+			Left:               "|",
+			TopIntersection:    ".",
+			BottomIntersection: "'",
+		},
+		Divider: &StyleDivider{
+			Left:         "+",
+			Center:       "-",
+			Right:        "+",
+			Intersection: "+",
+		},
+		Cell: "|",
+	}
+
+	StyleUnicode = &Style{
+		Border: &StyleBorder{
+			TopLeft:            "╔",
+			Top:                "═",
+			TopRight:           "╗",
+			Right:              "║",
+			BottomRight:        "╝",
+			Bottom:             "═",
+			BottomLeft:         "╚",
+			Left:               "║",
+			TopIntersection:    "╤",
+			BottomIntersection: "╧",
+		},
+		Divider: &StyleDivider{
+			Left:         "╟",
+			Center:       "━",
+			Right:        "╢",
+			Intersection: "┼",
+		},
+		Cell: "│",
+	}
 )
 
 type StyleBorder struct {

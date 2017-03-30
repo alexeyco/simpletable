@@ -21,6 +21,7 @@ var data = [][]interface{}{
 
 func main() {
 	table := simpletable.New()
+	table.SetStyle(simpletable.StyleUnicode)
 
 	table.Header = &simpletable.Header{
 		Cells: []simpletable.Cell{
@@ -48,7 +49,10 @@ func main() {
 
 	table.Footer = &simpletable.Footer{
 		Cells: []simpletable.Cell{
-			&simpletable.TextCell{Align: simpletable.AlignRight, Span: 4, Content: "Subtotal"},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Content: "Subtotal"},
 			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", subtotal)},
 		},
 	}
