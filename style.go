@@ -38,6 +38,28 @@ var (
 		},
 		Divider: &StyleDivider{
 			Left:         "",
+			Center:       "=",
+			Right:        "",
+			Intersection: " ",
+		},
+		Cell: " ",
+	}
+
+	StyleCompactLite = &Style{
+		Border: &StyleBorder{
+			TopLeft:            "",
+			Top:                "",
+			TopRight:           "",
+			Right:              "",
+			BottomRight:        "",
+			Bottom:             "",
+			BottomLeft:         "",
+			Left:               "",
+			TopIntersection:    "",
+			BottomIntersection: "",
+		},
+		Divider: &StyleDivider{
+			Left:         "",
 			Center:       "-",
 			Right:        "",
 			Intersection: " ",

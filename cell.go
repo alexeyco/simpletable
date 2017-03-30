@@ -2,15 +2,14 @@ package simpletable
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"unicode/utf8"
 )
 
 const (
-	AlignLeft   = -1
-	AlignCenter = 0
-	AlignRight  = 1
+	AlignLeft   = 0
+	AlignCenter = 1
+	AlignRight  = 2
 )
 
 type Cell interface {
@@ -76,11 +75,25 @@ func (c *TextCell) String() string {
 		return c.Content
 	}
 
-	if l < 0 {
-		log.Fatalln(c.width, c.Len())
+	var s string
+	switch c.Align {
+	case AlignLeft:
+		s = fmt.Sprintf("%s%s", c.Content, strings.Repeat(" ", l))
+
+	case AlignCenter:
+		lft := l / 2
+		rgt := l - lft
+
+		left := strings.Repeat(" ", lft)
+		right := strings.Repeat(" ", rgt)
+
+		s = fmt.Sprintf("%s%s%s", left, c.Content, right)
+
+	case AlignRight:
+		s = fmt.Sprintf("%s%s", strings.Repeat(" ", l), c.Content)
 	}
 
-	return fmt.Sprintf("%s%s", c.Content, strings.Repeat(" ", l))
+	return s
 }
 
 type Divider struct {
