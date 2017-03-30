@@ -47,6 +47,14 @@ func TestTextCell_Resize(t *testing.T) {
 	}
 }
 
+func TestTextCell_Resize2(t *testing.T) {
+
+}
+
+func TestTextCell_Resize3(t *testing.T) {
+
+}
+
 func TestTextCell_String(t *testing.T) {
 	c := &TextCell{Content: "12345"}
 	c.SetWidth(c.Len())
@@ -132,6 +140,13 @@ func TestDivider_String(t *testing.T) {
 				&TextCell{Content: "CCC"},
 				&TextCell{Content: "DDD"},
 			},
+		},
+	}
+
+	tbl.Footer = &Footer{
+		Cells: []Cell{
+			&TextCell{Content: "EEE"},
+			&TextCell{Content: "FFF"},
 		},
 	}
 
