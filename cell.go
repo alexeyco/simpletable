@@ -1,10 +1,10 @@
 package simpletable
 
 import (
-	"strings"
-	"unicode/utf8"
 	"fmt"
 	"log"
+	"strings"
+	"unicode/utf8"
 )
 
 const (
@@ -111,7 +111,8 @@ func (d *Divider) SetColumn(column *Column) {
 }
 
 func (d *Divider) String() string {
-	return strings.Repeat("=", d.width)
+	s := d.column.Table.style.Divider
+	return d.column.Table.line(s.Left, s.Center, s.Right, s.Intersection)
 }
 
 type EmptyCell struct {

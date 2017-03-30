@@ -21,7 +21,6 @@ var data = [][]interface{}{
 
 func main() {
 	table := simpletable.New()
-	table.SetStyle(simpletable.StylePretty)
 
 	table.Header = &simpletable.Header{
 		Cells: []simpletable.Cell{
