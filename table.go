@@ -28,8 +28,18 @@ func (t *Table) String() string {
 
 	s := []string{}
 
+	b := t.borderTop()
+	if b != "" {
+		s = append(s, b)
+	}
+
 	for _, r := range t.rows {
-		s = append(s, r.String())
+		s = append(s, t.borderLeftRight(r.String(), r.IsDivider()))
+	}
+
+	b = t.borderBottom()
+	if b != "" {
+		s = append(s, b)
 	}
 
 	return strings.Join(s, "\n")
@@ -43,11 +53,39 @@ func (t *Table) Println() {
 	fmt.Println(t.String())
 }
 
+func (t *Table) borderTop() string {
+	s := t.style.Border
+	return t.line(s.TopLeft, s.Top, s.TopRight, s.TopIntersection)
+}
+
+func (t *Table) borderBottom() string {
+	s := t.style.Border
+	return t.line(s.BottomLeft, s.Bottom, s.BottomRight, s.BottomIntersection)
+}
+
+func (t *Table) borderLeftRight(s string, d bool) string {
+	if d {
+		return s
+	}
+
+	return fmt.Sprintf("%s%s%s", t.style.Border.Left, s, t.style.Border.Right)
+}
+
+func (t *Table) line(l, c, r, i string) string {
+	b := []string{}
+	for _, col := range t.columns {
+		b = append(b, strings.Repeat(c, col.Width()+2))
+	}
+
+	return fmt.Sprintf("%s%s%s", l, strings.Join(b, i), r)
+}
+
 func (t *Table) prepareRows() {
 	hlen := len(t.Header.Cells)
 	if hlen > 0 {
 		t.rows = append(t.rows, &Row{
 			Cells: t.Header.Cells,
+			Table: t,
 		})
 
 		d := &Divider{
@@ -58,6 +96,7 @@ func (t *Table) prepareRows() {
 			Cells: []Cell{
 				d,
 			},
+			Table: t,
 		})
 
 		t.dividers = append(t.dividers, d)
@@ -66,6 +105,7 @@ func (t *Table) prepareRows() {
 	for _, r := range t.Body.Cells {
 		t.rows = append(t.rows, &Row{
 			Cells: r,
+			Table: t,
 		})
 	}
 
@@ -79,12 +119,14 @@ func (t *Table) prepareRows() {
 			Cells: []Cell{
 				d,
 			},
+			Table: t,
 		})
 
 		t.dividers = append(t.dividers, d)
 
 		t.rows = append(t.rows, &Row{
 			Cells: t.Footer.Cells,
+			Table: t,
 		})
 	}
 }
@@ -144,6 +186,7 @@ func (t *Table) prepareColumns() {
 	for _, r := range m {
 		c := &Column{
 			Cells: r,
+			Table: t,
 		}
 
 		for _, cell := range c.Cells {

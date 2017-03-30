@@ -2,6 +2,7 @@ package simpletable
 
 type Column struct {
 	Cells []Cell
+	Table *Table
 	width int
 }
 
