@@ -143,6 +143,13 @@ func TestDivider_String(t *testing.T) {
 		},
 	}
 
+	tbl.Footer = &Footer{
+		Cells: []Cell{
+			&TextCell{Content: "EEE"},
+			&TextCell{Content: "FFF"},
+		},
+	}
+
 	tbl.String()
 	s := tbl.dividers[0].String()
 
