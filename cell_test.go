@@ -1,6 +1,8 @@
 package simpletable
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestTextCell_Len(t *testing.T) {
 	c := &TextCell{Content: "12345"}
@@ -78,5 +80,65 @@ func TestTextCell_String4(t *testing.T) {
 
 	if c.String() != "     12345" {
 		t.Error("Wrong *TextCell contents (align: right)")
+	}
+}
+
+func TestDivider_Len(t *testing.T) {
+	d := &Divider{}
+	d.SetWidth(5)
+
+	if d.Len() != 5 {
+		t.Error("Wrong *Divider length")
+	}
+}
+
+func TestDivider_IsSpanned(t *testing.T) {
+	d := &Divider{Span: 1}
+
+	if d.IsSpanned() {
+		t.Error("*Divider must not be spanned")
+	}
+}
+
+func TestDivider_IsSpanned2(t *testing.T) {
+	d := &Divider{Span: 2}
+
+	if !d.IsSpanned() {
+		t.Error("*Divider must be spanned")
+	}
+}
+
+func TestDivider_SetWidth(t *testing.T) {
+	d := &Divider{}
+	d.SetWidth(5)
+
+	if d.width != 5 {
+		t.Error("Wrong *Divider width")
+	}
+}
+
+func TestDivider_String(t *testing.T) {
+	tbl := New()
+	tbl.Header = &Header{
+		Cells: []Cell{
+			&TextCell{Content: "AAA"},
+			&TextCell{Content: "BBB"},
+		},
+	}
+
+	tbl.Body = &Body{
+		Cells: [][]Cell{
+			{
+				&TextCell{Content: "CCC"},
+				&TextCell{Content: "DDD"},
+			},
+		},
+	}
+
+	tbl.String()
+	s := tbl.dividers[0].String()
+
+	if s != "+-----+-----+" {
+		t.Errorf("Wrong *Divider string [%s]", s)
 	}
 }
