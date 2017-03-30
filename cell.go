@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
+	"log"
 )
 
 const (
@@ -65,6 +66,7 @@ func (c *TextCell) Resize() {
 	if s > c.Len() {
 		c.SetWidth(s)
 	} else {
+		log.Fatalln("Need resize!")
 		// TODO: resize columns if it needed
 	}
 }
