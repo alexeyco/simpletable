@@ -47,6 +47,14 @@ func TestTextCell_Resize(t *testing.T) {
 	}
 }
 
+func TestTextCell_Resize2(t *testing.T) {
+
+}
+
+func TestTextCell_Resize3(t *testing.T) {
+
+}
+
 func TestTextCell_String(t *testing.T) {
 	c := &TextCell{Content: "12345"}
 	c.SetWidth(c.Len())
