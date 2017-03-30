@@ -21,15 +21,15 @@ var data = [][]interface{}{
 
 func main() {
 	table := simpletable.New()
-	table.SetStyle(simpletable.StyleUnicode)
+	table.SetStyle(simpletable.StyleCompact)
 
 	table.Header = &simpletable.Header{
 		Cells: []simpletable.Cell{
-			&simpletable.TextCell{Content: "#"},
-			&simpletable.TextCell{Content: "Name"},
-			&simpletable.TextCell{Content: "Phone"},
-			&simpletable.TextCell{Content: "Email"},
-			&simpletable.TextCell{Content: "Qtty"},
+			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "#"},
+			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "NAME"},
+			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "PHONE"},
+			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "EMAIL"},
+			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "QTTY"},
 		},
 	}
 
