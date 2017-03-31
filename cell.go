@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
+	"log"
 )
 
 const (
@@ -74,12 +75,13 @@ func (c *TextCell) Resize() {
 		}
 
 		c.column.Table.incrementColumns(cols, c.Len()-s)
+		log.Println(c.Len(), c.width)
 	}
 }
 
 func (c *TextCell) String() string {
 	l := c.width - c.Len()
-	if l == 0 {
+	if l <= 0 {
 		return c.Content
 	}
 
@@ -102,12 +104,6 @@ func (c *TextCell) String() string {
 	}
 
 	return s
-}
-
-func (c *TextCell) calcSize(v, p int) []int {
-	r := []int{}
-
-	return r
 }
 
 type Divider struct {
