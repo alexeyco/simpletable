@@ -2,9 +2,9 @@ package simpletable
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"unicode/utf8"
-	"log"
 )
 
 const (
