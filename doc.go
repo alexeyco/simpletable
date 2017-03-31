@@ -21,32 +21,30 @@
 /*
 This package allows to generate and display ascii tables in the terminal, f.e.:
 
-```
-+----+------------------+--------------+-----------------------------+------+
-| #  |       NAME       |    PHONE     |            EMAIL            | QTTY |
-+----+------------------+--------------+-----------------------------+------+
-|  1 | Newton G. Goetz  | 252-585-5166 | NewtonGGoetz@dayrep.com     |   10 |
-|  2 | Rebecca R. Edney | 865-475-4171 | RebeccaREdney@armyspy.com   |   12 |
-|  3 | John R. Jackson  | 810-325-1417 | JohnRJackson@armyspy.com    |   15 |
-|  4 | Ron J. Gomes     | 217-450-8568 | RonJGomes@rhyta.com         |   25 |
-|  5 | Penny R. Lewis   | 870-794-1666 | PennyRLewis@rhyta.com       |    5 |
-|  6 | Sofia J. Smith   | 770-333-7379 | SofiaJSmith@armyspy.com     |    3 |
-|  7 | Karlene D. Owen  | 231-242-4157 | KarleneDOwen@jourrapide.com |   12 |
-|  8 | Daniel L. Love   | 978-210-4178 | DanielLLove@rhyta.com       |   44 |
-|  9 | Julie T. Dial    | 719-966-5354 | JulieTDial@jourrapide.com   |    8 |
-| 10 | Juan J. Kennedy  | 908-910-8893 | JuanJKennedy@dayrep.com     |   16 |
-+----+------------------+--------------+-----------------------------+------+
-|                                                           Subtotal |  150 |
-+----+------------------+--------------+-----------------------------+------+
-```
+  +----+------------------+--------------+-----------------------------+------+
+  | #  |       NAME       |    PHONE     |            EMAIL            | QTTY |
+  +----+------------------+--------------+-----------------------------+------+
+  |  1 | Newton G. Goetz  | 252-585-5166 | NewtonGGoetz@dayrep.com     |   10 |
+  |  2 | Rebecca R. Edney | 865-475-4171 | RebeccaREdney@armyspy.com   |   12 |
+  |  3 | John R. Jackson  | 810-325-1417 | JohnRJackson@armyspy.com    |   15 |
+  |  4 | Ron J. Gomes     | 217-450-8568 | RonJGomes@rhyta.com         |   25 |
+  |  5 | Penny R. Lewis   | 870-794-1666 | PennyRLewis@rhyta.com       |    5 |
+  |  6 | Sofia J. Smith   | 770-333-7379 | SofiaJSmith@armyspy.com     |    3 |
+  |  7 | Karlene D. Owen  | 231-242-4157 | KarleneDOwen@jourrapide.com |   12 |
+  |  8 | Daniel L. Love   | 978-210-4178 | DanielLLove@rhyta.com       |   44 |
+  |  9 | Julie T. Dial    | 719-966-5354 | JulieTDial@jourrapide.com   |    8 |
+  | 10 | Juan J. Kennedy  | 908-910-8893 | JuanJKennedy@dayrep.com     |   16 |
+  +----+------------------+--------------+-----------------------------+------+
+  |                                                           Subtotal |  150 |
+  +----+------------------+--------------+-----------------------------+------+
 
 There are the following key features:
-  * **Declarative style.** _Have to write more code, and hell with it._
-  * **Styling.** _With 6 predefined styles: MySql-like (default), compact, compact lite, markdown,
-    rounded and unicode. And you can change it._
-  * **Header and footer.** _Separeted from table body._
-  * **Cell content alignment.** _Left, right or center._
-  * **Row spanning.** _By analogy with the way it is done in HTML. See TextCell.Span attribute
-    description._
+* **Declarative style.** _Have to write more code, and hell with it._
+* **Styling.** _With 6 predefined styles: MySql-like (default), compact, compact lite, markdown,
+  rounded and unicode. And you can change it._
+* **Header and footer.** _Separeted from table body._
+* **Cell content alignment.** _Left, right or center._
+* **Row spanning.** _By analogy with the way it is done in HTML. See TextCell.Span attribute
+  description._
 */
 package simpletable
