@@ -123,6 +123,7 @@ $ go run main.go
 ```
 
 More examples:
+For more examples see [_example](https://github.com/alexeyco/simpletable/tree/master/_example) directory:
 ```
 $ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ ls -F | grep /
@@ -132,7 +133,7 @@ $ ls -F | grep /
 ```
 
 ## Styling
-There is 6 styles available. To view them, run `_example/main.go/01-styles-demo/main.go`:
+There is 6 styles available. To view them, run [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go):
 ```
 $ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ go run main.go
