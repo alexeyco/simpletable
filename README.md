@@ -116,16 +116,25 @@ Result:
              Subtotal   $ 12827.02
 ```
 
-You can see also `_example/main.go` for styles demonstration.
+You can see also `_example/main.go/01-styles-demo/main.go` for styles demonstration.
 ```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example
+$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ go run main.go
 ```
 
-## Styling
-There is 6 styles available. To view them, run `_example/main.go`:
+More examples:
 ```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example
+$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
+$ ls -F | grep /
+
+01-styles-demo/
+02-ugly-span/
+```
+
+## Styling
+There is 6 styles available. To view them, run `_example/main.go/01-styles-demo/main.go`:
+```
+$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ go run main.go
 ```
 
@@ -147,6 +156,7 @@ c := &simpletable.TextCell{
 	Content: "Subtotal",
 }
 ```
+Note: by default `Span` is `1`. If you try to set it to `0`, the value will still be `1`.
 
 ## License
 ```
