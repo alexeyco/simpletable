@@ -137,16 +137,15 @@ func TestDivider_String(t *testing.T) {
 	tbl.Body = &Body{
 		Cells: [][]Cell{
 			{
-				&TextCell{Content: "CCC"},
-				&TextCell{Content: "DDD"},
+				&TextCell{Span: 2, Content: "CCC"},
 			},
 		},
 	}
 
 	tbl.Footer = &Footer{
 		Cells: []Cell{
+			&TextCell{Content: "DDD"},
 			&TextCell{Content: "EEE"},
-			&TextCell{Content: "FFF"},
 		},
 	}
 
