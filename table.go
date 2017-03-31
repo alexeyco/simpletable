@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
+	"math"
 )
 
 type Table struct {
@@ -226,6 +227,36 @@ func (t *Table) resizeColumns() {
 		s := t.size()
 		d.SetWidth(s)
 	}
+}
+
+func (t *Table) incrementColumns(c []*Column, length int) {
+	sizes := t.carve(length, len(c))
+
+	for i, col := range c {
+		col.IncrementWidth(sizes[i])
+	}
+}
+
+func (t *Table) carve(length, parts int) []int {
+	r := []int{}
+	step := int(math.Floor(float64(length)/float64(parts)))
+	if step * parts != length {
+		step++
+	}
+
+	for i := 0; i < parts; i++ {
+		var n int
+		if length < step {
+			n = length
+		} else {
+			n = step
+		}
+
+		length -= n
+		r = append(r, n)
+	}
+
+	return r
 }
 
 func (t *Table) size() int {

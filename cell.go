@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
-	"log"
 )
 
 const (
@@ -66,8 +65,15 @@ func (c *TextCell) Resize() {
 	if s > c.Len() {
 		c.SetWidth(s)
 	} else {
-		log.Fatalln("Need resize!")
-		// TODO: resize columns if it needed
+		cols := []*Column{
+			c.column,
+		}
+
+		for _, ch := range c.children {
+			cols = append(cols, ch.column)
+		}
+
+		c.column.Table.incrementColumns(cols, c.Len()-s)
 	}
 }
 
@@ -96,6 +102,12 @@ func (c *TextCell) String() string {
 	}
 
 	return s
+}
+
+func (c *TextCell) calcSize(v, p int) []int {
+	r := []int{}
+
+	return r
 }
 
 type Divider struct {
