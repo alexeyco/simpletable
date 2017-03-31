@@ -1,8 +1,21 @@
 package simpletable
 
 var (
+	// Default (MySql-like) table style:
+	//
+	// +---+------------------+------------+
+	// | # |       NAME       |    TAX     |
+	// +---+------------------+------------+
+	// | 1 | Newton G. Goetz  |   $ 532.70 |
+	// | 2 | Rebecca R. Edney |  $ 1423.25 |
+	// | 3 | John R. Jackson  |  $ 7526.12 |
+	// | 4 | Ron J. Gomes     |   $ 123.84 |
+	// | 5 | Penny R. Lewis   |  $ 3221.11 |
+	// +---+------------------+------------+
+	// |   |         Subtotal | $ 12827.02 |
+	// +---+------------------+------------+
 	StyleDefault = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            "+",
 			Top:                "-",
 			TopRight:           "+",
@@ -14,7 +27,7 @@ var (
 			TopIntersection:    "+",
 			BottomIntersection: "+",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "+",
 			Center:       "-",
 			Right:        "+",
@@ -23,8 +36,19 @@ var (
 		Cell: "|",
 	}
 
+	// Compact table style:
+	//
+	//  #         NAME            TAX
+	// === ================== ============
+	//  1   Newton G. Goetz      $ 532.70
+	//  2   Rebecca R. Edney    $ 1423.25
+	//  3   John R. Jackson     $ 7526.12
+	//  4   Ron J. Gomes         $ 123.84
+	//  5   Penny R. Lewis      $ 3221.11
+	// === ================== ============
+	//              Subtotal   $ 12827.02
 	StyleCompact = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            "",
 			Top:                "",
 			TopRight:           "",
@@ -36,7 +60,7 @@ var (
 			TopIntersection:    "",
 			BottomIntersection: "",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "",
 			Center:       "=",
 			Right:        "",
@@ -45,8 +69,19 @@ var (
 		Cell: " ",
 	}
 
+	// Compact lite table style:
+	//
+	//  #         NAME            TAX
+	// --- ------------------ ------------
+	//  1   Newton G. Goetz      $ 532.70
+	//  2   Rebecca R. Edney    $ 1423.25
+	//  3   John R. Jackson     $ 7526.12
+	//  4   Ron J. Gomes         $ 123.84
+	//  5   Penny R. Lewis      $ 3221.11
+	// --- ------------------ ------------
+	//              Subtotal   $ 12827.02
 	StyleCompactLite = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            "",
 			Top:                "",
 			TopRight:           "",
@@ -58,7 +93,7 @@ var (
 			TopIntersection:    "",
 			BottomIntersection: "",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "",
 			Center:       "-",
 			Right:        "",
@@ -67,8 +102,19 @@ var (
 		Cell: " ",
 	}
 
+	// Markdown table style:
+	//
+	// | # |       NAME       |    TAX     |
+	// |---|------------------|------------|
+	// | 1 | Newton G. Goetz  |   $ 532.70 |
+	// | 2 | Rebecca R. Edney |  $ 1423.25 |
+	// | 3 | John R. Jackson  |  $ 7526.12 |
+	// | 4 | Ron J. Gomes     |   $ 123.84 |
+	// | 5 | Penny R. Lewis   |  $ 3221.11 |
+	// |---|------------------|------------|
+	// |   |         Subtotal | $ 12827.02 |
 	StyleMarkdown = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            "",
 			Top:                "",
 			TopRight:           "",
@@ -80,7 +126,7 @@ var (
 			TopIntersection:    "",
 			BottomIntersection: "",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "|",
 			Center:       "-",
 			Right:        "|",
@@ -89,8 +135,21 @@ var (
 		Cell: "|",
 	}
 
+	// Rounded table style:
+	//
+	// .---.------------------.------------.
+	// | # |       NAME       |    TAX     |
+	// +---+------------------+------------+
+	// | 1 | Newton G. Goetz  |   $ 532.70 |
+	// | 2 | Rebecca R. Edney |  $ 1423.25 |
+	// | 3 | John R. Jackson  |  $ 7526.12 |
+	// | 4 | Ron J. Gomes     |   $ 123.84 |
+	// | 5 | Penny R. Lewis   |  $ 3221.11 |
+	// +---+------------------+------------+
+	// |   |         Subtotal | $ 12827.02 |
+	// '---'------------------'------------'
 	StyleRounded = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            ".",
 			Top:                "-",
 			TopRight:           ".",
@@ -102,7 +161,7 @@ var (
 			TopIntersection:    ".",
 			BottomIntersection: "'",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "+",
 			Center:       "-",
 			Right:        "+",
@@ -111,8 +170,9 @@ var (
 		Cell: "|",
 	}
 
+	// Unicode (awesome!!!) table style:
 	StyleUnicode = &Style{
-		Border: &StyleBorder{
+		Border: &BorderStyle{
 			TopLeft:            "╔",
 			Top:                "═",
 			TopRight:           "╗",
@@ -124,7 +184,7 @@ var (
 			TopIntersection:    "╤",
 			BottomIntersection: "╧",
 		},
-		Divider: &StyleDivider{
+		Divider: &DividerStyle{
 			Left:         "╟",
 			Center:       "━",
 			Right:        "╢",
@@ -134,7 +194,8 @@ var (
 	}
 )
 
-type StyleBorder struct {
+// BorderStyle defines table border style
+type BorderStyle struct {
 	TopLeft            string
 	Top                string
 	TopRight           string
@@ -147,15 +208,17 @@ type StyleBorder struct {
 	BottomIntersection string
 }
 
-type StyleDivider struct {
+// DividerStyle defines table divider style
+type DividerStyle struct {
 	Left         string
 	Center       string
 	Right        string
 	Intersection string
 }
 
+// Style is a table style (borders, dividers etc)
 type Style struct {
-	Border  *StyleBorder
-	Divider *StyleDivider
-	Cell    string
+	Border  *BorderStyle
+	Divider *DividerStyle
+	Cell    string // Symbol between cells
 }
