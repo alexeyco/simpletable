@@ -23,6 +23,8 @@ func (t *Table) SetStyle(style *Style) {
 }
 
 func (t *Table) String() string {
+	t.refresh()
+
 	t.prepareRows()
 	t.prepareColumns()
 	t.resizeColumns()
@@ -52,6 +54,13 @@ func (t *Table) Print() {
 
 func (t *Table) Println() {
 	fmt.Println(t.String())
+}
+
+func (t *Table) refresh() {
+	t.rows = []*Row{}
+	t.columns = []*Column{}
+	t.spanned = []*TextCell{}
+	t.dividers = []*Divider{}
 }
 
 func (t *Table) borderTop() string {

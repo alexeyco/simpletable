@@ -6,7 +6,8 @@ import (
 	"github.com/alexeyco/simpletable"
 )
 
-var data = [][]interface{}{
+var (
+	data = [][]interface{}{
 	{1, "Newton G. Goetz", "252-585-5166", "NewtonGGoetz@dayrep.com", 10},
 	{2, "Rebecca R. Edney", "865-475-4171", "RebeccaREdney@armyspy.com", 12},
 	{3, "John R. Jackson", "810-325-1417", "JohnRJackson@armyspy.com", 15},
@@ -18,10 +19,18 @@ var data = [][]interface{}{
 	{9, "Julie T. Dial", "719-966-5354", "JulieTDial@jourrapide.com", 8},
 	{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
 }
+	styles = map[string]*simpletable.Style{
+		"Default style": simpletable.StyleDefault,
+		"Compact style": simpletable.StyleCompact,
+		"Compact Lite style": simpletable.StyleCompactLite,
+		"Markdown style": simpletable.StyleMarkdown,
+		"Rounded style": simpletable.StyleRounded,
+		"Unicode style": simpletable.StyleUnicode,
+	}
+)
 
 func main() {
 	table := simpletable.New()
-	table.SetStyle(simpletable.StyleCompact)
 
 	table.Header = &simpletable.Header{
 		Cells: []simpletable.Cell{
@@ -49,13 +58,17 @@ func main() {
 
 	table.Footer = &simpletable.Footer{
 		Cells: []simpletable.Cell{
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: ""},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: "Subtotal"},
+			&simpletable.TextCell{Align: simpletable.AlignRight, Span: 4, Content: "Subtotal"},
 			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", subtotal)},
 		},
 	}
 
-	table.Print()
+	for n, s := range styles {
+		fmt.Println(n)
+
+		table.SetStyle(s)
+		table.Println()
+
+		fmt.Println()
+	}
 }
