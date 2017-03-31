@@ -23,6 +23,10 @@ func (t *Table) SetStyle(style *Style) {
 }
 
 func (t *Table) String() string {
+	t.refresh()
+
+	// TODO: protect against wrong spans
+
 	t.prepareRows()
 	t.prepareColumns()
 	t.resizeColumns()
@@ -52,6 +56,13 @@ func (t *Table) Print() {
 
 func (t *Table) Println() {
 	fmt.Println(t.String())
+}
+
+func (t *Table) refresh() {
+	t.rows = []*Row{}
+	t.columns = []*Column{}
+	t.spanned = []*TextCell{}
+	t.dividers = []*Divider{}
 }
 
 func (t *Table) borderTop() string {
@@ -259,10 +270,12 @@ func (t *Table) carve(length, parts int) []int {
 	return r
 }
 
+// size returns table content size.
 func (t *Table) size() int {
 	return utf8.RuneCountInString(t.rows[0].String())
 }
 
+// New is a Table constructor. It loads struct data, ready to be manipulated.
 func New() *Table {
 	return &Table{
 		style: StyleDefault,
