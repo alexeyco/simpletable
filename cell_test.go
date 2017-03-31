@@ -156,3 +156,28 @@ func TestDivider_String(t *testing.T) {
 		t.Errorf("Wrong *Divider string [%s]", s)
 	}
 }
+
+func TestDivider_String2(t *testing.T) {
+	tbl := New()
+	tbl.Header = &Header{
+		Cells: []Cell{
+			&TextCell{Content: "AAA"},
+			&TextCell{Content: "BBB"},
+		},
+	}
+
+	tbl.Body = &Body{
+		Cells: [][]Cell{
+			{
+				&TextCell{Span: 2, Content: "CCC CCC  CCC"},
+			},
+		},
+	}
+
+	tbl.String()
+	s := tbl.dividers[0].String()
+
+	if s != "+-------+------+" {
+		t.Errorf("Wrong *Divider string [%s]", s)
+	}
+}
