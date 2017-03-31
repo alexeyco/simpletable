@@ -39,12 +39,17 @@ This package allows to generate and display ascii tables in the terminal, f.e.:
   +----+------------------+--------------+-----------------------------+------+
 
 There are the following key features:
-* **Declarative style.** _Have to write more code, and hell with it._
-* **Styling.** _With 6 predefined styles: MySql-like (default), compact, compact lite, markdown,
-  rounded and unicode. And you can change it._
-* **Header and footer.** _Separeted from table body._
-* **Cell content alignment.** _Left, right or center._
-* **Row spanning.** _By analogy with the way it is done in HTML. See TextCell.Span attribute
-  description._
+
+* Declarative style. Have to write more code, and hell with it.
+
+* Styling. With 6 predefined styles: MySql-like (default), compact, compact lite, markdown,
+  rounded and unicode. And you can change it.
+
+* Header and footer. Separeted from table body.
+
+* Cell content alignment. Left, right or center.
+
+* Row spanning. By analogy with the way it is done in HTML. See TextCell.Span attribute
+  description.
 */
 package simpletable
