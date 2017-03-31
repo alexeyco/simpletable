@@ -116,7 +116,7 @@ Result:
              Subtotal   $ 12827.02
 ```
 
-You can see also `_example/main.go/01-styles-demo/main.go` for styles demonstration.
+You can see also [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go) for styles demonstration.
 ```
 $ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ go run main.go
