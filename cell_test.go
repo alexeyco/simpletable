@@ -66,7 +66,7 @@ func TestTextCell_String(t *testing.T) {
 
 func TestTextCell_String2(t *testing.T) {
 	c := &TextCell{Content: "12345"}
-	c.SetWidth(c.Len()+5)
+	c.SetWidth(c.Len() + 5)
 
 	if c.String() != "12345     " {
 		t.Error("Wrong *TextCell contents (align: left)")
@@ -75,7 +75,7 @@ func TestTextCell_String2(t *testing.T) {
 
 func TestTextCell_String3(t *testing.T) {
 	c := &TextCell{Content: "12345", Align: AlignCenter}
-	c.SetWidth(c.Len()+4)
+	c.SetWidth(c.Len() + 4)
 
 	if c.String() != "  12345  " {
 		t.Error("Wrong *TextCell contents (align: center)")
@@ -84,7 +84,7 @@ func TestTextCell_String3(t *testing.T) {
 
 func TestTextCell_String4(t *testing.T) {
 	c := &TextCell{Content: "12345", Align: AlignRight}
-	c.SetWidth(c.Len()+5)
+	c.SetWidth(c.Len() + 5)
 
 	if c.String() != "     12345" {
 		t.Error("Wrong *TextCell contents (align: right)")
@@ -137,16 +137,15 @@ func TestDivider_String(t *testing.T) {
 	tbl.Body = &Body{
 		Cells: [][]Cell{
 			{
-				&TextCell{Content: "CCC"},
-				&TextCell{Content: "DDD"},
+				&TextCell{Span: 2, Content: "CCC"},
 			},
 		},
 	}
 
 	tbl.Footer = &Footer{
 		Cells: []Cell{
+			&TextCell{Content: "DDD"},
 			&TextCell{Content: "EEE"},
-			&TextCell{Content: "FFF"},
 		},
 	}
 

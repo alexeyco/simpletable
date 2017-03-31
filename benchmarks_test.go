@@ -19,12 +19,12 @@ var (
 		{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
 	}
 
-	benchStyleDefaultTable = benchStyleTable(StyleDefault)
-	benchStyleCompactTable = benchStyleTable(StyleCompact)
+	benchStyleDefaultTable     = benchStyleTable(StyleDefault)
+	benchStyleCompactTable     = benchStyleTable(StyleCompact)
 	benchStyleCompactLiteTable = benchStyleTable(StyleCompactLite)
-	benchStyleMarkdownTable = benchStyleTable(StyleMarkdown)
-	benchStyleRoundedTable = benchStyleTable(StyleRounded)
-	benchStyleUnicodeTable = benchStyleTable(StyleUnicode)
+	benchStyleMarkdownTable    = benchStyleTable(StyleMarkdown)
+	benchStyleRoundedTable     = benchStyleTable(StyleRounded)
+	benchStyleUnicodeTable     = benchStyleTable(StyleUnicode)
 )
 
 func BenchmarkStyleDefault(b *testing.B) {
