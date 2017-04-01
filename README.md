@@ -31,6 +31,7 @@ rounded and unicode. And you can change it._
 * **Cell content alignment.** _Left, right or center._
 * **Row spanning.** _By analogy with the way it is done in HTML. See `Cell.Span` attribute 
 description._
+* **Fast!** _Really fast, see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)._
 
 ## Installation
 ```

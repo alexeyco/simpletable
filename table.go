@@ -24,7 +24,7 @@ func (t *Table) SetStyle(style *Style) {
 	t.style = style
 }
 
-// toString returns table as a toString
+// String returns table as a toString
 func (t *Table) String() string {
 	t.refresh()
 

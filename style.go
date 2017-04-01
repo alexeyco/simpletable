@@ -102,7 +102,7 @@ var (
 		Cell: " ",
 	}
 
-	// StyleMarkdown  markdown table style:
+	// StyleMarkdown - markdown table style:
 	//
 	// | # |       NAME       |    TAX     |
 	// |---|------------------|------------|

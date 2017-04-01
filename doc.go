@@ -48,7 +48,9 @@ There are the following key features:
 
 * cellInterface content alignment. Left, right or center.
 
-* tblRow spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
+* Row spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
+
+* Fast! Really fast, see https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others
 
 Examples: https://github.com/alexeyco/simpletable/tree/master/_example
 */
