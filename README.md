@@ -143,8 +143,8 @@ $ go run main.go
 You can set cell content alignment:
 ```go
 c := &simpletable.TextCell{
-	// or simpletable.AlignLeft (default), or simpletable.Center
-	Align: simpletable.AlignRight, 
+	// or simpletable.AlignLeft (default), or simpletable.AlignCenter
+	Align:   simpletable.AlignRight, 
 	Content: "Subtotal",
 }
 ```
@@ -153,7 +153,7 @@ c := &simpletable.TextCell{
 By analogy with HTML:
 ```go
 c := &simpletable.TextCell{
-	Span: 2, // Default: 1
+	Span:    2, // Default: 1
 	Content: "Subtotal",
 }
 ```
