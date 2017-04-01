@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestTextCell_Len(t *testing.T) {
+func TestCell_Len(t *testing.T) {
 	c := &Cell{Content: "12345"}
 
 	if c.len() != 5 {
@@ -12,7 +12,7 @@ func TestTextCell_Len(t *testing.T) {
 	}
 }
 
-func TestTextCell_IsSpanned(t *testing.T) {
+func TestCell_IsSpanned(t *testing.T) {
 	c := &Cell{Content: "12345", Span: 2}
 
 	if !c.isSpanned() {
@@ -20,7 +20,7 @@ func TestTextCell_IsSpanned(t *testing.T) {
 	}
 }
 
-func TestTextCell_IsSpanned2(t *testing.T) {
+func TestCell_IsSpanned2(t *testing.T) {
 	c := &Cell{Content: "12345", Span: 1}
 
 	if c.isSpanned() {
@@ -28,7 +28,7 @@ func TestTextCell_IsSpanned2(t *testing.T) {
 	}
 }
 
-func TestTextCell_SetWidth(t *testing.T) {
+func TestCell_SetWidth(t *testing.T) {
 	c := &Cell{Content: "12345"}
 	c.setWidth(10)
 
@@ -37,7 +37,7 @@ func TestTextCell_SetWidth(t *testing.T) {
 	}
 }
 
-func TestTextCell_Resize(t *testing.T) {
+func TestCell_Resize(t *testing.T) {
 	c := &Cell{Content: "12345"}
 	c.setWidth(c.len())
 	c.resize()
@@ -47,15 +47,7 @@ func TestTextCell_Resize(t *testing.T) {
 	}
 }
 
-func TestTextCell_Resize2(t *testing.T) {
-
-}
-
-func TestTextCell_Resize3(t *testing.T) {
-
-}
-
-func TestTextCell_String(t *testing.T) {
+func TestCell_String(t *testing.T) {
 	c := &Cell{Content: "12345"}
 	c.setWidth(c.len())
 
@@ -64,7 +56,7 @@ func TestTextCell_String(t *testing.T) {
 	}
 }
 
-func TestTextCell_String2(t *testing.T) {
+func TestCell_String2(t *testing.T) {
 	c := &Cell{Content: "12345"}
 	c.setWidth(c.len() + 5)
 
@@ -73,7 +65,7 @@ func TestTextCell_String2(t *testing.T) {
 	}
 }
 
-func TestTextCell_String3(t *testing.T) {
+func TestCell_String3(t *testing.T) {
 	c := &Cell{Content: "12345", Align: AlignCenter}
 	c.setWidth(c.len() + 4)
 
@@ -82,7 +74,7 @@ func TestTextCell_String3(t *testing.T) {
 	}
 }
 
-func TestTextCell_String4(t *testing.T) {
+func TestCell_String4(t *testing.T) {
 	c := &Cell{Content: "12345", Align: AlignRight}
 	c.setWidth(c.len() + 5)
 

@@ -35,6 +35,6 @@ func main() {
 			},
 		},
 	}
-simple
+
 	table.Println()
 }
