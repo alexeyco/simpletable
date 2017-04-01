@@ -53,7 +53,7 @@ func (t *Table) String() string {
 	return strings.Join(s, "\n")
 }
 
-// Prints table
+// Print prints table
 func (t *Table) Print() {
 	fmt.Print(t.String())
 }

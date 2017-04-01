@@ -19,7 +19,7 @@
 // SOFTWARE.
 
 /*
-This package allows to generate and display ascii tables in the terminal, f.e.:
+Package simpletable allows to generate and display ascii tables in the terminal, f.e.:
 
   +----+------------------+--------------+-----------------------------+------+
   | #  |       NAME       |    PHONE     |            EMAIL            | QTTY |

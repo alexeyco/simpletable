@@ -7,9 +7,14 @@ import (
 )
 
 const (
-	AlignLeft   = 0 // Left alignment (default)
-	AlignCenter = 1 // Center alignment
-	AlignRight  = 2 // Right alignment
+	// AlignLeft sets cell left alignment (default)
+	AlignLeft = 0
+
+	// AlignCenter sets cell center alignment
+	AlignCenter = 1
+
+	// AlignRight sets cell right alignment
+	AlignRight = 2
 )
 
 // cellInterface is a basic cell interface
