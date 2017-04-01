@@ -44,8 +44,9 @@ $ go test -cover
 To run benchmarks:
 ```
 $ cd $GOPATH/src/github.com/alexeyco/simpletable
-$ go test bench=".*"
+$ go test -bench=.
 ```
+Comparison with similar libraries see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)
 
 ## Basic example
 ```go
@@ -130,6 +131,7 @@ $ ls -F | grep /
 
 01-styles-demo/
 02-ugly-span/
+03-benchmarks-with-others/
 ```
 
 ## Styling
