@@ -42,14 +42,14 @@ There are the following key features:
 
 * Declarative style. Have to write more code, and hell with it.
 
-* Styling. With 6 predefined styles: MySql-like (default), compact, compact lite, markdown,
-  rounded and unicode. And you can change it.
+* Styling. With 6 predefined styles: MySql-like (default), compact, compact lite, markdown, rounded and unicode. And you can change it.
 
 * Header and footer. Separeted from table body.
 
 * Cell content alignment. Left, right or center.
 
-* Row spanning. By analogy with the way it is done in HTML. See TextCell.Span attribute
-  description.
+* Row spanning. By analogy with the way it is done in HTML. See TextCell.Span attribute description.
+
+Examples: https://github.com/alexeyco/simpletable/tree/master/_example
 */
 package simpletable

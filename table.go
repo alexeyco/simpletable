@@ -2,9 +2,9 @@ package simpletable
 
 import (
 	"fmt"
+	"math"
 	"strings"
 	"unicode/utf8"
-	"math"
 )
 
 type Table struct {
@@ -250,8 +250,8 @@ func (t *Table) incrementColumns(c []*Column, length int) {
 
 func (t *Table) carve(length, parts int) []int {
 	r := []int{}
-	step := int(math.Floor(float64(length)/float64(parts)))
-	if step * parts != length {
+	step := int(math.Floor(float64(length) / float64(parts)))
+	if step*parts != length {
 		step++
 	}
 

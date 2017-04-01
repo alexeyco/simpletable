@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 	"unicode/utf8"
-	"log"
 )
 
 const (
@@ -75,7 +74,6 @@ func (c *TextCell) Resize() {
 		}
 
 		c.column.Table.incrementColumns(cols, c.Len()-s)
-		log.Println(c.Len(), c.width)
 	}
 }
 
