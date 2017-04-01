@@ -5,45 +5,45 @@ import (
 )
 
 func TestTextCell_Len(t *testing.T) {
-	c := &TextCell{Content: "12345"}
+	c := &Cell{Content: "12345"}
 
-	if c.Len() != 5 {
-		t.Error("Wrong *TextCell length")
+	if c.len() != 5 {
+		t.Error("Wrong *Cell length")
 	}
 }
 
 func TestTextCell_IsSpanned(t *testing.T) {
-	c := &TextCell{Content: "12345", Span: 2}
+	c := &Cell{Content: "12345", Span: 2}
 
-	if !c.IsSpanned() {
-		t.Error("*TextCell must be spanned")
+	if !c.isSpanned() {
+		t.Error("*Cell must be spanned")
 	}
 }
 
 func TestTextCell_IsSpanned2(t *testing.T) {
-	c := &TextCell{Content: "12345", Span: 1}
+	c := &Cell{Content: "12345", Span: 1}
 
-	if c.IsSpanned() {
-		t.Error("*TextCell must not be spanned")
+	if c.isSpanned() {
+		t.Error("*Cell must not be spanned")
 	}
 }
 
 func TestTextCell_SetWidth(t *testing.T) {
-	c := &TextCell{Content: "12345"}
-	c.SetWidth(10)
+	c := &Cell{Content: "12345"}
+	c.setWidth(10)
 
 	if c.width != 10 {
-		t.Error("Wrong *TextCell width")
+		t.Error("Wrong *Cell width")
 	}
 }
 
 func TestTextCell_Resize(t *testing.T) {
-	c := &TextCell{Content: "12345"}
-	c.SetWidth(c.Len())
-	c.Resize()
+	c := &Cell{Content: "12345"}
+	c.setWidth(c.len())
+	c.resize()
 
 	if c.width != 5 {
-		t.Error("Wrong *TextCell resizing")
+		t.Error("Wrong *Cell resizing")
 	}
 }
 
@@ -56,128 +56,128 @@ func TestTextCell_Resize3(t *testing.T) {
 }
 
 func TestTextCell_String(t *testing.T) {
-	c := &TextCell{Content: "12345"}
-	c.SetWidth(c.Len())
+	c := &Cell{Content: "12345"}
+	c.setWidth(c.len())
 
-	if c.String() != "12345" {
-		t.Error("Wrong *TextCell contents")
+	if c.toString() != "12345" {
+		t.Error("Wrong *Cell contents")
 	}
 }
 
 func TestTextCell_String2(t *testing.T) {
-	c := &TextCell{Content: "12345"}
-	c.SetWidth(c.Len() + 5)
+	c := &Cell{Content: "12345"}
+	c.setWidth(c.len() + 5)
 
-	if c.String() != "12345     " {
-		t.Error("Wrong *TextCell contents (align: left)")
+	if c.toString() != "12345     " {
+		t.Error("Wrong *Cell contents (align: left)")
 	}
 }
 
 func TestTextCell_String3(t *testing.T) {
-	c := &TextCell{Content: "12345", Align: AlignCenter}
-	c.SetWidth(c.Len() + 4)
+	c := &Cell{Content: "12345", Align: AlignCenter}
+	c.setWidth(c.len() + 4)
 
-	if c.String() != "  12345  " {
-		t.Error("Wrong *TextCell contents (align: center)")
+	if c.toString() != "  12345  " {
+		t.Error("Wrong *Cell contents (align: center)")
 	}
 }
 
 func TestTextCell_String4(t *testing.T) {
-	c := &TextCell{Content: "12345", Align: AlignRight}
-	c.SetWidth(c.Len() + 5)
+	c := &Cell{Content: "12345", Align: AlignRight}
+	c.setWidth(c.len() + 5)
 
-	if c.String() != "     12345" {
-		t.Error("Wrong *TextCell contents (align: right)")
+	if c.toString() != "     12345" {
+		t.Error("Wrong *Cell contents (align: right)")
 	}
 }
 
 func TestDivider_Len(t *testing.T) {
-	d := &Divider{}
-	d.SetWidth(5)
+	d := &dividerCell{}
+	d.setWidth(5)
 
-	if d.Len() != 5 {
-		t.Error("Wrong *Divider length")
+	if d.len() != 5 {
+		t.Error("Wrong *dividerCell length")
 	}
 }
 
 func TestDivider_IsSpanned(t *testing.T) {
-	d := &Divider{Span: 1}
+	d := &dividerCell{span: 1}
 
-	if d.IsSpanned() {
-		t.Error("*Divider must not be spanned")
+	if d.isSpanned() {
+		t.Error("*dividerCell must not be spanned")
 	}
 }
 
 func TestDivider_IsSpanned2(t *testing.T) {
-	d := &Divider{Span: 2}
+	d := &dividerCell{span: 2}
 
-	if !d.IsSpanned() {
-		t.Error("*Divider must be spanned")
+	if !d.isSpanned() {
+		t.Error("*dividerCell must be spanned")
 	}
 }
 
 func TestDivider_SetWidth(t *testing.T) {
-	d := &Divider{}
-	d.SetWidth(5)
+	d := &dividerCell{}
+	d.setWidth(5)
 
 	if d.width != 5 {
-		t.Error("Wrong *Divider width")
+		t.Error("Wrong *dividerCell width")
 	}
 }
 
 func TestDivider_String(t *testing.T) {
 	tbl := New()
 	tbl.Header = &Header{
-		Cells: []Cell{
-			&TextCell{Content: "AAA"},
-			&TextCell{Content: "BBB"},
+		Cells: []*Cell{
+			{Content: "AAA"},
+			{Content: "BBB"},
 		},
 	}
 
 	tbl.Body = &Body{
-		Cells: [][]Cell{
+		Cells: [][]*Cell{
 			{
-				&TextCell{Span: 2, Content: "CCC"},
+				&Cell{Span: 2, Content: "CCC"},
 			},
 		},
 	}
 
 	tbl.Footer = &Footer{
-		Cells: []Cell{
-			&TextCell{Content: "DDD"},
-			&TextCell{Content: "EEE"},
+		Cells: []*Cell{
+			{Content: "DDD"},
+			{Content: "EEE"},
 		},
 	}
 
 	tbl.String()
-	s := tbl.dividers[0].String()
+	s := tbl.dividers[0].toString()
 
 	if s != "+-----+-----+" {
-		t.Errorf("Wrong *Divider string [%s]", s)
+		t.Errorf("Wrong *dividerCell toString [%s]", s)
 	}
 }
 
 func TestDivider_String2(t *testing.T) {
 	tbl := New()
 	tbl.Header = &Header{
-		Cells: []Cell{
-			&TextCell{Content: "AAA"},
-			&TextCell{Content: "BBB"},
+		Cells: []*Cell{
+			{Content: "AAA"},
+			{Content: "BBB"},
 		},
 	}
 
 	tbl.Body = &Body{
-		Cells: [][]Cell{
+		Cells: [][]*Cell{
 			{
-				&TextCell{Span: 2, Content: "CCC CCC  CCC"},
+				&Cell{Span: 2, Content: "CCC CCC  CCC"},
 			},
 		},
 	}
 
 	tbl.String()
-	s := tbl.dividers[0].String()
+	s := tbl.dividers[0].toString()
 
 	if s != "+-------+------+" {
-		t.Errorf("Wrong *Divider string [%s]", s)
+		t.Errorf("Wrong *dividerCell toString [%s]", s)
 	}
 }

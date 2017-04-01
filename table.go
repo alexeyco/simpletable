@@ -7,21 +7,24 @@ import (
 	"unicode/utf8"
 )
 
+// Table main table object
 type Table struct {
 	Header   *Header
 	Body     *Body
 	Footer   *Footer
 	style    *Style
-	rows     []*Row
-	columns  []*Column
-	spanned  []*TextCell
-	dividers []*Divider
+	rows     []*tblRow
+	columns  []*tblColumn
+	spanned  []*Cell
+	dividers []*dividerCell
 }
 
+//SetStyle sets table style
 func (t *Table) SetStyle(style *Style) {
 	t.style = style
 }
 
+// toString returns table as a toString
 func (t *Table) String() string {
 	t.refresh()
 
@@ -39,7 +42,7 @@ func (t *Table) String() string {
 	}
 
 	for _, r := range t.rows {
-		s = append(s, t.borderLeftRight(r.String(), r.IsDivider()))
+		s = append(s, t.borderLeftRight(r.toString(), r.isDivider()))
 	}
 
 	b = t.borderBottom()
@@ -50,31 +53,37 @@ func (t *Table) String() string {
 	return strings.Join(s, "\n")
 }
 
+// Prints table
 func (t *Table) Print() {
 	fmt.Print(t.String())
 }
 
+// Println prints table with new line below
 func (t *Table) Println() {
 	fmt.Println(t.String())
 }
 
+// refresh resets table meta data (t.rows, t.columns, t.spanned, t.dividers)
 func (t *Table) refresh() {
-	t.rows = []*Row{}
-	t.columns = []*Column{}
-	t.spanned = []*TextCell{}
-	t.dividers = []*Divider{}
+	t.rows = []*tblRow{}
+	t.columns = []*tblColumn{}
+	t.spanned = []*Cell{}
+	t.dividers = []*dividerCell{}
 }
 
+// borderTop returns top table border
 func (t *Table) borderTop() string {
 	s := t.style.Border
 	return t.line(s.TopLeft, s.Top, s.TopRight, s.TopIntersection)
 }
 
+// borderBottom returns bottom table border
 func (t *Table) borderBottom() string {
 	s := t.style.Border
 	return t.line(s.BottomLeft, s.Bottom, s.BottomRight, s.BottomIntersection)
 }
 
+// borderLeftRight returns bordered row as a toString
 func (t *Table) borderLeftRight(s string, d bool) string {
 	if d {
 		return s
@@ -83,29 +92,43 @@ func (t *Table) borderLeftRight(s string, d bool) string {
 	return fmt.Sprintf("%s%s%s", t.style.Border.Left, s, t.style.Border.Right)
 }
 
+// line returns line (border or divider) as a toString
 func (t *Table) line(l, c, r, i string) string {
 	b := []string{}
 	for _, col := range t.columns {
-		b = append(b, strings.Repeat(c, col.Width()+2))
+		b = append(b, strings.Repeat(c, col.getWidth()+2))
 	}
 
 	return fmt.Sprintf("%s%s%s", l, strings.Join(b, i), r)
 }
 
+// textSlice2CellSlice casts []*Cell to []cellInterface cause it's not possible do this:
+//     s := append([]cellInterface{}, t...)
+func (t *Table) textSlice2CellSlice(c []*Cell) []cellInterface {
+	r := []cellInterface{}
+
+	for _, tc := range c {
+		r = append(r, tc)
+	}
+
+	return r
+}
+
+// prepareRows fills t.rows slice from t.Header, t.Body and t.Footer
 func (t *Table) prepareRows() {
 	hlen := len(t.Header.Cells)
 	if hlen > 0 {
-		t.rows = append(t.rows, &Row{
-			Cells: t.Header.Cells,
+		t.rows = append(t.rows, &tblRow{
+			Cells: t.textSlice2CellSlice(t.Header.Cells),
 			Table: t,
 		})
 
-		d := &Divider{
-			Span: hlen,
+		d := &dividerCell{
+			span: hlen,
 		}
 
-		t.rows = append(t.rows, &Row{
-			Cells: []Cell{
+		t.rows = append(t.rows, &tblRow{
+			Cells: []cellInterface{
 				d,
 			},
 			Table: t,
@@ -115,20 +138,20 @@ func (t *Table) prepareRows() {
 	}
 
 	for _, r := range t.Body.Cells {
-		t.rows = append(t.rows, &Row{
-			Cells: r,
+		t.rows = append(t.rows, &tblRow{
+			Cells: t.textSlice2CellSlice(r),
 			Table: t,
 		})
 	}
 
 	flen := len(t.Footer.Cells)
 	if flen > 0 {
-		d := &Divider{
-			Span: hlen,
+		d := &dividerCell{
+			span: hlen,
 		}
 
-		t.rows = append(t.rows, &Row{
-			Cells: []Cell{
+		t.rows = append(t.rows, &tblRow{
+			Cells: []cellInterface{
 				d,
 			},
 			Table: t,
@@ -136,40 +159,41 @@ func (t *Table) prepareRows() {
 
 		t.dividers = append(t.dividers, d)
 
-		t.rows = append(t.rows, &Row{
-			Cells: t.Footer.Cells,
+		t.rows = append(t.rows, &tblRow{
+			Cells: t.textSlice2CellSlice(t.Footer.Cells),
 			Table: t,
 		})
 	}
 }
 
+// prepareColumns fills t.columns slice from t.rows
 func (t *Table) prepareColumns() {
-	m := [][]Cell{}
+	m := [][]cellInterface{}
 
 	for _, r := range t.rows {
-		row := []Cell{}
+		row := []cellInterface{}
 
 		for _, c := range r.Cells {
 			row = append(row, c)
 			span := 0
-			var p Cell
-			var tc *TextCell
+			var p cellInterface
+			var tc *Cell
 
 			switch v := c.(type) {
-			case *TextCell:
+			case *Cell:
 				span = v.Span
 				p = v
 				tc = v
-			case *Divider:
-				span = v.Span
+			case *dividerCell:
+				span = v.span
 				p = v
 			}
 
 			if span > 1 {
-				empty := []*EmptyCell{}
+				empty := []*emptyCell{}
 
 				for i := 1; i < span; i++ {
-					empty = append(empty, &EmptyCell{
+					empty = append(empty, &emptyCell{
 						parent: p,
 					})
 				}
@@ -183,9 +207,9 @@ func (t *Table) prepareColumns() {
 				}
 
 				switch v := c.(type) {
-				case *TextCell:
+				case *Cell:
 					v.children = empty
-				case *Divider:
+				case *dividerCell:
 					v.children = empty
 				}
 			}
@@ -196,24 +220,25 @@ func (t *Table) prepareColumns() {
 
 	m = t.transposeCells(m)
 	for _, r := range m {
-		c := &Column{
+		c := &tblColumn{
 			Cells: r,
 			Table: t,
 		}
 
 		for _, cell := range c.Cells {
-			cell.SetColumn(c)
+			cell.setColumn(c)
 		}
 
 		t.columns = append(t.columns, c)
 	}
 }
 
-func (t *Table) transposeCells(i [][]Cell) [][]Cell {
-	r := [][]Cell{}
+// transposeCells transposes cells matrix - needed for t.columns filling
+func (t *Table) transposeCells(i [][]cellInterface) [][]cellInterface {
+	r := [][]cellInterface{}
 
 	for x := 0; x < len(i[0]); x++ {
-		r = append(r, make([]Cell, len(i)))
+		r = append(r, make([]cellInterface, len(i)))
 	}
 
 	for x, row := range i {
@@ -225,29 +250,32 @@ func (t *Table) transposeCells(i [][]Cell) [][]Cell {
 	return r
 }
 
+// resizeColumns calculate column sizes (text cells and dividers)
 func (t *Table) resizeColumns() {
 	for _, c := range t.columns {
-		c.Resize()
+		c.resize()
 	}
 
 	for _, c := range t.spanned {
-		c.Resize()
+		c.resize()
 	}
 
 	for _, d := range t.dividers {
 		s := t.size()
-		d.SetWidth(s)
+		d.setWidth(s)
 	}
 }
 
-func (t *Table) incrementColumns(c []*Column, length int) {
+// incrementColumns bulk increment columns for specified length
+func (t *Table) incrementColumns(c []*tblColumn, length int) {
 	sizes := t.carve(length, len(c))
 
 	for i, col := range c {
-		col.IncrementWidth(sizes[i])
+		col.incrementWidth(sizes[i])
 	}
 }
 
+// carve splits length into a slice of integers, the sum of which is equal to length, and the count - equal to parts
 func (t *Table) carve(length, parts int) []int {
 	r := []int{}
 	step := int(math.Floor(float64(length) / float64(parts)))
@@ -272,7 +300,7 @@ func (t *Table) carve(length, parts int) []int {
 
 // size returns table content size.
 func (t *Table) size() int {
-	return utf8.RuneCountInString(t.rows[0].String())
+	return utf8.RuneCountInString(t.rows[0].toString())
 }
 
 // New is a Table constructor. It loads struct data, ready to be manipulated.
@@ -280,17 +308,17 @@ func New() *Table {
 	return &Table{
 		style: StyleDefault,
 		Header: &Header{
-			Cells: []Cell{},
+			Cells: []*Cell{},
 		},
 		Body: &Body{
-			Cells: [][]Cell{},
+			Cells: [][]*Cell{},
 		},
 		Footer: &Footer{
-			Cells: []Cell{},
+			Cells: []*Cell{},
 		},
-		rows:     []*Row{},
-		columns:  []*Column{},
-		spanned:  []*TextCell{},
-		dividers: []*Divider{},
+		rows:     []*tblRow{},
+		columns:  []*tblColumn{},
+		spanned:  []*Cell{},
+		dividers: []*dividerCell{},
 	}
 }

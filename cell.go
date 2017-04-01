@@ -7,65 +7,67 @@ import (
 )
 
 const (
-	AlignLeft   = 0
-	AlignCenter = 1
-	AlignRight  = 2
+	AlignLeft   = 0 // Left alignment (default)
+	AlignCenter = 1 // Center alignment
+	AlignRight  = 2 // Right alignment
 )
 
-type Cell interface {
-	Len() int
-	IsSpanned() bool
-	SetWidth(int)
-	Column() *Column
-	SetColumn(*Column)
-	String() string
+// cellInterface is a basic cell interface
+type cellInterface interface {
+	len() int              // Returns cell text length
+	isSpanned() bool       // Returns true if cell spanned
+	setWidth(int)          // Sets cell width
+	getColumn() *tblColumn // Returns parent column
+	setColumn(*tblColumn)  // Sets parent column
+	toString() string      // Returns cell content as a string
 }
 
-type TextCell struct {
-	Align    int
-	Span     int
-	Content  string
-	width    int
-	children []*EmptyCell
-	column   *Column
+// Cell is a table cell
+type Cell struct {
+	Align    int          // Cell alignment
+	Span     int          // span cell to right (1 - default)
+	Content  string       // Cell content
+	width    int          // Cell width
+	children []*emptyCell // Nested empty cells
+	column   *tblColumn   // Parent column
 }
 
-func (c *TextCell) Len() int {
+func (c *Cell) len() int {
 	return utf8.RuneCountInString(c.Content)
 }
 
-func (c *TextCell) IsSpanned() bool {
+func (c *Cell) isSpanned() bool {
 	return c.Span > 1
 }
 
-func (c *TextCell) SetWidth(width int) {
+func (c *Cell) setWidth(width int) {
 	c.width = width
 }
 
-func (c *TextCell) Column() *Column {
+func (c *Cell) getColumn() *tblColumn {
 	return c.column
 }
 
-func (c *TextCell) SetColumn(column *Column) {
+func (c *Cell) setColumn(column *tblColumn) {
 	c.column = column
 }
 
-func (c *TextCell) Resize() {
-	if !c.IsSpanned() {
+func (c *Cell) resize() {
+	if !c.isSpanned() {
 		return
 	}
 
-	s := c.column.Width()
+	s := c.column.getWidth()
 	for _, ch := range c.children {
-		s += ch.Column().Width()
+		s += ch.getColumn().getWidth()
 	}
 
 	s += len(c.children) * 3
 
-	if s > c.Len() {
-		c.SetWidth(s)
+	if s > c.len() {
+		c.setWidth(s)
 	} else {
-		cols := []*Column{
+		cols := []*tblColumn{
 			c.column,
 		}
 
@@ -73,12 +75,12 @@ func (c *TextCell) Resize() {
 			cols = append(cols, ch.column)
 		}
 
-		c.column.Table.incrementColumns(cols, c.Len()-s)
+		c.column.Table.incrementColumns(cols, c.len()-s)
 	}
 }
 
-func (c *TextCell) String() string {
-	l := c.width - c.Len()
+func (c *Cell) toString() string {
+	l := c.width - c.len()
 	if l <= 0 {
 		return c.Content
 	}
@@ -104,64 +106,66 @@ func (c *TextCell) String() string {
 	return s
 }
 
-type Divider struct {
-	Span     int
-	width    int
-	children []*EmptyCell
-	column   *Column
+// dividerCell is table divider cell
+type dividerCell struct {
+	span     int          // Divider span
+	width    int          // Divider width
+	children []*emptyCell // Nested empty meta cells
+	column   *tblColumn   // Divider parent column
 }
 
-func (d *Divider) Len() int {
+func (d *dividerCell) len() int {
 	return d.width
 }
 
-func (d *Divider) IsSpanned() bool {
-	return d.Span > 1
+func (d *dividerCell) isSpanned() bool {
+	return d.span > 1
 }
 
-func (d *Divider) SetWidth(width int) {
+func (d *dividerCell) setWidth(width int) {
 	d.width = width
 }
 
-func (d *Divider) Column() *Column {
+func (d *dividerCell) getColumn() *tblColumn {
 	return d.column
 }
 
-func (d *Divider) SetColumn(column *Column) {
+func (d *dividerCell) setColumn(column *tblColumn) {
 	d.column = column
 }
 
-func (d *Divider) String() string {
+func (d *dividerCell) toString() string {
 	s := d.column.Table.style.Divider
 	return d.column.Table.line(s.Left, s.Center, s.Right, s.Intersection)
 }
 
-type EmptyCell struct {
-	parent Cell
-	width  int
-	column *Column
+// emptyCell is meta cell, used when cell is spanned
+type emptyCell struct {
+	parent cellInterface // Parent cell
+	width  int           // Cell width
+	column *tblColumn    // Parent cell column
 }
 
-func (e *EmptyCell) Len() int {
+func (e *emptyCell) len() int {
 	return 0
 }
 
-func (e *EmptyCell) IsSpanned() bool {
+func (e *emptyCell) isSpanned() bool {
 	return false
 }
 
-func (e *EmptyCell) SetWidth(width int) {
+func (e *emptyCell) setWidth(width int) {
 	e.width = width
 }
 
-func (e *EmptyCell) Column() *Column {
+func (e *emptyCell) getColumn() *tblColumn {
 	return e.column
 }
 
-func (e *EmptyCell) SetColumn(column *Column) {
+func (e *emptyCell) setColumn(column *tblColumn) {
 	e.column = column
 }
 
-func (e *EmptyCell) String() string {
+func (e *emptyCell) toString() string {
 	return ""
 }

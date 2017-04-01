@@ -3,38 +3,38 @@ package simpletable
 import "testing"
 
 func TestRow_String(t *testing.T) {
-	c := &TextCell{Content: "12345"}
-	c.SetWidth(10)
+	c := &Cell{Content: "12345"}
+	c.setWidth(10)
 
-	r := &Row{
-		Cells: []Cell{c},
+	r := &tblRow{
+		Cells: []cellInterface{c},
 		Table: New(),
 	}
 
-	s := r.String()
+	s := r.toString()
 	if s != " 12345      " {
 		t.Error("Wrong row formatting")
 	}
 }
 
 func TestRow_IsDivider(t *testing.T) {
-	d := &Row{
-		Cells: []Cell{&Divider{}},
+	d := &tblRow{
+		Cells: []cellInterface{&dividerCell{}},
 		Table: New(),
 	}
 
-	if !d.IsDivider() {
+	if !d.isDivider() {
 		t.Error("Must be divider row")
 	}
 }
 
 func TestRow_IsDivider2(t *testing.T) {
-	n := &Row{
-		Cells: []Cell{&TextCell{Content: ""}},
+	n := &tblRow{
+		Cells: []cellInterface{&Cell{Content: ""}},
 		Table: New(),
 	}
 
-	if n.IsDivider() {
+	if n.isDivider() {
 		t.Error("Must not be divider row")
 	}
 }
