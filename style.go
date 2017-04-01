@@ -1,7 +1,7 @@
 package simpletable
 
 var (
-	// Default (MySql-like) table style:
+	// StyleDefault - MySql-like table style:
 	//
 	// +---+------------------+------------+
 	// | # |       NAME       |    TAX     |
@@ -36,7 +36,7 @@ var (
 		Cell: "|",
 	}
 
-	// Compact table style:
+	// StyleCompact - compact table style:
 	//
 	//  #         NAME            TAX
 	// === ================== ============
@@ -69,7 +69,7 @@ var (
 		Cell: " ",
 	}
 
-	// Compact lite table style:
+	// StyleCompactLite - compact lite table style:
 	//
 	//  #         NAME            TAX
 	// --- ------------------ ------------
@@ -102,7 +102,7 @@ var (
 		Cell: " ",
 	}
 
-	// Markdown table style:
+	// StyleMarkdown  markdown table style:
 	//
 	// | # |       NAME       |    TAX     |
 	// |---|------------------|------------|
@@ -135,7 +135,7 @@ var (
 		Cell: "|",
 	}
 
-	// Rounded table style:
+	// StyleRounded - rounded table style:
 	//
 	// .---.------------------.------------.
 	// | # |       NAME       |    TAX     |
@@ -170,7 +170,7 @@ var (
 		Cell: "|",
 	}
 
-	// Unicode (awesome!!!) table style:
+	// StyleUnicode - unicode (awesome!!!) table style:
 	StyleUnicode = &Style{
 		Border: &BorderStyle{
 			TopLeft:            "╔",
