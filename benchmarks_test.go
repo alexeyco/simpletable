@@ -29,37 +29,37 @@ var (
 
 func BenchmarkStyleDefault(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleDefaultTable.String()
+		_ = benchStyleDefaultTable.String()
 	}
 }
 
 func BenchmarkStyleCompact(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleCompactTable.String()
+		_ = benchStyleCompactTable.String()
 	}
 }
 
 func BenchmarkStyleCompactLite(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleCompactLiteTable.String()
+		_ = benchStyleCompactLiteTable.String()
 	}
 }
 
 func BenchmarkStyleMarkdown(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleMarkdownTable.String()
+		_ = benchStyleMarkdownTable.String()
 	}
 }
 
 func BenchmarkStyleRounded(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleRoundedTable.String()
+		_ = benchStyleRoundedTable.String()
 	}
 }
 
 func BenchmarkStyleUnicode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		benchStyleUnicodeTable.String()
+		_ = benchStyleUnicodeTable.String()
 	}
 }
 
