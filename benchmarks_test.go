@@ -68,23 +68,23 @@ func benchStyleTable(s *Style) *Table {
 	t.SetStyle(s)
 
 	t.Header = &Header{
-		Cells: []Cell{
-			&TextCell{Align: AlignCenter, Content: "#"},
-			&TextCell{Align: AlignCenter, Content: "NAME"},
-			&TextCell{Align: AlignCenter, Content: "PHONE"},
-			&TextCell{Align: AlignCenter, Content: "EMAIL"},
-			&TextCell{Align: AlignCenter, Content: "QTTY"},
+		Cells: []*Cell{
+			{Align: AlignCenter, Content: "#"},
+			{Align: AlignCenter, Content: "NAME"},
+			{Align: AlignCenter, Content: "PHONE"},
+			{Align: AlignCenter, Content: "EMAIL"},
+			{Align: AlignCenter, Content: "QTTY"},
 		},
 	}
 
 	subtotal := 0
 	for _, row := range benchStyleData {
-		r := []Cell{
-			&TextCell{Align: AlignRight, Content: fmt.Sprintf("%d", row[0].(int))},
-			&TextCell{Content: row[1].(string)},
-			&TextCell{Content: row[2].(string)},
-			&TextCell{Content: row[3].(string)},
-			&TextCell{Align: AlignRight, Content: fmt.Sprintf("%d", row[4])},
+		r := []*Cell{
+			{Align: AlignRight, Content: fmt.Sprintf("%d", row[0].(int))},
+			{Content: row[1].(string)},
+			{Content: row[2].(string)},
+			{Content: row[3].(string)},
+			{Align: AlignRight, Content: fmt.Sprintf("%d", row[4])},
 		}
 
 		t.Body.Cells = append(t.Body.Cells, r)
@@ -92,9 +92,9 @@ func benchStyleTable(s *Style) *Table {
 	}
 
 	t.Footer = &Footer{
-		Cells: []Cell{
-			&TextCell{Align: AlignRight, Span: 4, Content: "Subtotal"},
-			&TextCell{Align: AlignRight, Content: fmt.Sprintf("%d", subtotal)},
+		Cells: []*Cell{
+			{Align: AlignRight, Span: 4, Content: "Subtotal"},
+			{Align: AlignRight, Content: fmt.Sprintf("%d", subtotal)},
 		},
 	}
 

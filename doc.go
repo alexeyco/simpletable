@@ -46,9 +46,9 @@ There are the following key features:
 
 * Header and footer. Separeted from table body.
 
-* Cell content alignment. Left, right or center.
+* cellInterface content alignment. Left, right or center.
 
-* Row spanning. By analogy with the way it is done in HTML. See TextCell.Span attribute description.
+* tblRow spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
 
 Examples: https://github.com/alexeyco/simpletable/tree/master/_example
 */

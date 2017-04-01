@@ -29,7 +29,7 @@ There are the following key features:
 rounded and unicode. And you can change it._
 * **Header and footer.** _Separeted from table body._
 * **Cell content alignment.** _Left, right or center._
-* **Row spanning.** _By analogy with the way it is done in HTML. See TextCell.Span attribute 
+* **Row spanning.** _By analogy with the way it is done in HTML. See `Cell.Span` attribute 
 description._
 
 ## Installation
@@ -71,19 +71,19 @@ func main() {
 	table := simpletable.New()
 
 	table.Header = &simpletable.Header{
-		Cells: []simpletable.Cell{
-			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "#"},
-			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "NAME"},
-			&simpletable.TextCell{Align: simpletable.AlignCenter, Content: "TAX"},
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Content: "#"},
+			{Align: simpletable.AlignCenter, Content: "NAME"},
+			{Align: simpletable.AlignCenter, Content: "TAX"},
 		},
 	}
 
 	subtotal := float64(0)
 	for _, row := range data {
-		r := []simpletable.Cell{
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", row[0].(int))},
-			&simpletable.TextCell{Content: row[1].(string)},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("$ %.2f", row[2].(float64))},
+		r := []*simpletable.Cell{
+			{Align: simpletable.AlignRight, Content: fmt.Sprintf("%d", row[0].(int))},
+			{Content: row[1].(string)},
+			{Align: simpletable.AlignRight, Content: fmt.Sprintf("$ %.2f", row[2].(float64))},
 		}
 
 		table.Body.Cells = append(table.Body.Cells, r)
@@ -91,15 +91,15 @@ func main() {
 	}
 
 	table.Footer = &simpletable.Footer{
-		Cells: []simpletable.Cell{
-			&simpletable.TextCell{},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: "Subtotal"},
-			&simpletable.TextCell{Align: simpletable.AlignRight, Content: fmt.Sprintf("$ %.2f", subtotal)},
+		Cells: []*simpletable.Cell{
+			{},
+			{Align: simpletable.AlignRight, Content: "Subtotal"},
+			{Align: simpletable.AlignRight, Content: fmt.Sprintf("$ %.2f", subtotal)},
 		},
 	}
 
 	table.SetStyle(simpletable.StyleCompactLite)
-	fmt.Println(table.String()) // or table.Println()
+	fmt.Println(table.String())
 }
 ```
 
@@ -142,7 +142,7 @@ $ go run main.go
 ## Cell content alignment
 You can set cell content alignment:
 ```go
-c := &simpletable.TextCell{
+c := &simpletable.Cell{
 	// or simpletable.AlignLeft (default), or simpletable.AlignCenter
 	Align:   simpletable.AlignRight, 
 	Content: "Subtotal",
@@ -152,7 +152,7 @@ c := &simpletable.TextCell{
 ## Column spanning
 By analogy with HTML:
 ```go
-c := &simpletable.TextCell{
+c := &simpletable.Cell{
 	Span:    2, // Default: 1
 	Content: "Subtotal",
 }
