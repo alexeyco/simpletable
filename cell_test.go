@@ -141,7 +141,7 @@ func TestDivider_String(t *testing.T) {
 		},
 	}
 
-	tbl.String()
+	_ = tbl.String()
 	s := tbl.dividers[0].toString()
 
 	if s != "+-----+-----+" {
@@ -166,7 +166,7 @@ func TestDivider_String2(t *testing.T) {
 		},
 	}
 
-	tbl.String()
+	_ = tbl.String()
 	s := tbl.dividers[0].toString()
 
 	if s != "+-------+------+" {
