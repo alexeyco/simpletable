@@ -48,7 +48,7 @@ There are the following key features:
 
 * cellInterface content alignment. Left, right or center.
 
-* tblRow spanning. By analogy with the way it is done in HTML. See Cell.span attribute description.
+* tblRow spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
 
 Examples: https://github.com/alexeyco/simpletable/tree/master/_example
 */
