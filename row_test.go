@@ -3,7 +3,7 @@ package simpletable
 import "testing"
 
 func TestRow_String(t *testing.T) {
-	c := &Cell{Content: "12345"}
+	c := testCellNewCell("12345")
 	c.setWidth(10)
 
 	r := &tblRow{
@@ -11,7 +11,7 @@ func TestRow_String(t *testing.T) {
 		Table: New(),
 	}
 
-	s := r.toString()
+	s := r.toStringSlice()[0]
 	if s != " 12345      " {
 		t.Error("Wrong row formatting")
 	}
@@ -30,7 +30,7 @@ func TestRow_IsDivider(t *testing.T) {
 
 func TestRow_IsDivider2(t *testing.T) {
 	n := &tblRow{
-		Cells: []cellInterface{&Cell{Content: ""}},
+		Cells: []cellInterface{&Cell{Text: ""}},
 		Table: New(),
 	}
 

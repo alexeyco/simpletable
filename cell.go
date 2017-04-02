@@ -1,11 +1,5 @@
 package simpletable
 
-import (
-	"fmt"
-	"strings"
-	"unicode/utf8"
-)
-
 const (
 	// AlignLeft sets cell left alignment (default)
 	AlignLeft = 0
@@ -21,32 +15,47 @@ const (
 type cellInterface interface {
 	len() int              // Returns cell text length
 	isSpanned() bool       // Returns true if cell spanned
-	setWidth(int)          // Sets cell width
+	width() int            // Returns cell content width
+	setWidth(int)          // Sets cell content width
+	height() int           // Returns cell content height
+	setHeight(int)         // Sets cell content height
 	getColumn() *tblColumn // Returns parent column
 	setColumn(*tblColumn)  // Sets parent column
-	toString() string      // Returns cell content as a string
+	lines() []string       // Returns cell as string slice
 }
 
 // Cell is a table cell
 type Cell struct {
 	Align    int          // Cell alignment
 	Span     int          // span cell to right (1 - default)
-	Content  string       // Cell content
-	width    int          // Cell width
+	Text     string       // Cell raw text
+	content  *content     // Cell content object instance
 	children []*emptyCell // Nested empty cells
 	column   *tblColumn   // Parent column
 }
 
 func (c *Cell) len() int {
-	return utf8.RuneCountInString(c.Content)
+	return c.width()
 }
 
 func (c *Cell) isSpanned() bool {
 	return c.Span > 1
 }
 
+func (c *Cell) width() int {
+	return c.content.width()
+}
+
 func (c *Cell) setWidth(width int) {
-	c.width = width
+	c.content.setWidth(width)
+}
+
+func (c *Cell) height() int {
+	return c.content.height()
+}
+
+func (c *Cell) setHeight(height int) {
+	c.content.setHeight(height)
 }
 
 func (c *Cell) getColumn() *tblColumn {
@@ -84,51 +93,37 @@ func (c *Cell) resize() {
 	}
 }
 
-func (c *Cell) toString() string {
-	l := c.width - c.len()
-	if l <= 0 {
-		return c.Content
-	}
-
-	var s string
-	switch c.Align {
-	case AlignLeft:
-		s = fmt.Sprintf("%s%s", c.Content, strings.Repeat(" ", l))
-
-	case AlignCenter:
-		lft := l / 2
-		rgt := l - lft
-
-		left := strings.Repeat(" ", lft)
-		right := strings.Repeat(" ", rgt)
-
-		s = fmt.Sprintf("%s%s%s", left, c.Content, right)
-
-	case AlignRight:
-		s = fmt.Sprintf("%s%s", strings.Repeat(" ", l), c.Content)
-	}
-
-	return s
+func (c *Cell) lines() []string {
+	return c.content.lines(c.Align)
 }
 
 // dividerCell is table divider cell
 type dividerCell struct {
 	span     int          // Divider span
-	width    int          // Divider width
 	children []*emptyCell // Nested empty meta cells
 	column   *tblColumn   // Divider parent column
 }
 
 func (d *dividerCell) len() int {
-	return d.width
+	return 1
 }
 
 func (d *dividerCell) isSpanned() bool {
 	return d.span > 1
 }
 
+func (d *dividerCell) width() int {
+	return 1
+}
+
 func (d *dividerCell) setWidth(width int) {
-	d.width = width
+}
+
+func (d *dividerCell) height() int {
+	return 1
+}
+
+func (d *dividerCell) setHeight(height int) {
 }
 
 func (d *dividerCell) getColumn() *tblColumn {
@@ -139,16 +134,23 @@ func (d *dividerCell) setColumn(column *tblColumn) {
 	d.column = column
 }
 
-func (d *dividerCell) toString() string {
+func (d *dividerCell) lines() []string {
 	s := d.column.Table.style.Divider
-	return d.column.Table.line(s.Left, s.Center, s.Right, s.Intersection)
+	c := &content{
+		c: []string{
+			d.column.Table.line(s.Left, s.Center, s.Right, s.Intersection),
+		},
+	}
+
+	return c.lines(AlignLeft)
 }
 
 // emptyCell is meta cell, used when cell is spanned
 type emptyCell struct {
-	parent cellInterface // Parent cell
-	width  int           // Cell width
-	column *tblColumn    // Parent cell column
+	parent  cellInterface // Parent cell
+	w       int           // Cell width
+	column  *tblColumn    // Parent cell column
+	content *content      // Cell content
 }
 
 func (e *emptyCell) len() int {
@@ -159,8 +161,20 @@ func (e *emptyCell) isSpanned() bool {
 	return false
 }
 
+func (e *emptyCell) width() int {
+	return e.w
+}
+
 func (e *emptyCell) setWidth(width int) {
-	e.width = width
+	e.w = width
+}
+
+func (e *emptyCell) height() int {
+	return e.content.height()
+}
+
+func (e *emptyCell) setHeight(height int) {
+	e.content.setHeight(height)
 }
 
 func (e *emptyCell) getColumn() *tblColumn {
@@ -171,6 +185,6 @@ func (e *emptyCell) setColumn(column *tblColumn) {
 	e.column = column
 }
 
-func (e *emptyCell) toString() string {
-	return ""
+func (e *emptyCell) lines() []string {
+	return e.content.lines(AlignLeft)
 }
