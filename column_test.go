@@ -20,8 +20,8 @@ func TestColumn_IncrementWidth(t *testing.T) {
 func testColumn() *tblColumn {
 	c := &tblColumn{
 		Cells: []cellInterface{
-			&Cell{Content: "123"},
-			&Cell{Content: "12345"},
+			&Cell{Text: "123"},
+			&Cell{Text: "12345"},
 		},
 		Table: New(),
 	}

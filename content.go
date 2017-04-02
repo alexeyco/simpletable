@@ -1,16 +1,19 @@
 package simpletable
 
 import (
+	"fmt"
 	"strings"
 	"unicode/utf8"
-	"fmt"
 )
 
+// content is a cell content
 type content struct {
-	c     []string
+	c []string // content lines (trimmed)
+	w int      // meta content width
 }
 
-func (c *content) width() int {
+// width returns maximum content lines width
+func (c *content) maxLinewidth() int {
 	w := 0
 
 	for _, r := range c.c {
@@ -23,10 +26,27 @@ func (c *content) width() int {
 	return w
 }
 
+// width returns content width
+func (c *content) width() int {
+	m := c.maxLinewidth()
+	if m > c.w {
+		return m
+	}
+
+	return c.w
+}
+
+// setWidth sets content block width
+func (c *content) setWidth(w int) {
+	c.w = w
+}
+
+// height returns content height
 func (c *content) height() int {
 	return len(c.c)
 }
 
+// setHeigth sets content height
 func (c *content) setHeight(h int) {
 	l := c.height()
 	if h <= l {
@@ -38,6 +58,7 @@ func (c *content) setHeight(h int) {
 	}
 }
 
+// lines returns content as string slice
 func (c *content) lines(a int) []string {
 	r := []string{}
 
@@ -48,6 +69,7 @@ func (c *content) lines(a int) []string {
 	return r
 }
 
+// line formats content line
 func (c *content) line(l string, a int) string {
 	len := c.width() - utf8.RuneCountInString(l)
 	if len <= 0 {
@@ -74,6 +96,7 @@ func (c *content) line(l string, a int) string {
 	return l
 }
 
+// newContent returns new content object
 func newContent(s string) *content {
 	c := strings.Split(s, "\n")
 

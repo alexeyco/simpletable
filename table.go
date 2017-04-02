@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"strings"
-	"unicode/utf8"
 )
 
 // Table main table object
@@ -30,8 +29,11 @@ func (t *Table) String() string {
 
 	// TODO: protect against wrong spans
 
+	t.initCellContent()
 	t.prepareRows()
 	t.prepareColumns()
+
+	t.resizeRows()
 	t.resizeColumns()
 
 	s := []string{}
@@ -42,7 +44,7 @@ func (t *Table) String() string {
 	}
 
 	for _, r := range t.rows {
-		s = append(s, t.borderLeftRight(r.toString(), r.isDivider()))
+		s = append(s, t.borderLeftRight(r.toStringSlice(), r.isDivider())...)
 	}
 
 	b = t.borderBottom()
@@ -84,12 +86,16 @@ func (t *Table) borderBottom() string {
 }
 
 // borderLeftRight returns bordered row as a toString
-func (t *Table) borderLeftRight(s string, d bool) string {
+func (t *Table) borderLeftRight(s []string, d bool) []string {
 	if d {
 		return s
 	}
 
-	return fmt.Sprintf("%s%s%s", t.style.Border.Left, s, t.style.Border.Right)
+	for i, v := range s {
+		s[i] = fmt.Sprintf("%s%s%s", t.style.Border.Left, v, t.style.Border.Right)
+	}
+
+	return s
 }
 
 // line returns line (border or divider) as a toString
@@ -112,6 +118,24 @@ func (t *Table) textSlice2CellSlice(c []*Cell) []cellInterface {
 	}
 
 	return r
+}
+
+// initCellContent loads content for all Cells of table (t.Header.Cells, t.Footer.Cells and t.Body.Cells)
+func (t *Table) initCellContent() {
+	t.initContent(t.Header.Cells...)
+
+	for _, c := range t.Body.Cells {
+		t.initContent(c...)
+	}
+
+	t.initContent(t.Footer.Cells...)
+}
+
+// initContent loads content in a slice of Cell
+func (t *Table) initContent(s ...*Cell) {
+	for _, c := range s {
+		c.content = newContent(c.Text)
+	}
 }
 
 // prepareRows fills t.rows slice from t.Header, t.Body and t.Footer
@@ -250,7 +274,14 @@ func (t *Table) transposeCells(i [][]cellInterface) [][]cellInterface {
 	return r
 }
 
-// resizeColumns calculate column sizes (text cells and dividers)
+// resizeColumns calculate column height
+func (t *Table) resizeRows() {
+	for _, r := range t.rows {
+		r.resize()
+	}
+}
+
+// resizeColumns calculate column width (text cells and dividers)
 func (t *Table) resizeColumns() {
 	for _, c := range t.columns {
 		c.resize()
@@ -300,7 +331,7 @@ func (t *Table) carve(length, parts int) []int {
 
 // size returns table content size.
 func (t *Table) size() int {
-	return utf8.RuneCountInString(t.rows[0].toString())
+	return t.rows[0].len()
 }
 
 // New is a Table constructor. It loads struct data, ready to be manipulated.

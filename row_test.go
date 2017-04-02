@@ -3,7 +3,7 @@ package simpletable
 import "testing"
 
 func TestRow_String(t *testing.T) {
-	c := &Cell{Content: "12345"}
+	c := &Cell{Text: "12345"}
 	c.setWidth(10)
 
 	r := &tblRow{
@@ -30,7 +30,7 @@ func TestRow_IsDivider(t *testing.T) {
 
 func TestRow_IsDivider2(t *testing.T) {
 	n := &tblRow{
-		Cells: []cellInterface{&Cell{Content: ""}},
+		Cells: []cellInterface{&Cell{Text: ""}},
 		Table: New(),
 	}
 
