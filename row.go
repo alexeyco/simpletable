@@ -1,8 +1,8 @@
 package simpletable
 
 import (
-	"strings"
 	"fmt"
+	"strings"
 )
 
 // tblRow is a meta table row
@@ -34,7 +34,7 @@ func (r *tblRow) toStringSlice() []string {
 
 	ret := []string{}
 	for _, s := range l {
-		row := strings.Join(s,fmt.Sprintf(" %s ", r.Table.style.Cell))
+		row := strings.Join(s, fmt.Sprintf(" %s ", r.Table.style.Cell))
 		if !r.isDivider() {
 			row = fmt.Sprintf(" %s ", row)
 		}
@@ -63,6 +63,7 @@ func (r *tblRow) transpose(s [][]string) [][]string {
 	return ret
 }
 
+// resize resets all cells height
 func (r *tblRow) resize() {
 	m := 0
 	for _, c := range r.Cells {

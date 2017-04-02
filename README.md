@@ -26,11 +26,12 @@ This package allows to generate and display ascii tables in the terminal, f.e.:
 There are the following key features:
 * **Declarative style.** _Have to write more code, and hell with it._
 * **Styling.** _With 6 predefined styles: MySql-like (default), compact, compact lite, markdown, 
-rounded and unicode. And you can change it._
+  rounded and unicode. And you can change it._
 * **Header and footer.** _Separeted from table body._
+* **Multiline cells support.** _See [_example/main.go/_example/04-multiline/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/04-multiline/main.go) for example._
 * **Cell content alignment.** _Left, right or center._
 * **Row spanning.** _By analogy with the way it is done in HTML. See `Cell.Span` attribute 
-description._
+  description._
 * **Fast!** _Really fast, see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)._
 
 ## Installation
@@ -133,6 +134,7 @@ $ ls -F | grep /
 01-styles-demo/
 02-ugly-span/
 03-benchmarks-with-others/
+04-multiline/
 ```
 
 ## Styling

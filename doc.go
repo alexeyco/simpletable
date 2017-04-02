@@ -46,6 +46,8 @@ There are the following key features:
 
 * Header and footer. Separeted from table body.
 
+* Multiline cells support. See https://github.com/alexeyco/simpletable/blob/master/_example/04-multiline/main.go for example.
+
 * cellInterface content alignment. Left, right or center.
 
 * Row spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
