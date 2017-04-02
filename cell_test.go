@@ -45,6 +45,16 @@ func TestCell_SetWidth(t *testing.T) {
 	}
 }
 
+func TestCell_SetHeight(t *testing.T) {
+	c := testCellNewCell("12345")
+
+	c.setHeight(3)
+
+	if c.height() != 3 {
+		t.Error("Wrong *Cell height")
+	}
+}
+
 func TestCell_Resize(t *testing.T) {
 	c := testCellNewCell("12345")
 
@@ -184,5 +194,24 @@ func TestDivider_String2(t *testing.T) {
 
 	if s != "+-------+------+" {
 		t.Errorf("Wrong *dividerCell toString [%s]", s)
+	}
+}
+
+func TestEmptyCell_SetHeight(t *testing.T) {
+	d := &emptyCell{content: &content{c: []string{""}}}
+	d.setHeight(3)
+
+	if d.height() != 3 {
+		t.Error("Wrong *emptyCell width")
+	}
+}
+
+func TestEmptyCell_Lines(t *testing.T) {
+	d := &emptyCell{content: &content{c: []string{""}}}
+	d.setHeight(2)
+
+	l := d.lines()
+	if d.height() != 2 || (l[0] != "" && l[1] != "") {
+		t.Error("Wrong *emptyCell lines")
 	}
 }
