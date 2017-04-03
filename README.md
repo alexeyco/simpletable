@@ -128,7 +128,7 @@ $ go run main.go
 More examples:
 For more examples see [_example](https://github.com/alexeyco/simpletable/tree/master/_example) directory:
 ```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
+$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example
 $ ls -F | grep /
 
 01-styles-demo/
