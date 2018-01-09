@@ -74,6 +74,14 @@ func TestContent_Lines(t *testing.T) {
 	}
 }
 
+func TestContent_StripAnsiEscape(t *testing.T) {
+	line := "\t\u001b[0;35mBlabla\u001b[0m                                  \u001b[0;36m172.18.0.2\u001b[0m"
+
+	if stripAnsiEscape(line) != "\tBlabla                                  172.18.0.2" {
+		t.Error("Wrong ANSI escape sequences stripping")
+	}
+}
+
 func testContentEqual(o, s []string) bool {
 	for i, v := range o {
 		if s[i] != v {
