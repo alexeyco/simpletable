@@ -2,9 +2,14 @@ package simpletable
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
+
+// stripAnsiEscapeRegexp is a regular expression to clean ANSI Control sequences
+// feat https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python#33925425
+var stripAnsiEscapeRegexp = regexp.MustCompile(`(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]`)
 
 // content is a cell content
 type content struct {
@@ -17,7 +22,7 @@ func (c *content) maxLinewidth() int {
 	w := 0
 
 	for _, r := range c.c {
-		l := utf8.RuneCountInString(r)
+		l := utf8.RuneCountInString(stripAnsiEscape(r))
 		if l > w {
 			w = l
 		}
@@ -71,7 +76,7 @@ func (c *content) lines(a int) []string {
 
 // line formats content line
 func (c *content) line(l string, a int) string {
-	len := c.width() - utf8.RuneCountInString(l)
+	len := c.width() - utf8.RuneCountInString(stripAnsiEscape(l))
 	if len <= 0 {
 		return l
 	}
@@ -107,4 +112,9 @@ func newContent(s string) *content {
 	return &content{
 		c: c,
 	}
+}
+
+// stripAnsiEscape returns string without ANSI escape sequences (colors etc)
+func stripAnsiEscape(s string) string {
+	return stripAnsiEscapeRegexp.ReplaceAllString(s, "")
 }
