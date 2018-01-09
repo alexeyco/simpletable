@@ -1,6 +1,7 @@
 package simpletable
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -79,6 +80,18 @@ func TestContent_StripAnsiEscape(t *testing.T) {
 
 	if stripAnsiEscape(line) != "\tBlabla                                  172.18.0.2" {
 		t.Error("Wrong ANSI escape sequences stripping")
+	}
+}
+
+func TestContent_RealLength(t *testing.T) {
+	colorDefault := "\x1b[39m"
+	colorRed := "\x1b[91m"
+
+	plainString := "I am string"
+	colorizedString := fmt.Sprintf("%s%s%s", colorRed, plainString, colorDefault)
+
+	if realLength(plainString) != realLength(colorizedString) {
+		t.Error("Wrong real string length calculation")
 	}
 }
 

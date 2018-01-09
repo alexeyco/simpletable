@@ -13,27 +13,14 @@ var stripAnsiEscapeRegexp = regexp.MustCompile(`(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]`)
 
 // content is a cell content
 type content struct {
-	c []string // content lines (trimmed)
-	w int      // meta content width
-}
-
-// width returns maximum content lines width
-func (c *content) maxLinewidth() int {
-	w := 0
-
-	for _, r := range c.c {
-		l := utf8.RuneCountInString(stripAnsiEscape(r))
-		if l > w {
-			w = l
-		}
-	}
-
-	return w
+	c  []string // content lines (trimmed)
+	mw int      // maximal content width (f.e, for multilines columns)
+	w  int      // meta content width
 }
 
 // width returns content width
 func (c *content) width() int {
-	m := c.maxLinewidth()
+	m := c.mw
 	if m > c.w {
 		return m
 	}
@@ -104,17 +91,29 @@ func (c *content) line(l string, a int) string {
 // newContent returns new content object
 func newContent(s string) *content {
 	c := strings.Split(s, "\n")
+	mw := 0
 
 	for i, v := range c {
 		c[i] = strings.TrimSpace(v)
+		w := realLength(c[i])
+
+		if w > mw {
+			mw = w
+		}
 	}
 
 	return &content{
-		c: c,
+		c:  c,
+		mw: mw,
 	}
 }
 
 // stripAnsiEscape returns string without ANSI escape sequences (colors etc)
 func stripAnsiEscape(s string) string {
 	return stripAnsiEscapeRegexp.ReplaceAllString(s, "")
+}
+
+// realWidth returns real string length (without ANSI escape sequences)
+func realLength(s string) int {
+	return utf8.RuneCountInString(stripAnsiEscape(s))
 }
