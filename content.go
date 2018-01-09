@@ -63,7 +63,7 @@ func (c *content) lines(a int) []string {
 
 // line formats content line
 func (c *content) line(l string, a int) string {
-	len := c.width() - utf8.RuneCountInString(stripAnsiEscape(l))
+	len := c.width() - realLength(l)
 	if len <= 0 {
 		return l
 	}
