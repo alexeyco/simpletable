@@ -71,9 +71,9 @@ $ go test -bench=. -benchmem
 ## Results
 Intel Core i5 (3470), 8Gb DDR3 memory, Windows 10 results:
 ```
-BenchmarkSimpletable-4             20000             84929 ns/op           39266 B/op        983 allocs/op
-BenchmarkTermtables-4              20000             86327 ns/op           27792 B/op       1193 allocs/op
-BenchmarkUITable-4                  5000            240229 ns/op           39571 B/op       1082 allocs/op
+BenchmarkSimpletable-4             10000            186476 ns/op           45651 B/op       1330 allocs/op
+BenchmarkTermtables-4              10000            130461 ns/op           27632 B/op       1164 allocs/op
+BenchmarkUITable-4                 10000            229150 ns/op           39425 B/op       1073 allocs/op
 PASS
-ok      github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench        6.436s
+ok      github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench        5.559s
 ```
