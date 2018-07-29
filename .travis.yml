@@ -17,6 +17,6 @@ before_install:
   - go get github.com/lawrencewoodman/roveralls
 
 script:
-  - $HOME/gopath/bin/ginkgo -cover -r -v
+  - $HOME/gopath/bin/ginkgo -cover -r -v -skipPackage=_example
   - $HOME/gopath/bin/roveralls
   - $HOME/gopath/bin/goveralls -coverprofile=roveralls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
