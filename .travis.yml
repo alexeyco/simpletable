@@ -3,10 +3,18 @@ language: go
 go:
   - tip
 
+branches:
+  only:
+  - master
+  - develop
+
 before_install:
-  - go get github.com/mattn/goveralls
+  - go get github.com/onsi/ginkgo/ginkgo
   - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+  - go get github.com/lawrencewoodman/roveralls
 
 script:
- - go test -v ./...
- - $HOME/gopath/bin/goveralls -repotoken EzfjTpIpdoUpusSiKNjF6sgfacbs1fiGo
+  - $HOME/gopath/bin/ginkgo -cover -r -v
+  - $HOME/gopath/bin/roveralls
+  - $HOME/gopath/bin/goveralls -coverprofile=roveralls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
