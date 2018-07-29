@@ -5,8 +5,8 @@ go:
 
 branches:
   only:
-  - master
-  - develop
+    - master
+    - develop
 
 before_install:
   - go get github.com/apcera/termtables
