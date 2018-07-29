@@ -9,6 +9,8 @@ branches:
   - develop
 
 before_install:
+  - go get github.com/apcera/termtables
+  - go get github.com/gosuri/uitable
   - go get github.com/onsi/ginkgo/ginkgo
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
