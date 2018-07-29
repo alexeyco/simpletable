@@ -18,5 +18,5 @@ before_install:
 
 script:
   - $HOME/gopath/bin/ginkgo -cover -r -v -skipPackage=_example
-  - $HOME/gopath/bin/roveralls
+  - $HOME/gopath/bin/roveralls -ignore _example
   - $HOME/gopath/bin/goveralls -coverprofile=roveralls.coverprofile -service=travis-ci -repotoken $COVERALLS_TOKEN
