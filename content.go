@@ -2,9 +2,9 @@ package simpletable
 
 import (
 	"fmt"
+	"github.com/mattn/go-runewidth"
 	"regexp"
 	"strings"
-	"unicode/utf8"
 )
 
 // stripAnsiEscapeRegexp is a regular expression to clean ANSI Control sequences
@@ -115,5 +115,5 @@ func stripAnsiEscape(s string) string {
 
 // realWidth returns real string length (without ANSI escape sequences)
 func realLength(s string) int {
-	return utf8.RuneCountInString(stripAnsiEscape(s))
+	return runewidth.StringWidth(stripAnsiEscape(s))
 }
