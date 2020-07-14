@@ -151,12 +151,14 @@ func (t *Table) prepareRows() {
 			span: hlen,
 		}
 
-		t.rows = append(t.rows, &tblRow{
-			Cells: []cellInterface{
-				d,
-			},
-			Table: t,
-		})
+		if t.style.Divider.Center != "" {
+			t.rows = append(t.rows, &tblRow{
+				Cells: []cellInterface{
+					d,
+				},
+				Table: t,
+			})
+		}
 
 		t.dividers = append(t.dividers, d)
 	}
@@ -174,12 +176,14 @@ func (t *Table) prepareRows() {
 			span: hlen,
 		}
 
-		t.rows = append(t.rows, &tblRow{
-			Cells: []cellInterface{
-				d,
-			},
-			Table: t,
-		})
+		if t.style.Divider.Center != "" {
+			t.rows = append(t.rows, &tblRow{
+				Cells: []cellInterface{
+					d,
+				},
+				Table: t,
+			})
+		}
 
 		t.dividers = append(t.dividers, d)
 

@@ -21,12 +21,13 @@ var (
 	}
 
 	styles = map[string]*simpletable.Style{
-		"Default style":      simpletable.StyleDefault,
-		"Compact style":      simpletable.StyleCompact,
-		"Compact Lite style": simpletable.StyleCompactLite,
-		"Markdown style":     simpletable.StyleMarkdown,
-		"Rounded style":      simpletable.StyleRounded,
-		"Unicode style":      simpletable.StyleUnicode,
+		"Default style":         simpletable.StyleDefault,
+		"Compact style":         simpletable.StyleCompact,
+		"Compact Lite style":    simpletable.StyleCompactLite,
+		"Compact Classic style": simpletable.StyleCompactClassic,
+		"Markdown style":        simpletable.StyleMarkdown,
+		"Rounded style":         simpletable.StyleRounded,
+		"Unicode style":         simpletable.StyleUnicode,
 	}
 )
 
