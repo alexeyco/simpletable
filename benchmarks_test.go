@@ -19,12 +19,13 @@ var (
 		{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
 	}
 
-	benchStyleDefaultTable     = benchStyleTable(StyleDefault)
-	benchStyleCompactTable     = benchStyleTable(StyleCompact)
-	benchStyleCompactLiteTable = benchStyleTable(StyleCompactLite)
-	benchStyleMarkdownTable    = benchStyleTable(StyleMarkdown)
-	benchStyleRoundedTable     = benchStyleTable(StyleRounded)
-	benchStyleUnicodeTable     = benchStyleTable(StyleUnicode)
+	benchStyleDefaultTable        = benchStyleTable(StyleDefault)
+	benchStyleCompactTable        = benchStyleTable(StyleCompact)
+	benchStyleCompactLiteTable    = benchStyleTable(StyleCompactLite)
+	benchStyleCompactClassicTable = benchStyleTable(StyleCompactClassic)
+	benchStyleMarkdownTable       = benchStyleTable(StyleMarkdown)
+	benchStyleRoundedTable        = benchStyleTable(StyleRounded)
+	benchStyleUnicodeTable        = benchStyleTable(StyleUnicode)
 )
 
 func BenchmarkStyleDefault(b *testing.B) {
@@ -42,6 +43,12 @@ func BenchmarkStyleCompact(b *testing.B) {
 func BenchmarkStyleCompactLite(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = benchStyleCompactLiteTable.String()
+	}
+}
+
+func BenchmarkStyleCompactClassic(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = benchStyleCompactClassicTable.String()
 	}
 }
 
