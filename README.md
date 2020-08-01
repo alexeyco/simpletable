@@ -30,6 +30,9 @@ There are the following key features:
 * **Header and footer.** _Separated from table body._
 * **Multiline cells support.** _See [_example/main.go/_example/04-multiline/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/04-multiline/main.go) for example._
 * **Cell content alignment.** _Left, right or center._
+* **Sortable Body.** _Simply call `SortByField(index)` on Body to sort body cells. 
+By default, the body sorts in lexical order. 
+You can define your own compare method by `SortByFieldWithFunc(index, func)`._
 * **Row spanning.** _By analogy with the way it is done in HTML. See `Cell.Span` attribute 
   description._
 * **Fast!** _Really fast, see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)._
@@ -138,7 +141,7 @@ $ ls -F | grep /
 ```
 
 ## Styling
-There is 6 styles available. To view them, run [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go):
+There is 7 styles available. To view them, run [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go):
 ```
 $ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
 $ go run main.go
@@ -163,6 +166,27 @@ c := &simpletable.Cell{
 }
 ```
 Note: by default `Span` is `1`. If you try to set it to `0`, the value will still be `1`.
+
+## Body sorting
+Using the standard `sort` package
+```go
+b := &simpletable.Body{
+	Cells:    [][]*Cell{},
+}
+
+// Will sort Cells using the first element of []*Cell in lexical order
+b.SortByField(0)
+
+// Will sort Cells using the first element of []*Cell with given Less func
+// Refer https://pkg.go.dev/sort?tab=doc
+lessFunc = func(i, j string) bool {
+    iNum, _ = strconv.Atoi(i)
+    jNum, _ = strconv.Atoi(j)
+    return iNum < jNum
+}
+b.SortByFieldWithFunc(0, lessFunc)
+```
+Note: If you are using Column spanning. You should make sure the field index used for sort is always available.
 
 ## License
 ```
