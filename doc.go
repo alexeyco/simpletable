@@ -50,7 +50,7 @@ There are the following key features:
 
 * cellInterface content alignment. Left, right or center.
 
-* Row spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
+* row spanning. By analogy with the way it is done in HTML. See Cell.Span attribute description.
 
 * Fast! Really fast, see https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others
 
