@@ -17,63 +17,33 @@ func TestCol_Width(t *testing.T) {
 	}{
 		{
 			name:   "SingleLine",
-			column: st.Column("Foo Bar"),
-			width:  7,
+			column: st.Column("Lorem ipsum dolor sit amet"),
+			width:  26,
 		},
 		{
 			name:   "SingleLineTrim",
-			column: st.Column("   Foo Bar   "),
-			width:  7,
-		},
-		{
-			name:   "SingleLineResize",
-			column: st.Column("Foo Bar", st.Width(6)),
-			width:  6,
-		},
-		{
-			name:   "SingleLineTrimResize",
-			column: st.Column("   Foo Bar   ", st.Width(6)),
-			width:  6,
-		},
-		{
-			name:   "SingleLineOverResize",
-			column: st.Column("Foo Bar", st.Width(1)),
-			width:  3,
-		},
-		{
-			name:   "SingleLineTrimOverResize",
-			column: st.Column("   Foo Bar   ", st.Width(1)),
-			width:  3,
+			column: st.Column(" Lorem ipsum dolor sit amet "),
+			width:  26,
 		},
 		{
 			name:   "DoubleLine",
-			column: st.Column("Foo\nBar"),
-			width:  3,
+			column: st.Column("Lorem\nipsum dolor sit amet"),
+			width:  20,
 		},
 		{
 			name:   "DoubleLineTrim",
-			column: st.Column("  Foo  \n  Bar  "),
-			width:  3,
+			column: st.Column(" Lorem \n ipsum dolor sit amet "),
+			width:  20,
 		},
 		{
-			name:   "DoubleLineResize",
-			column: st.Column("Foo\nBar", st.Width(6)),
-			width:  6,
+			name:   "MultiLine",
+			column: st.Column("Lorem\nipsum\ndolor\nsit\namet"),
+			width:  5,
 		},
 		{
-			name:   "DoubleLineTrimResize",
-			column: st.Column("  Foo  \n  Bar  ", st.Width(6)),
-			width:  6,
-		},
-		{
-			name:   "DoubleLineOverResize",
-			column: st.Column("Foo\nBar", st.Width(3)),
-			width:  3,
-		},
-		{
-			name:   "DoubleLineTrimOverResize",
-			column: st.Column("  Foo  \n  Bar  ", st.Width(1)),
-			width:  3,
+			name:   "MultiLineTrim",
+			column: st.Column(" Lorem \n ipsum \n dolor \n sit \n amet "),
+			width:  5,
 		},
 	}
 
@@ -98,48 +68,33 @@ func TestCol_Height(t *testing.T) {
 	}{
 		{
 			name:   "SingleLine",
-			column: st.Column("Foo Bar"),
+			column: st.Column("Lorem ipsum dolor sit amet"),
 			height: 1,
 		},
 		{
-			name:   "SingleLineResize",
-			column: st.Column("Foo Bar", st.Width(6)),
-			height: 2,
-		},
-		{
-			name:   "SingleLineOverResize",
-			column: st.Column("Foo Bar", st.Width(1)),
-			height: 2,
+			name:   "SingleLineTrim",
+			column: st.Column(" Lorem ipsum dolor sit amet "),
+			height: 1,
 		},
 		{
 			name:   "DoubleLine",
-			column: st.Column("Foo Bar\nBaz"),
+			column: st.Column("Lorem\nipsum dolor sit amet"),
 			height: 2,
 		},
 		{
-			name:   "DoubleLineResize",
-			column: st.Column("Foo Bar\nBaz", st.Width(6)),
-			height: 3,
-		},
-		{
-			name:   "DoubleLineOverResize",
-			column: st.Column("Foo Bar\nBaz", st.Width(1)),
-			height: 3,
+			name:   "DoubleLineTrim",
+			column: st.Column(" Lorem \n ipsum dolor sit amet "),
+			height: 2,
 		},
 		{
 			name:   "MultiLine",
-			column: st.Column("Foo\nBar\nFiz\nBaz"),
-			height: 4,
+			column: st.Column("Lorem\nipsum\ndolor\nsit\namet"),
+			height: 5,
 		},
 		{
-			name:   "MultiLineResize",
-			column: st.Column("Foo\nBar\nFiz\nBaz", st.Width(3)),
-			height: 4,
-		},
-		{
-			name:   "MultiLineOverResize",
-			column: st.Column("Foo\nBar\nFiz\nBaz", st.Width(1)),
-			height: 4,
+			name:   "MultiLineTrim",
+			column: st.Column(" Lorem \n ipsum \n dolor \n sit \n amet "),
+			height: 5,
 		},
 	}
 
@@ -164,48 +119,73 @@ func TestCol_Lines(t *testing.T) {
 	}{
 		{
 			name:   "SingleLine",
-			column: st.Column("Foo Bar"),
-			lines:  []string{"Foo Bar"},
+			column: st.Column("Lorem ipsum dolor sit amet"),
+			lines:  []string{"Lorem ipsum dolor sit amet"},
 		},
 		{
 			name:   "SingleLineTrim",
-			column: st.Column("   Foo Bar   "),
-			lines:  []string{"Foo Bar"},
+			column: st.Column(" Lorem ipsum dolor sit amet "),
+			lines:  []string{"Lorem ipsum dolor sit amet"},
 		},
 		{
 			name:   "DoubleLine",
-			column: st.Column("Foo\nBar"),
-			lines:  []string{"Foo", "Bar"},
+			column: st.Column("Lorem\nipsum dolor sit amet"),
+			lines:  []string{"Lorem               ", "ipsum dolor sit amet"},
 		},
 		{
 			name:   "DoubleLineTrim",
-			column: st.Column("  Foo  \n  Bar  "),
-			lines:  []string{"Foo", "Bar"},
+			column: st.Column(" Lorem \n ipsum dolor sit amet "),
+			lines:  []string{"Lorem               ", "ipsum dolor sit amet"},
 		},
 		{
-			name:   "DoubleLineResized",
-			column: st.Column("Foo\nBar", st.Width(12)),
-			lines:  []string{"Foo         ", "Bar         "},
+			name:   "DoubleLineAlignRight",
+			column: st.Column("Lorem\nipsum dolor sit amet", st.Align(st.Center)),
+			lines:  []string{"       Lorem        ", "ipsum dolor sit amet"},
 		},
 		{
-			name:   "DoubleLineResizedAlignCenter",
-			column: st.Column("Foo\nBar", st.Width(12), st.Align(st.Center)),
-			lines:  []string{"    Foo     ", "    Bar     "},
+			name:   "DoubleLineTrimAlignCenter",
+			column: st.Column(" Lorem \n ipsum dolor sit amet ", st.Align(st.Center)),
+			lines:  []string{"       Lorem        ", "ipsum dolor sit amet"},
 		},
 		{
-			name:   "DoubleLineResizedAlignRight",
-			column: st.Column("Foo\nBar", st.Width(12), st.Align(st.Right)),
-			lines:  []string{"         Foo", "         Bar"},
+			name:   "DoubleLineAlignRight",
+			column: st.Column("Lorem\nipsum dolor sit amet", st.Align(st.Right)),
+			lines:  []string{"               Lorem", "ipsum dolor sit amet"},
+		},
+		{
+			name:   "DoubleLineTrimAlignRight",
+			column: st.Column(" Lorem \n ipsum dolor sit amet ", st.Align(st.Right)),
+			lines:  []string{"               Lorem", "ipsum dolor sit amet"},
 		},
 		{
 			name:   "MultiLine",
-			column: st.Column("Foo\nBar\nFizz\nBuzz"),
-			lines:  []string{"Foo ", "Bar ", "Fizz", "Buzz"},
+			column: st.Column("Lorem\nipsum\ndolor\nsit\namet"),
+			lines:  []string{"Lorem", "ipsum", "dolor", "sit  ", "amet "},
 		},
 		{
 			name:   "MultiLineTrim",
-			column: st.Column("  Foo  \n  Bar  \n  Fizz  \n  Buzz  "),
-			lines:  []string{"Foo ", "Bar ", "Fizz", "Buzz"},
+			column: st.Column(" Lorem \n ipsum \n dolor \n sit \n amet "),
+			lines:  []string{"Lorem", "ipsum", "dolor", "sit  ", "amet "},
+		},
+		{
+			name:   "MultiLineAlignCenter",
+			column: st.Column("Lorem\nipsum\ndolor\nsit\namet", st.Align(st.Center)),
+			lines:  []string{"Lorem", "ipsum", "dolor", " sit ", "amet "},
+		},
+		{
+			name:   "MultiLineTrimAlignCenter",
+			column: st.Column(" Lorem \n ipsum \n dolor \n sit \n amet ", st.Align(st.Center)),
+			lines:  []string{"Lorem", "ipsum", "dolor", " sit ", "amet "},
+		},
+		{
+			name:   "MultiLineAlignRight",
+			column: st.Column("Lorem\nipsum\ndolor\nsit\namet", st.Align(st.Right)),
+			lines:  []string{"Lorem", "ipsum", "dolor", "  sit", " amet"},
+		},
+		{
+			name:   "MultiLineTrimAlignRight",
+			column: st.Column(" Lorem \n ipsum \n dolor \n sit \n amet ", st.Align(st.Right)),
+			lines:  []string{"Lorem", "ipsum", "dolor", "  sit", " amet"},
 		},
 	}
 
@@ -224,42 +204,54 @@ func TestCol_Resize(t *testing.T) {
 	t.Parallel()
 
 	testData := [...]struct {
-		name   string
-		column *st.Col
-		resize int
-		lines  []string
-		width  int
-		height int
+		name         string
+		column       *st.Col
+		resizeWidth  int
+		resizeHeight int
+		lines        []string
+		width        int
+		height       int
 	}{
 		{
-			name:   "SingleLine",
-			column: st.Column("Foo Bar"),
-			lines:  []string{"Foo Bar"},
+			name:        "SingleLineResizeWidth14",
+			column:      st.Column("Lorem ipsum dolor sit amet"),
+			resizeWidth: 14,
+			lines:       []string{"Lorem ipsum   ", "dolor sit amet"},
+			width:       14,
+			height:      2,
 		},
 		{
-			name:   "SingleLineTrim",
-			column: st.Column("   Foo Bar   "),
-			lines:  []string{"Foo Bar"},
+			name:        "SingleLineResizeWidth14AlignCenter",
+			column:      st.Column("Lorem ipsum dolor sit amet", st.Align(st.Center)),
+			resizeWidth: 14,
+			lines:       []string{" Lorem ipsum  ", "dolor sit amet"},
+			width:       14,
+			height:      2,
 		},
 		{
-			name:   "DoubleLine",
-			column: st.Column("Foo\nBar"),
-			lines:  []string{"Foo", "Bar"},
+			name:        "SingleLineResizeWidth14AlignRight",
+			column:      st.Column("Lorem ipsum dolor sit amet", st.Align(st.Right)),
+			resizeWidth: 14,
+			lines:       []string{"   Lorem ipsum", "dolor sit amet"},
+			width:       14,
+			height:      2,
 		},
 		{
-			name:   "DoubleLineTrim",
-			column: st.Column("  Foo  \n  Bar  "),
-			lines:  []string{"Foo", "Bar"},
+			name:         "SingleLineResizeWidth14Height3",
+			column:       st.Column("Lorem ipsum dolor sit amet"),
+			resizeWidth:  14,
+			resizeHeight: 3,
+			lines:        []string{"Lorem ipsum   ", "dolor sit amet", "              "},
+			width:        14,
+			height:       3,
 		},
 		{
-			name:   "MultiLine",
-			column: st.Column("Foo\nBar\nFizz\nBuzz"),
-			lines:  []string{"Foo ", "Bar ", "Fizz", "Buzz"},
-		},
-		{
-			name:   "MultiLineTrim",
-			column: st.Column("  Foo  \n  Bar  \n  Fizz  \n  Buzz  "),
-			lines:  []string{"Foo ", "Bar ", "Fizz", "Buzz"},
+			name:        "SingleLineResizeWidth28",
+			column:      st.Column("Lorem ipsum dolor sit amet  "),
+			resizeWidth: 28,
+			lines:       []string{"Lorem ipsum dolor sit amet  "},
+			width:       28,
+			height:      1,
 		},
 	}
 
@@ -269,7 +261,11 @@ func TestCol_Resize(t *testing.T) {
 		t.Run(testDatum.name, func(t *testing.T) {
 			t.Parallel()
 
+			testDatum.column.Resize(testDatum.resizeWidth, testDatum.resizeHeight)
+
 			assert.Equal(t, testDatum.lines, testDatum.column.Lines())
+			assert.Equal(t, testDatum.width, testDatum.column.Width())
+			assert.Equal(t, testDatum.height, testDatum.column.Height())
 		})
 	}
 }

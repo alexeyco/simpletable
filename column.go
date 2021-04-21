@@ -19,9 +19,12 @@ const (
 var stripAnsiEscapeExp = regexp.MustCompile(`(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]`)
 
 type Col struct {
-	options                 Options
-	original, resized       []string
-	minWidth, width, height int
+	options       Options
+	minWidth      int
+	originalLines []string
+	resizedLines  []string
+	width         int
+	height        int
 }
 
 func (c *Col) Width() int {
@@ -33,11 +36,12 @@ func (c *Col) Height() int {
 }
 
 func (c *Col) Lines() []string {
-	return c.resized
+	return c.resizedLines
 }
 
 func (c *Col) Resize(width, height int) {
 	c.resizeWidth(width)
+	c.align()
 	c.resizeHeight(height)
 }
 
@@ -45,12 +49,13 @@ func (c *Col) resizeWidth(width int) {
 	if width < c.minWidth {
 		width = c.minWidth
 	}
-	if width == c.width && len(c.resized) > 0 {
+
+	if width == c.width {
 		return
 	}
 
 	var lines []string
-	for _, originalLine := range c.original {
+	for _, originalLine := range c.originalLines {
 		words := strings.Split(originalLine, space)
 
 		var (
@@ -84,35 +89,37 @@ func (c *Col) resizeWidth(width int) {
 		}
 	}
 
-	for n := range lines {
+	c.resizedLines = lines
+	c.width = width
+	c.height = len(c.resizedLines)
+}
+
+func (c *Col) align() {
+	for n := range c.resizedLines {
 		var (
 			spanLeft  int
 			spanRight int
 		)
 
-		lineWidth := runewidth.StringWidth(lines[n])
+		lineWidth := runewidth.StringWidth(c.resizedLines[n])
 
 		switch c.options.Align {
 		case Left:
-			spanRight = width - lineWidth
+			spanRight = c.width - lineWidth
 		case Center:
-			span := width - lineWidth
+			span := c.width - lineWidth
 
 			spanLeft = int(math.Floor(float64(span) / float64(2)))
 			spanRight = span - spanLeft
 		case Right:
-			spanLeft = width - lineWidth
+			spanLeft = c.width - lineWidth
 		}
 
-		lines[n] = fmt.Sprintf("%s%s%s",
+		c.resizedLines[n] = fmt.Sprintf("%s%s%s",
 			strings.Repeat(space, spanLeft),
-			lines[n],
+			c.resizedLines[n],
 			strings.Repeat(space, spanRight))
 	}
-
-	c.resized = lines
-	c.width = width
-	c.height = len(c.resized)
 }
 
 func (c *Col) resizeHeight(height int) {
@@ -122,7 +129,7 @@ func (c *Col) resizeHeight(height int) {
 
 	span := height - c.height
 	for i := 0; i < span; i++ {
-		c.resized = append(c.resized, strings.Repeat(space, c.width))
+		c.resizedLines = append(c.resizedLines, strings.Repeat(space, c.width))
 	}
 
 	c.height = height
@@ -161,18 +168,15 @@ func Column(text string, options ...Option) *Col {
 	}
 
 	col := &Col{
-		options:  o,
-		original: lines,
-		minWidth: minWidth,
-		width:    width,
-		height:   len(lines),
+		options:       o,
+		minWidth:      minWidth,
+		originalLines: lines,
+		resizedLines:  lines,
+		width:         width,
+		height:        len(lines),
 	}
 
-	if o.Width > 0 {
-		width = o.Width
-	}
-
-	col.resizeWidth(width)
+	col.align()
 
 	return col
 }
