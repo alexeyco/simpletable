@@ -3,7 +3,7 @@ package simpletable
 import "strings"
 
 type info struct {
-	length uint
+	length int
 }
 
 type Table struct {
@@ -18,8 +18,8 @@ func (t *Table) Style(s Style) *Table {
 	return t
 }
 
-func (t *Table) Row(columns ...Col) *Table {
-	var l uint
+func (t *Table) Row(columns ...*Col) *Table {
+	var l int
 	for _, c := range columns {
 		l += c.options.Span
 	}
@@ -47,7 +47,7 @@ func (t *Table) Divider() *Table {
 	return t
 }
 
-func (t *Table) pad(pad uint) {
+func (t *Table) pad(pad int) {
 	t.iterateRows(func(_ int, r row) {
 		r.pad(pad)
 	})

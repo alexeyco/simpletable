@@ -8,8 +8,8 @@ const (
 
 type Options struct {
 	Align uint8
-	Span  uint
-	Width uint
+	Span  int
+	Width int
 }
 
 type Option func(*Options)
@@ -22,12 +22,14 @@ func Align(align uint8) Option {
 
 func Span(span uint) Option {
 	return func(o *Options) {
-		o.Span = span
+		if span > 0 {
+			o.Span = int(span)
+		}
 	}
 }
 
 func Width(width uint) Option {
 	return func(o *Options) {
-		o.Width = width
+		o.Width = int(width)
 	}
 }

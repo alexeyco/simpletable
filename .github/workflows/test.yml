@@ -1,0 +1,56 @@
+---
+name: Test
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+      - v1
+      - v2
+      - feature-*
+  pull_request:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go:
+          - 1.13
+          - 1.14
+          - 1.15
+          - 1.x # Latest version
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          path: ${{ github.workspace }}/go/src/github.com/alexeyco/simpletable
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Show Go version
+        run: go version
+      - name: Install dependencies
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/simpletable
+        run: go mod vendor
+      - name: Lint source code
+        uses: golangci/golangci-lint-action@v2
+        with:
+          working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/simpletable
+          version: v1.38.0
+      - name: Run tests
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/simpletable
+        run: go test -race -covermode atomic -coverprofile=coverage.out ./...
+      - name: Install goveralls
+        env:
+          GO111MODULE: off
+        run: go get github.com/mattn/goveralls
+      - name: Upload coverage
+        env:
+          COVERALLS_TOKEN: ${{ github.token }}
+          GIT_BRANCH: ${{ github.head_ref }}
+        working-directory: ${{ github.workspace }}/go/src/github.com/alexeyco/simpletable
+        run: goveralls -coverprofile=coverage.out -service=github

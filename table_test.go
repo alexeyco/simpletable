@@ -110,6 +110,6 @@ func TestTable(t *testing.T) {
 				st.Column(fmt.Sprintf("%d", qtty), st.Align(st.Right)),
 			)
 
-		t.Log(fmt.Sprintf("\n%s", table.String()))
+		//		t.Log(fmt.Sprintf("\n%s", table.String()))
 	})
 }

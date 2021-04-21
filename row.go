@@ -1,11 +1,11 @@
 package simpletable
 
 type row struct {
-	columns []Col
-	length  uint
+	columns []*Col
+	length  int
 }
 
-func (r row) pad(pad uint) {
+func (r row) pad(pad int) {
 	if r.length >= pad || len(r.columns) == 0 {
 		return
 	}
