@@ -128,6 +128,11 @@ func TestCol_Lines(t *testing.T) {
 			lines:  []string{"Lorem ipsum dolor sit amet"},
 		},
 		{
+			name:   "SingleLineColored",
+			column: st.Column("\x1b[38;5;140mLorem ipsum dolor sit amet\x1b[0m"),
+			lines:  []string{"Lorem ipsum dolor sit amet"},
+		},
+		{
 			name:   "DoubleLine",
 			column: st.Column("Lorem\nipsum dolor sit amet"),
 			lines:  []string{"Lorem               ", "ipsum dolor sit amet"},
@@ -213,6 +218,14 @@ func TestCol_Resize(t *testing.T) {
 		height       int
 	}{
 		{
+			name:        "SingleLineResizeWidth26",
+			column:      st.Column("Lorem ipsum dolor sit amet"),
+			resizeWidth: 26,
+			lines:       []string{"Lorem ipsum dolor sit amet"},
+			width:       26,
+			height:      1,
+		},
+		{
 			name:        "SingleLineResizeWidth14",
 			column:      st.Column("Lorem ipsum dolor sit amet"),
 			resizeWidth: 14,
@@ -252,6 +265,14 @@ func TestCol_Resize(t *testing.T) {
 			lines:       []string{"Lorem ipsum dolor sit amet  "},
 			width:       28,
 			height:      1,
+		},
+		{
+			name:        "SingleLineResizeWidth1",
+			column:      st.Column("Lorem ipsum dolor sit amet  "),
+			resizeWidth: 1,
+			lines:       []string{"Lorem", "ipsum", "dolor", "sit  ", "amet "},
+			width:       5,
+			height:      5,
 		},
 	}
 

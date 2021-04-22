@@ -42,41 +42,6 @@ func TestAlign(t *testing.T) {
 	}
 }
 
-func TestSpan(t *testing.T) {
-	t.Parallel()
-
-	testData := [...]struct {
-		name string
-		span uint
-	}{
-		{
-			name: "1",
-			span: 1,
-		},
-		{
-			name: "12",
-			span: 12,
-		},
-		{
-			name: "123",
-			span: 123,
-		},
-	}
-
-	for _, testDatum := range testData {
-		testDatum := testDatum
-
-		t.Run(testDatum.name, func(t *testing.T) {
-			t.Parallel()
-
-			var o st.Options
-			st.Span(testDatum.span)(&o)
-
-			assert.Equal(t, int(testDatum.span), o.Span)
-		})
-	}
-}
-
 func TestWidth(t *testing.T) {
 	t.Parallel()
 

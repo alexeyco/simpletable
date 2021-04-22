@@ -3,9 +3,9 @@ package simpletable
 import (
 	"fmt"
 	"math"
-	"regexp"
 	"strings"
 
+	"github.com/alexeyco/simpletable/xterm"
 	"github.com/mattn/go-runewidth"
 )
 
@@ -13,10 +13,6 @@ const (
 	newLine = "\n"
 	space   = " "
 )
-
-// stripAnsiEscapeExp is a regular expression to clean ANSI Control sequences
-// feat https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python#33925425
-var stripAnsiEscapeExp = regexp.MustCompile(`(\x9B|\x1B\[)[0-?]*[ -/]*[@-~]`)
 
 type Col struct {
 	options       Options
@@ -71,11 +67,6 @@ func (c *Col) resizeWidth(width int) {
 			case overallLineWidth <= width:
 				line = append(line, word)
 				lineWidth += wordWidth
-			case overallLineWidth == width:
-				lines = append(lines, strings.Join(line, space))
-
-				line = []string{}
-				lineWidth = 0
 			case overallLineWidth > width:
 				lines = append(lines, strings.Join(line, space))
 
@@ -148,6 +139,10 @@ func Column(text string, options ...Option) *Col {
 		minWidth int
 		width    int
 	)
+
+	if text != "" {
+		text = xterm.Strip(text)
+	}
 
 	lines := strings.Split(text, newLine)
 	for n := range lines {

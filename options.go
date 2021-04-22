@@ -20,14 +20,6 @@ func Align(align uint8) Option {
 	}
 }
 
-func Span(span uint) Option {
-	return func(o *Options) {
-		if span > 0 {
-			o.Span = int(span)
-		}
-	}
-}
-
 func Width(width uint) Option {
 	return func(o *Options) {
 		o.Width = int(width)
