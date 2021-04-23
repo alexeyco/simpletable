@@ -6,8 +6,6 @@ import (
 	"github.com/alexeyco/simpletable/grid"
 )
 
-type divider struct{}
-
 type Table struct {
 	style Style
 	sizer *grid.grid
@@ -58,6 +56,5 @@ func (t *Table) String() string {
 func New() *Table {
 	return &Table{
 		style: StyleDefault,
-		sizer: &grid.grid{},
 	}
 }
