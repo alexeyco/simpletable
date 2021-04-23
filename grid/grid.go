@@ -63,43 +63,8 @@ func (g *Grid) SetHeight(rowIdx, height int) {
 	}
 }
 
-// VExpand expand column vertically.
-func (g *Grid) VExpand(rowIdx, colIdx, span int) {
-	if span < 1 {
-		return
-	}
-
-	cell := g.cell(rowIdx, colIdx)
-	if cell == nil || cell.mergedTo != nil {
-		return
-	}
-
-	fromIdx := cell.Row + cell.VSpan
-	for celRowIdx := fromIdx; celRowIdx <= fromIdx+span; celRowIdx++ {
-		var heightIncreased bool
-
-		for cellColIdx := cell.Col; cellColIdx < cell.Col+cell.HSpan; cellColIdx++ {
-			if c := g.cell(celRowIdx, cellColIdx); c != nil && c.mergedTo != nil {
-				return
-			}
-		}
-
-		for cellColIdx := cell.Col; cellColIdx < cell.Col+cell.HSpan; cellColIdx++ {
-			if c := g.cell(celRowIdx, cellColIdx); c != nil {
-				c.mergedTo = cell
-				if !heightIncreased {
-					cell.Height += c.Height
-					heightIncreased = true
-				}
-			}
-		}
-	}
-
-	cell.VSpan = span
-}
-
-// HExpand expand column vertically.
-func (g *Grid) HExpand(rowIdx, colIdx, span int) {
+// Expand column horizontally.
+func (g *Grid) Expand(rowIdx, colIdx, span int) {
 	if span < 1 {
 		return
 	}

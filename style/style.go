@@ -1,4 +1,4 @@
-package simpletable
+package style
 
 var (
 	// StyleDefault - MySql-like table style:

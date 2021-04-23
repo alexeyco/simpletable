@@ -3,58 +3,39 @@ package simpletable
 import (
 	"strings"
 
-	"github.com/alexeyco/simpletable/grid"
+	"github.com/alexeyco/simpletable/style"
 )
 
+// Table structure.
 type Table struct {
-	style Style
-	sizer *grid.grid
-	rows  []interface{}
+	style style.Style
+	lines []Line
 }
 
-func (t *Table) Style(s Style) *Table {
+// SetStyle table style setter.
+func (t *Table) SetStyle(s style.Style) *Table {
 	t.style = s
 
 	return t
 }
 
-func (t *Table) Row(columns ...*Col) *Table {
-	var (
-		length int
-		height int
-	)
-
-	for n, column := range columns {
-		length += column.options.Span
-
-		if column.Height() > height {
-			height = column.Height()
-		}
-	}
-
-	t.rows = append(t.rows, row{
-		columns: columns,
-		length:  length,
-		height:  height,
-	})
+// Append line to table.
+func (t *Table) Append(line Line) *Table {
+	t.lines = append(t.lines, line)
 
 	return t
 }
 
-func (t *Table) Divider() *Table {
-	t.rows = append(t.rows, divider{})
-
-	return t
-}
-
+// String returns table as a string.
 func (t *Table) String() string {
 	var lines []string
 
 	return strings.Join(lines, "\n")
 }
 
+// New returns new table instance.
 func New() *Table {
 	return &Table{
-		style: StyleDefault,
+		style: style.StyleDefault,
 	}
 }

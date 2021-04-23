@@ -53,44 +53,12 @@ func TestGrid_Cells(t *testing.T) {
 				g.SetWidth(0, 2)
 				g.SetWidth(1, 3)
 
-				g.HExpand(0, 0, 2)
+				g.Expand(0, 0, 2)
 			},
 			cells: []*grid.Cell{
 				{Row: 0, Col: 0, HSpan: 2, VSpan: 1, Width: 5, Height: 0},
 				{Row: 1, Col: 0, HSpan: 1, VSpan: 1, Width: 2, Height: 0},
 				{Row: 1, Col: 1, HSpan: 1, VSpan: 1, Width: 3, Height: 0},
-			},
-		},
-		{
-			name: "ExpandColumnVertically",
-			grid: grid.New(2, 2),
-			prepare: func(g *grid.Grid) {
-				g.SetHeight(0, 2)
-				g.SetHeight(1, 3)
-
-				g.VExpand(0, 0, 2)
-			},
-			cells: []*grid.Cell{
-				{Row: 0, Col: 0, HSpan: 1, VSpan: 2, Width: 0, Height: 5},
-				{Row: 0, Col: 1, HSpan: 1, VSpan: 1, Width: 0, Height: 2},
-				{Row: 1, Col: 1, HSpan: 1, VSpan: 1, Width: 0, Height: 3},
-			},
-		},
-		{
-			name: "MergeVerticallyThenResize",
-			grid: grid.New(2, 2),
-			prepare: func(g *grid.Grid) {
-				g.SetHeight(0, 2)
-				g.SetHeight(1, 3)
-
-				g.VExpand(0, 0, 2)
-				g.VExpand(0, 1, 2)
-
-				g.SetHeight(1, 4)
-			},
-			cells: []*grid.Cell{
-				{Row: 0, Col: 0, HSpan: 1, VSpan: 2, Width: 0, Height: 6},
-				{Row: 0, Col: 1, HSpan: 1, VSpan: 2, Width: 0, Height: 6},
 			},
 		},
 	}
