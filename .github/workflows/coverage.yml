@@ -1,0 +1,34 @@
+name: Coverage
+
+on:
+  push:
+    branches: ["v1"]
+
+permissions:
+  contents: read
+
+jobs:
+  coveralls:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Test with coverage
+        run: go test -coverprofile=coverage.out ./...
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.out
+          format: golang
+          github-token: ${{ secrets.GITHUB_TOKEN }}
