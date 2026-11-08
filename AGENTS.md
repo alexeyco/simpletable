@@ -13,7 +13,7 @@ Keep this file focused on agent-specific constraints and repository gotchas. Put
 ## Go checks
 
 - The GitHub Actions workflow runs `go test ./...` and `go build ./...`. Run the relevant checks after Go code changes; run both before reporting a code change as verified.
-- The coverage workflow runs `go test -coverprofile=coverage.out ./...` and uploads its report to Coveralls on pushes to `v1`.
+- The coverage workflow runs `go test -coverprofile=coverage.out ./...` and uploads its report to Coveralls on pushes to `master`.
 - For performance changes, measure a representative baseline and compare with `go test -bench . -benchmem`. Do not claim an optimization without benchmark evidence.
 
 ## Git boundaries
