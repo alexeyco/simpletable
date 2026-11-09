@@ -1,0 +1,19 @@
+name: reminder
+
+on:
+  schedule:
+    - cron: "0 9 1 * *"
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open a comparison refresh issue when none is open
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const runReminder = require(`${process.env.GITHUB_WORKSPACE}/scripts/reminder.js`);
+            await runReminder({ github, context, core });

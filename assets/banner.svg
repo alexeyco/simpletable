@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" role="img" aria-labelledby="title description">
+  <title id="title">simpletable</title>
+  <desc id="description">An abstract arrangement of broken rows and cells for a Go package.</desc>
+
+  <rect width="1200" height="280" fill="#0b1220" />
+
+  <g fill="#e7edf7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace">
+    <text x="64" y="151" font-size="62" font-weight="600" letter-spacing="-2">simpletable</text>
+    <text x="68" y="190" fill="#8493aa" font-size="13" letter-spacing="3">Simple tables in terminal with Go</text>
+  </g>
+
+  <g fill="none" stroke="#27364d" stroke-linecap="square" stroke-width="2">
+    <path d="M650 63h116 M800 63h53 M887 63h191" />
+    <path d="M650 99h73 M757 99h194 M984 99h94" />
+    <path d="M702 135h105 M841 135h98 M972 135h106" />
+    <path d="M650 171h162 M848 171h64 M950 171h128" />
+    <path d="M680 207h80 M796 207h161 M993 207h85" />
+    <path d="M1031 43v37 M1031 113v56 M1031 199v40" />
+    <path d="M778 43v38 M778 115v72 M778 221v18" />
+    <path d="M920 81v42 M920 157v82" />
+    <path d="M1120 41v198" />
+  </g>
+
+  <!-- Change this color to reuse the banner with another package accent. -->
+  <g color="#4f8cff" fill="none" stroke="currentColor" stroke-linecap="square" stroke-width="3">
+    <path d="M650 63h38 M757 99h68 M972 135h49 M848 171h40 M993 207h51" />
+    <path d="M920 157v38 M778 81v34 M1031 80v33" />
+    <rect x="705" y="57" width="14" height="14" fill="currentColor" stroke="none" />
+    <rect x="937" y="128" width="14" height="14" fill="currentColor" stroke="none" />
+    <rect x="813" y="200" width="14" height="14" fill="currentColor" stroke="none" />
+    <circle cx="1120" cy="41" r="4" fill="currentColor" stroke="none" />
+  </g>
+</svg>

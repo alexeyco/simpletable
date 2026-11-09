@@ -1,78 +1,39 @@
 # Simple tables in terminal with Go
 
-[![Quality gates](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml/badge.svg)](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/alexeyco/simpletable/badge.svg?branch=master)](https://coveralls.io/github/alexeyco/simpletable?branch=master)&nbsp;[![Go Reference](https://pkg.go.dev/badge/github.com/alexeyco/simpletable.svg)](https://pkg.go.dev/github.com/alexeyco/simpletable)
+![simpletable banner](assets/banner.svg)
 
-This package allows to generate and display ascii tables in the terminal, f.e.:
+[![Quality gates](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml/badge.svg)](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/alexeyco/simpletable/badge.svg?branch=master)](https://coveralls.io/github/alexeyco/simpletable?branch=master)&nbsp;[![Go Reference](https://pkg.go.dev/badge/github.com/alexeyco/simpletable.svg)](https://pkg.go.dev/github.com/alexeyco/simpletable)&nbsp;[![License](https://img.shields.io/github/license/alexeyco/simpletable)](LICENSE)
 
-```
-+----+------------------+--------------+-----------------------------+------+
-| #  |       NAME       |    PHONE     |            EMAIL            | QTTY |
-+----+------------------+--------------+-----------------------------+------+
-|  1 | Newton G. Goetz  | 252-585-5166 | NewtonGGoetz@dayrep.com     |   10 |
-|  2 | Rebecca R. Edney | 865-475-4171 | RebeccaREdney@armyspy.com   |   12 |
-|  3 | John R. Jackson  | 810-325-1417 | JohnRJackson@armyspy.com    |   15 |
-|  4 | Ron J. Gomes     | 217-450-8568 | RonJGomes@rhyta.com         |   25 |
-|  5 | Penny R. Lewis   | 870-794-1666 | PennyRLewis@rhyta.com       |    5 |
-|  6 | Sofia J. Smith   | 770-333-7379 | SofiaJSmith@armyspy.com     |    3 |
-|  7 | Karlene D. Owen  | 231-242-4157 | KarleneDOwen@jourrapide.com |   12 |
-|  8 | Daniel L. Love   | 978-210-4178 | DanielLLove@rhyta.com       |   44 |
-|  9 | Julie T. Dial    | 719-966-5354 | JulieTDial@jourrapide.com   |    8 |
-| 10 | Juan J. Kennedy  | 908-910-8893 | JuanJKennedy@dayrep.com     |   16 |
-+----+------------------+--------------+-----------------------------+------+
-|                                                           Subtotal |  150 |
-+----+------------------+--------------+-----------------------------+------+
-```
+Build readable terminal tables in Go with seven built-in styles, multiline cells, alignment, and column spanning.
 
-There are the following key features:
-* **Declarative style.** _Have to write more code, and hell with it._
-* **Styling.** _With 7 predefined styles: MySql-like (default), compact, compact lite, compact classic, markdown, 
-  rounded and unicode. And you can change it._
-* **Header and footer.** _Separated from table body._
-* **Multiline cells support.** _See [_example/main.go/_example/04-multiline/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/04-multiline/main.go) for example._
-* **Cell content alignment.** _Left, right or center._
-* **Row spanning.** _By analogy with the way it is done in HTML. See `Cell.Span` attribute 
-  description._
-* **Fast!** _Really fast, see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)._
+## Comparison
 
-## Installation
-```
-$ go get -u github.com/alexeyco/simpletable
-```
-To run unit tests:
-```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable
-$ go test -cover
-```
-To run benchmarks:
-```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable
-$ go test -bench=.
-```
-Comparison with similar libraries see [_example/main.go/_example/03-benchmarks-with-others](https://github.com/alexeyco/simpletable/blob/master/_example/03-benchmarks-with-others)
+✅ documented · ⚠️ partial · ❌ not found in sources checked. The last status means the sources checked did not document the feature; it does not establish that the library lacks it. Each symbol links to the public source checked for that comparison.
 
-## Basic example
+| Feature | [simpletable](https://github.com/alexeyco/simpletable) | [termtables](https://pkg.go.dev/github.com/apcera/termtables) | [uitable](https://github.com/gosuri/uitable) | [tablewriter](https://github.com/olekukonko/tablewriter) | [go-pretty](https://github.com/jedib0t/go-pretty) |
+| --- | --- | --- | --- | --- | --- |
+| Multiline cell content | [✅](https://github.com/alexeyco/simpletable/blob/master/_example/04-multiline/main.go) | [❌](https://pkg.go.dev/github.com/apcera/termtables) | [⚠️](https://github.com/gosuri/uitable#example-usage) | [⚠️](https://github.com/olekukonko/tablewriter#advanced-examples) | [❌](https://github.com/jedib0t/go-pretty/tree/main/table) |
+| Explicit column spans | [✅](https://github.com/alexeyco/simpletable/blob/master/cell.go) | [✅](https://pkg.go.dev/github.com/apcera/termtables#CellStyle) | [❌](https://pkg.go.dev/github.com/gosuri/uitable) | [⚠️](https://github.com/olekukonko/tablewriter#examples) | [⚠️](https://github.com/jedib0t/go-pretty/tree/main/table) |
+| Markdown output | [✅](https://github.com/alexeyco/simpletable/blob/master/style.go) | [✅](https://pkg.go.dev/github.com/apcera/termtables#Table.SetModeMarkdown) | [❌](https://github.com/gosuri/uitable) | [✅](https://github.com/olekukonko/tablewriter#key-features) | [✅](https://github.com/jedib0t/go-pretty) |
+| Alignment controls | [✅](https://github.com/alexeyco/simpletable/blob/master/cell.go) | [✅](https://pkg.go.dev/github.com/apcera/termtables#Table.SetAlign) | [⚠️](https://pkg.go.dev/github.com/gosuri/uitable#Table.RightAlign) | [✅](https://github.com/olekukonko/tablewriter#examples) | [✅](https://github.com/jedib0t/go-pretty/tree/main/table) |
+| Custom table styles | [✅](https://github.com/alexeyco/simpletable/blob/master/style.go) | [✅](https://pkg.go.dev/github.com/apcera/termtables#TableStyle) | [❌](https://pkg.go.dev/github.com/gosuri/uitable) | [✅](https://github.com/olekukonko/tablewriter#key-features) | [✅](https://github.com/jedib0t/go-pretty/tree/main/table) |
+
+Sources checked on 2026-11-09. Add a library as a column or a feature as a row, and link each status to the public source checked.
+
+## Quick start
+
 ```go
 package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/alexeyco/simpletable"
 )
 
-var (
-	data = [][]interface{}{
-		{1, "Newton G. Goetz", 532.7},
-		{2, "Rebecca R. Edney", 1423.25},
-		{3, "John R. Jackson", 7526.12},
-		{4, "Ron J. Gomes", 123.84},
-		{5, "Penny R. Lewis", 3221.11},
-	}
-)
-
 func main() {
 	table := simpletable.New()
-
 	table.Header = &simpletable.Header{
 		Cells: []*simpletable.Cell{
 			{Align: simpletable.AlignCenter, Text: "#"},
@@ -80,109 +41,74 @@ func main() {
 			{Align: simpletable.AlignCenter, Text: "TAX"},
 		},
 	}
-
-	subtotal := float64(0)
-	for _, row := range data {
-		r := []*simpletable.Cell{
-			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row[0].(int))},
-			{Text: row[1].(string)},
-			{Align: simpletable.AlignRight, Text: fmt.Sprintf("$ %.2f", row[2].(float64))},
-		}
-
-		table.Body.Cells = append(table.Body.Cells, r)
-		subtotal += row[2].(float64)
+	rows := []struct {
+		name string
+		tax  float64
+	}{
+		{"Newton G. Goetz", 532.70},
+		{"Rebecca R. Edney", 1423.25},
+		{"John R. Jackson", 7526.12},
+		{"Ron J. Gomes", 123.84},
+		{"Penny R. Lewis", 3221.11},
 	}
 
+	total := 0.0
+	for i, row := range rows {
+		table.Body.Cells = append(table.Body.Cells, []*simpletable.Cell{
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", i+1)},
+			{Text: row.name},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("$ %.2f", row.tax)},
+		})
+
+		total += row.tax
+	}
 	table.Footer = &simpletable.Footer{
 		Cells: []*simpletable.Cell{
-			{},
-			{Align: simpletable.AlignRight, Text: "Subtotal"},
-			{Align: simpletable.AlignRight, Text: fmt.Sprintf("$ %.2f", subtotal)},
+			{Align: simpletable.AlignRight, Span: 2, Text: "Subtotal"},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("$ %.2f", total)},
 		},
 	}
-
 	table.SetStyle(simpletable.StyleCompactLite)
-	fmt.Println(table.String())
+
+	for _, line := range strings.Split(table.String(), "\n") {
+		fmt.Println(strings.TrimPrefix(strings.TrimRight(line, " "), " "))
+	}
 }
 ```
 
-Result:
 ```
- #         NAME            TAX
+#         NAME            TAX
 --- ------------------ ------------
- 1   Newton G. Goetz      $ 532.70
- 2   Rebecca R. Edney    $ 1423.25
- 3   John R. Jackson     $ 7526.12
- 4   Ron J. Gomes         $ 123.84
- 5   Penny R. Lewis      $ 3221.11
+1   Newton G. Goetz      $ 532.70
+2   Rebecca R. Edney    $ 1423.25
+3   John R. Jackson     $ 7526.12
+4   Ron J. Gomes         $ 123.84
+5   Penny R. Lewis      $ 3221.11
 --- ------------------ ------------
-             Subtotal   $ 12827.02
+            Subtotal   $ 12827.02
 ```
 
-You can see also [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go) for styles demonstration.
+Install with `go get github.com/alexeyco/simpletable`.
+
+See the [styles demo](https://github.com/alexeyco/simpletable/tree/master/_example/01-styles-demo), [multiline example](https://github.com/alexeyco/simpletable/tree/master/_example/04-multiline), and [column-span example](https://github.com/alexeyco/simpletable/tree/master/_example/02-ugly-span) for more.
+
+## Benchmarks
+
+<details>
+<summary>(MacBook)</summary>
+
+Run these benchmarks using the [benchmark instructions](https://github.com/alexeyco/simpletable/tree/master/_example/03-benchmarks-with-others#run-benchmarks).
+
 ```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
-$ go run main.go
+BenchmarkSimpletable-12             31845             37586 ns/op           34903 B/op        760 allocs/op
+BenchmarkTermtables-12              34851             34191 ns/op           24192 B/op        755 allocs/op
+BenchmarkUITable-12                  6452            176884 ns/op           55480 B/op       3070 allocs/op
+PASS
+ok      github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench        5.172s
 ```
 
-More examples:
-For more examples see [_example](https://github.com/alexeyco/simpletable/tree/master/_example) directory:
-```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example
-$ ls -F | grep /
-
-01-styles-demo/
-02-ugly-span/
-03-benchmarks-with-others/
-04-multiline/
-```
-
-## Styling
-There is 6 styles available. To view them, run [_example/main.go/01-styles-demo/main.go](https://github.com/alexeyco/simpletable/blob/master/_example/01-styles-demo/main.go):
-```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/01-styles-demo
-$ go run main.go
-```
-
-## Cell content alignment
-You can set cell content alignment:
-```go
-c := &simpletable.Cell{
-	// or simpletable.AlignLeft (default), or simpletable.AlignCenter
-	Align:   simpletable.AlignRight, 
-	Content: "Subtotal",
-}
-```
-
-## Column spanning
-By analogy with HTML:
-```go
-c := &simpletable.Cell{
-	Span:    2, // Default: 1
-	Content: "Subtotal",
-}
-```
-Note: by default `Span` is `1`. If you try to set it to `0`, the value will still be `1`.
+</details>
 
 ## License
-```
-Copyright (c) 2017 Alexey Popov
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+[MIT](LICENSE)
