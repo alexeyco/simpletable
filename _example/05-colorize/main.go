@@ -1,3 +1,4 @@
+// Package main demonstrates colored table content.
 package main
 
 import (
@@ -7,12 +8,12 @@ import (
 )
 
 const (
-	ColorDefault = "\x1b[39m"
+	colorDefault = "\x1b[39m"
 
-	ColorRed   = "\x1b[91m"
-	ColorGreen = "\x1b[32m"
-	ColorBlue  = "\x1b[94m"
-	ColorGray  = "\x1b[90m"
+	colorRed   = "\x1b[91m"
+	colorGreen = "\x1b[32m"
+	colorBlue  = "\x1b[94m"
+	colorGray  = "\x1b[90m"
 )
 
 func main() {
@@ -46,17 +47,17 @@ func main() {
 }
 
 func red(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorRed, s, ColorDefault)
+	return fmt.Sprintf("%s%s%s", colorRed, s, colorDefault)
 }
 
 func green(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorGreen, s, ColorDefault)
+	return fmt.Sprintf("%s%s%s", colorGreen, s, colorDefault)
 }
 
 func blue(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorBlue, s, ColorDefault)
+	return fmt.Sprintf("%s%s%s", colorBlue, s, colorDefault)
 }
 
 func gray(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorGray, s, ColorDefault)
+	return fmt.Sprintf("%s%s%s", colorGray, s, colorDefault)
 }

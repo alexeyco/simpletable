@@ -1,6 +1,6 @@
 # Simple tables in terminal with Go
 
-[![Go](https://github.com/alexeyco/simpletable/actions/workflows/go.yml/badge.svg)](https://github.com/alexeyco/simpletable/actions/workflows/go.yml)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/alexeyco/simpletable/badge.svg?branch=master)](https://coveralls.io/github/alexeyco/simpletable?branch=master)&nbsp;[![Go Reference](https://pkg.go.dev/badge/github.com/alexeyco/simpletable.svg)](https://pkg.go.dev/github.com/alexeyco/simpletable)
+[![Quality gates](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml/badge.svg)](https://github.com/alexeyco/simpletable/actions/workflows/quality-gates.yml)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/alexeyco/simpletable/badge.svg?branch=master)](https://coveralls.io/github/alexeyco/simpletable?branch=master)&nbsp;[![Go Reference](https://pkg.go.dev/badge/github.com/alexeyco/simpletable.svg)](https://pkg.go.dev/github.com/alexeyco/simpletable)
 
 This package allows to generate and display ascii tables in the terminal, f.e.:
 

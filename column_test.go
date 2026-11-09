@@ -1,31 +1,32 @@
-package simpletable
+package simpletable_test
 
-import "testing"
+import (
+	"testing"
 
-func TestColumn_Resize(t *testing.T) {
-	if testColumn().getWidth() != 5 {
-		t.Error("Wrong *tblColumn width calculation")
+	"github.com/alexeyco/simpletable"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestColumnUsesLongestCell(t *testing.T) {
+	table := simpletable.New()
+	table.Body.Cells = [][]*simpletable.Cell{
+		{{Text: "123"}},
+		{{Text: "12345"}},
 	}
+
+	output := table.String()
+	assert.Contains(t, output, "| 123   |")
+	assert.Contains(t, output, "| 12345 |")
 }
 
-func TestColumn_IncrementWidth(t *testing.T) {
-	c := testColumn()
-	c.incrementWidth(5)
-
-	if c.getWidth() != 10 {
-		t.Error("Wrong *tblColumn width calculation")
-	}
-}
-
-func testColumn() *tblColumn {
-	c := &tblColumn{
-		Cells: []cellInterface{
-			testCellNewCell("123"),
-			testCellNewCell("12345"),
-		},
-		Table: New(),
+func TestSpannedCellExpandsColumns(t *testing.T) {
+	table := simpletable.New()
+	table.Body.Cells = [][]*simpletable.Cell{
+		{{Span: 2, Text: "1234567890"}},
+		{{Text: "12345"}, {Text: "12345"}},
 	}
 
-	c.resize()
-	return c
+	output := table.String()
+	assert.Contains(t, output, "1234567890")
+	assertEqualLineWidths(t, output)
 }

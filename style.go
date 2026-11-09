@@ -1,3 +1,4 @@
+//nolint:godot // ASCII style examples are diagrams rather than prose.
 package simpletable
 
 var (
@@ -201,7 +202,7 @@ var (
 		Cell: "|",
 	}
 
-	// StyleUnicode - unicode (awesome!!!) table style:
+	// StyleUnicode is the Unicode table style.
 	StyleUnicode = &Style{
 		Border: &BorderStyle{
 			TopLeft:            "╔",
@@ -225,7 +226,7 @@ var (
 	}
 )
 
-// BorderStyle defines table border style
+// BorderStyle defines the table border style.
 type BorderStyle struct {
 	TopLeft            string
 	Top                string
@@ -239,7 +240,7 @@ type BorderStyle struct {
 	BottomIntersection string
 }
 
-// DividerStyle defines table divider style
+// DividerStyle defines the table divider style.
 type DividerStyle struct {
 	Left         string
 	Center       string
@@ -247,7 +248,7 @@ type DividerStyle struct {
 	Intersection string
 }
 
-// Style is a table style (borders, dividers etc)
+// Style defines a table style, including borders and dividers.
 type Style struct {
 	Border  *BorderStyle
 	Divider *DividerStyle

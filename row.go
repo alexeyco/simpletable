@@ -5,24 +5,24 @@ import (
 	"strings"
 )
 
-// tblRow is a meta table row
+// tblRow is a metadata row used to render the table.
 type tblRow struct {
 	Cells []cellInterface
 	Table *Table
 }
 
-// len returns row length
+// len returns the rendered row length.
 func (r *tblRow) len() int {
 	l := 0
 	for _, c := range r.Cells {
 		l += c.width()
 	}
 
-	len := len(r.Cells)
-	return l + (3 * len) - 1
+	cellCount := len(r.Cells)
+	return l + (3 * cellCount) - 1
 }
 
-// toStringSlice returns row contents as a toString
+// toStringSlice returns the rendered row contents as a string slice.
 func (r *tblRow) toStringSlice() []string {
 	l := [][]string{}
 
@@ -45,7 +45,7 @@ func (r *tblRow) toStringSlice() []string {
 	return ret
 }
 
-// transpose transposes slice of string slices
+// transpose transposes a slice of string slices.
 func (r *tblRow) transpose(s [][]string) [][]string {
 	ret := [][]string{}
 	l := len(s)
@@ -63,7 +63,7 @@ func (r *tblRow) transpose(s [][]string) [][]string {
 	return ret
 }
 
-// resize resets all cells height
+// resize sets every cell to the height of the tallest cell.
 func (r *tblRow) resize() {
 	m := 0
 	for _, c := range r.Cells {
@@ -78,12 +78,8 @@ func (r *tblRow) resize() {
 	}
 }
 
-// isDivider check if a row is divider (if first row cell is divider - row divider to)
+// isDivider reports whether the first cell in the row is a divider.
 func (r *tblRow) isDivider() bool {
-	switch r.Cells[0].(type) {
-	case *dividerCell:
-		return true
-	}
-
-	return false
+	_, ok := r.Cells[0].(*dividerCell)
+	return ok
 }

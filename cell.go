@@ -1,17 +1,17 @@
 package simpletable
 
 const (
-	// AlignLeft sets cell left alignment (default)
+	// AlignLeft sets cell left alignment (default).
 	AlignLeft = 0
 
-	// AlignCenter sets cell center alignment
+	// AlignCenter sets cell center alignment.
 	AlignCenter = 1
 
-	// AlignRight sets cell right alignment
+	// AlignRight sets cell right alignment.
 	AlignRight = 2
 )
 
-// cellInterface is a basic cell interface
+// cellInterface is a basic cell interface.
 type cellInterface interface {
 	len() int              // Returns cell text length
 	isSpanned() bool       // Returns true if cell spanned
@@ -24,7 +24,7 @@ type cellInterface interface {
 	lines() []string       // Returns cell as string slice
 }
 
-// Cell is a table cell
+// Cell is a table cell.
 type Cell struct {
 	Align    int          // Cell alignment
 	Span     int          // span cell to right (1 - default)
@@ -97,7 +97,7 @@ func (c *Cell) lines() []string {
 	return c.content.lines(c.Align)
 }
 
-// dividerCell is table divider cell
+// dividerCell is table divider cell.
 type dividerCell struct {
 	span     int          // Divider span
 	children []*emptyCell // Nested empty meta cells
@@ -116,14 +116,14 @@ func (d *dividerCell) width() int {
 	return 1
 }
 
-func (d *dividerCell) setWidth(width int) {
+func (d *dividerCell) setWidth(_ int) {
 }
 
 func (d *dividerCell) height() int {
 	return 1
 }
 
-func (d *dividerCell) setHeight(height int) {
+func (d *dividerCell) setHeight(_ int) {
 }
 
 func (d *dividerCell) getColumn() *tblColumn {
@@ -145,7 +145,7 @@ func (d *dividerCell) lines() []string {
 	return c.lines(AlignLeft)
 }
 
-// emptyCell is meta cell, used when cell is spanned
+// emptyCell is meta cell, used when a cell is spanned.
 type emptyCell struct {
 	parent  cellInterface // Parent cell
 	w       int           // Cell width

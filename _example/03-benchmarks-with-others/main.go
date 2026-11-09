@@ -1,8 +1,10 @@
+// Package main compares simpletable with other table libraries.
 package main
 
 import (
-	"github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench"
 	"fmt"
+
+	"github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench"
 )
 
 func main() {

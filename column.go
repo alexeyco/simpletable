@@ -1,13 +1,13 @@
 package simpletable
 
-// tblColumn is a meta table column
+// tblColumn is a meta table column.
 type tblColumn struct {
 	Cells []cellInterface
 	Table *Table
 	width int
 }
 
-// resize resizes column to maximum nested cell length
+// resize resizes the column to the maximum nested cell length.
 func (c *tblColumn) resize() {
 	c.width = 0
 
@@ -23,7 +23,7 @@ func (c *tblColumn) resize() {
 	c.incrementWidth(0)
 }
 
-// incrementWidth increment nested cells width to i
+// incrementWidth increments nested cell widths by i.
 func (c *tblColumn) incrementWidth(i int) {
 	c.width += i
 	for _, cell := range c.Cells {
@@ -31,7 +31,7 @@ func (c *tblColumn) incrementWidth(i int) {
 	}
 }
 
-// getWidth returns column width
+// getWidth returns the column width.
 func (c *tblColumn) getWidth() int {
 	return c.width
 }

@@ -1,0 +1,50 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - copyloopvar
+    - durationcheck
+    - dupword
+    - errcheck
+    - errname
+    - errorlint
+    - forcetypeassert
+    - gocognit
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
+    - gosec
+    - govet
+    - ineffassign
+    - makezero
+    - misspell
+    - nilerr
+    - nilnil
+    - nolintlint
+    - predeclared
+    - revive
+    - staticcheck
+    - testifylint
+    - testpackage
+    - thelper
+    - unconvert
+    - unparam
+    - unused
+    - usetesting
+    - wastedassign
+  settings:
+    errcheck:
+      disable-default-exclusions: true
+      exclude-functions:
+        - fmt.Print
+        - fmt.Println
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
