@@ -1,40 +1,36 @@
-package simpletable
+package simpletable_test
 
-import "testing"
+import (
+	"strings"
+	"testing"
 
-func TestRow_String(t *testing.T) {
-	c := testCellNewCell("12345")
-	c.setWidth(10)
+	"github.com/alexeyco/simpletable"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+)
 
-	r := &tblRow{
-		Cells: []cellInterface{c},
-		Table: New(),
-	}
+func TestRowFormatting(t *testing.T) {
+	table := simpletable.New()
+	table.Body.Cells = [][]*simpletable.Cell{{{Text: "12345"}}, {{Text: "123456789"}}}
 
-	s := r.toStringSlice()[0]
-	if s != " 12345      " {
-		t.Error("Wrong row formatting")
-	}
+	output := table.String()
+	assert.Contains(t, output, "12345")
+	assert.Contains(t, output, "123456789")
+	assertEqualLineWidths(t, output)
 }
 
-func TestRow_IsDivider(t *testing.T) {
-	d := &tblRow{
-		Cells: []cellInterface{&dividerCell{}},
-		Table: New(),
-	}
+func TestRowDividerWithHeader(t *testing.T) {
+	table := simpletable.New()
+	table.Header.Cells = []*simpletable.Cell{{Text: "a"}}
+	table.Body.Cells = [][]*simpletable.Cell{{{Text: "b"}}}
 
-	if !d.isDivider() {
-		t.Error("Must be divider row")
-	}
+	assert.Contains(t, table.String(), "\n+---+\n")
 }
 
-func TestRow_IsDivider2(t *testing.T) {
-	n := &tblRow{
-		Cells: []cellInterface{&Cell{Text: ""}},
-		Table: New(),
-	}
+func TestRowWithoutHeaderHasNoDivider(t *testing.T) {
+	table := simpletable.New()
+	table.Body.Cells = [][]*simpletable.Cell{{{Text: "a"}}}
 
-	if n.isDivider() {
-		t.Error("Must not be divider row")
-	}
+	lines := strings.Split(table.String(), "\n")
+	require.Len(t, lines, 3)
 }

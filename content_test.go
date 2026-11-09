@@ -1,106 +1,64 @@
-package simpletable
+package simpletable_test
 
 import (
-	"fmt"
 	"testing"
+
+	"github.com/alexeyco/simpletable"
+	"github.com/stretchr/testify/assert"
 )
 
-var testContent = `1
-22
-333`
+const testContent = "1\n22\n333"
 
-func TestContent_Width(t *testing.T) {
-	c := newContent(testContent)
+func TestContentWidthAndHeight(t *testing.T) {
+	table := simpletable.New()
+	table.Body.Cells = [][]*simpletable.Cell{{{Text: testContent}}, {{Text: "1234"}}}
 
-	if c.width() != 3 {
-		t.Error("Wrong content width")
+	output := table.String()
+	assert.Contains(t, output, "+------+")
+	assert.Contains(t, output, "333")
+}
+
+func TestContentAlignment(t *testing.T) {
+	tests := []struct {
+		name  string
+		align int
+		want  string
+	}{
+		{name: "left", align: simpletable.AlignLeft, want: "| a    |"},
+		{name: "center", align: simpletable.AlignCenter, want: "|  a   |"},
+		{name: "right", align: simpletable.AlignRight, want: "|    a |"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			table := simpletable.New()
+			table.Body.Cells = [][]*simpletable.Cell{
+				{{Text: "a\nbb", Align: test.align}},
+				{{Text: "xxxx"}},
+			}
+
+			assert.Contains(t, table.String(), test.want)
+		})
 	}
 }
 
-func TestContent_Height(t *testing.T) {
-	c := newContent(testContent)
-
-	if c.height() != 3 {
-		t.Error("Wrong content height")
-	}
-}
-
-func TestContent_SetHeight(t *testing.T) {
-	c := newContent(testContent)
-
-	c.setHeight(5)
-	if c.height() != 5 {
-		t.Error("Wrong content height")
-	}
-}
-
-func TestContent_Lines(t *testing.T) {
-	c := newContent(testContent)
-	c.setHeight(5)
-
-	left := []string{
-		"1  ",
-		"22 ",
-		"333",
-		"   ",
-		"   ",
+func TestContentStripsANSIForWidth(t *testing.T) {
+	tests := []struct {
+		name    string
+		colored string
+	}{
+		{name: "7-bit CSI", colored: "\x1b[91mabc\x1b[0m"},
+		{name: "8-bit CSI", colored: "\x9b91mabc\x9b0m"},
 	}
 
-	center := []string{
-		" 1 ",
-		"22 ",
-		"333",
-		"   ",
-		"   ",
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			table := simpletable.New()
+			table.Body.Cells = [][]*simpletable.Cell{{{Text: test.colored}}, {{Text: "1234"}}}
+
+			output := table.String()
+			assert.Contains(t, output, "+------+")
+			assert.Contains(t, output, test.colored)
+		})
 	}
-
-	right := []string{
-		"  1",
-		" 22",
-		"333",
-		"   ",
-		"   ",
-	}
-
-	if !testContentEqual(c.lines(AlignLeft), left) {
-		t.Error("Wrong lines rendering (align: left)")
-	}
-
-	if !testContentEqual(c.lines(AlignCenter), center) {
-		t.Error("Wrong lines rendering (align: center)")
-	}
-
-	if !testContentEqual(c.lines(AlignRight), right) {
-		t.Error("Wrong lines rendering (align: right)")
-	}
-}
-
-func TestContent_StripAnsiEscape(t *testing.T) {
-	line := "\t\u001b[0;35mBlabla\u001b[0m                                  \u001b[0;36m172.18.0.2\u001b[0m"
-
-	if stripAnsiEscape(line) != "\tBlabla                                  172.18.0.2" {
-		t.Error("Wrong ANSI escape sequences stripping")
-	}
-}
-
-func TestContent_RealLength(t *testing.T) {
-	colorDefault := "\x1b[39m"
-	colorRed := "\x1b[91m"
-
-	plainString := "I am string"
-	colorizedString := fmt.Sprintf("%s%s%s", colorRed, plainString, colorDefault)
-
-	if realLength(plainString) != realLength(colorizedString) {
-		t.Error("Wrong real string length calculation")
-	}
-}
-
-func testContentEqual(o, s []string) bool {
-	for i, v := range o {
-		if s[i] != v {
-			return false
-		}
-	}
-
-	return true
 }

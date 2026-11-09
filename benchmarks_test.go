@@ -1,107 +1,102 @@
-package simpletable
+package simpletable_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/alexeyco/simpletable"
 )
 
-var (
-	benchStyleData = [][]interface{}{
-		{1, "Newton G. Goetz", "252-585-5166", "NewtonGGoetz@dayrep.com", 10},
-		{2, "Rebecca R. Edney", "865-475-4171", "RebeccaREdney@armyspy.com", 12},
-		{3, "John R. Jackson", "810-325-1417", "JohnRJackson@armyspy.com", 15},
-		{4, "Ron J. Gomes", "217-450-8568", "RonJGomes@rhyta.com", 25},
-		{5, "Penny R. Lewis", "870-794-1666", "PennyRLewis@rhyta.com", 5},
-		{6, "Sofia J. Smith", "770-333-7379", "SofiaJSmith@armyspy.com", 3},
-		{7, "Karlene D. Owen", "231-242-4157", "KarleneDOwen@jourrapide.com", 12},
-		{8, "Daniel L. Love", "978-210-4178", "DanielLLove@rhyta.com", 44},
-		{9, "Julie T. Dial", "719-966-5354", "JulieTDial@jourrapide.com", 8},
-		{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
-	}
+type benchStyleRow struct {
+	id       int
+	name     string
+	phone    string
+	email    string
+	quantity int
+}
 
-	benchStyleDefaultTable        = benchStyleTable(StyleDefault)
-	benchStyleCompactTable        = benchStyleTable(StyleCompact)
-	benchStyleCompactLiteTable    = benchStyleTable(StyleCompactLite)
-	benchStyleCompactClassicTable = benchStyleTable(StyleCompactClassic)
-	benchStyleMarkdownTable       = benchStyleTable(StyleMarkdown)
-	benchStyleRoundedTable        = benchStyleTable(StyleRounded)
-	benchStyleUnicodeTable        = benchStyleTable(StyleUnicode)
-)
+var benchStyleData = []benchStyleRow{
+	{id: 1, name: "Newton G. Goetz", phone: "252-585-5166", email: "NewtonGGoetz@dayrep.com", quantity: 10},
+	{id: 2, name: "Rebecca R. Edney", phone: "865-475-4171", email: "RebeccaREdney@armyspy.com", quantity: 12},
+	{id: 3, name: "John R. Jackson", phone: "810-325-1417", email: "JohnRJackson@armyspy.com", quantity: 15},
+	{id: 4, name: "Ron J. Gomes", phone: "217-450-8568", email: "RonJGomes@rhyta.com", quantity: 25},
+	{id: 5, name: "Penny R. Lewis", phone: "870-794-1666", email: "PennyRLewis@rhyta.com", quantity: 5},
+	{id: 6, name: "Sofia J. Smith", phone: "770-333-7379", email: "SofiaJSmith@armyspy.com", quantity: 3},
+	{id: 7, name: "Karlene D. Owen", phone: "231-242-4157", email: "KarleneDOwen@jourrapide.com", quantity: 12},
+	{id: 8, name: "Daniel L. Love", phone: "978-210-4178", email: "DanielLLove@rhyta.com", quantity: 44},
+	{id: 9, name: "Julie T. Dial", phone: "719-966-5354", email: "JulieTDial@jourrapide.com", quantity: 8},
+	{id: 10, name: "Juan J. Kennedy", phone: "908-910-8893", email: "JuanJKennedy@dayrep.com", quantity: 16},
+}
 
 func BenchmarkStyleDefault(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleDefaultTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleDefault)
 }
 
 func BenchmarkStyleCompact(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleCompactTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleCompact)
 }
 
 func BenchmarkStyleCompactLite(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleCompactLiteTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleCompactLite)
 }
 
 func BenchmarkStyleCompactClassic(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleCompactClassicTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleCompactClassic)
 }
 
 func BenchmarkStyleMarkdown(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleMarkdownTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleMarkdown)
 }
 
 func BenchmarkStyleRounded(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_ = benchStyleRoundedTable.String()
-	}
+	benchmarkStyle(b, simpletable.StyleRounded)
 }
 
 func BenchmarkStyleUnicode(b *testing.B) {
+	benchmarkStyle(b, simpletable.StyleUnicode)
+}
+
+func benchmarkStyle(b *testing.B, style *simpletable.Style) {
+	b.Helper()
+	t := benchStyleTable(style)
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = benchStyleUnicodeTable.String()
+		_ = t.String()
 	}
 }
 
-func benchStyleTable(s *Style) *Table {
-	t := New()
-	t.SetStyle(s)
+func benchStyleTable(style *simpletable.Style) *simpletable.Table {
+	t := simpletable.New()
+	t.SetStyle(style)
 
-	t.Header = &Header{
-		Cells: []*Cell{
-			{Align: AlignCenter, Text: "#"},
-			{Align: AlignCenter, Text: "NAME"},
-			{Align: AlignCenter, Text: "PHONE"},
-			{Align: AlignCenter, Text: "EMAIL"},
-			{Align: AlignCenter, Text: "QTTY"},
+	t.Header = &simpletable.Header{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Text: "#"},
+			{Align: simpletable.AlignCenter, Text: "NAME"},
+			{Align: simpletable.AlignCenter, Text: "PHONE"},
+			{Align: simpletable.AlignCenter, Text: "EMAIL"},
+			{Align: simpletable.AlignCenter, Text: "QTTY"},
 		},
 	}
 
 	subtotal := 0
 	for _, row := range benchStyleData {
-		r := []*Cell{
-			{Align: AlignRight, Text: fmt.Sprintf("%d", row[0].(int))},
-			{Text: row[1].(string)},
-			{Text: row[2].(string)},
-			{Text: row[3].(string)},
-			{Align: AlignRight, Text: fmt.Sprintf("%d", row[4])},
+		r := []*simpletable.Cell{
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row.id)},
+			{Text: row.name},
+			{Text: row.phone},
+			{Text: row.email},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row.quantity)},
 		}
 
 		t.Body.Cells = append(t.Body.Cells, r)
-		subtotal += row[4].(int)
+		subtotal += row.quantity
 	}
 
-	t.Footer = &Footer{
-		Cells: []*Cell{
-			{Align: AlignRight, Span: 4, Text: "Subtotal"},
-			{Align: AlignRight, Text: fmt.Sprintf("%d", subtotal)},
+	t.Footer = &simpletable.Footer{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignRight, Span: 4, Text: "Subtotal"},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", subtotal)},
 		},
 	}
 

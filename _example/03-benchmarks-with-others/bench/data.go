@@ -1,14 +1,23 @@
+// Package bench renders comparison tables for the benchmark example.
 package bench
 
-var data = [][]interface{}{
-	{1, "Newton G. Goetz", "252-585-5166", "NewtonGGoetz@dayrep.com", 10},
-	{2, "Rebecca R. Edney", "865-475-4171", "RebeccaREdney@armyspy.com", 12},
-	{3, "John R. Jackson", "810-325-1417", "JohnRJackson@armyspy.com", 15},
-	{4, "Ron J. Gomes", "217-450-8568", "RonJGomes@rhyta.com", 25},
-	{5, "Penny R. Lewis", "870-794-1666", "PennyRLewis@rhyta.com", 5},
-	{6, "Sofia J. Smith", "770-333-7379", "SofiaJSmith@armyspy.com", 3},
-	{7, "Karlene D. Owen", "231-242-4157", "KarleneDOwen@jourrapide.com", 12},
-	{8, "Daniel L. Love", "978-210-4178", "DanielLLove@rhyta.com", 44},
-	{9, "Julie T. Dial", "719-966-5354", "JulieTDial@jourrapide.com", 8},
-	{10, "Juan J. Kennedy", "908-910-8893", "JuanJKennedy@dayrep.com", 16},
+type exampleRow struct {
+	id       int
+	name     string
+	phone    string
+	email    string
+	quantity int
+}
+
+var exampleData = []exampleRow{
+	{id: 1, name: "Newton G. Goetz", phone: "252-585-5166", email: "NewtonGGoetz@dayrep.com", quantity: 10},
+	{id: 2, name: "Rebecca R. Edney", phone: "865-475-4171", email: "RebeccaREdney@armyspy.com", quantity: 12},
+	{id: 3, name: "John R. Jackson", phone: "810-325-1417", email: "JohnRJackson@armyspy.com", quantity: 15},
+	{id: 4, name: "Ron J. Gomes", phone: "217-450-8568", email: "RonJGomes@rhyta.com", quantity: 25},
+	{id: 5, name: "Penny R. Lewis", phone: "870-794-1666", email: "PennyRLewis@rhyta.com", quantity: 5},
+	{id: 6, name: "Sofia J. Smith", phone: "770-333-7379", email: "SofiaJSmith@armyspy.com", quantity: 3},
+	{id: 7, name: "Karlene D. Owen", phone: "231-242-4157", email: "KarleneDOwen@jourrapide.com", quantity: 12},
+	{id: 8, name: "Daniel L. Love", phone: "978-210-4178", email: "DanielLLove@dayrep.com", quantity: 44},
+	{id: 9, name: "Julie T. Dial", phone: "719-966-5354", email: "JulieTDial@jourrapide.com", quantity: 8},
+	{id: 10, name: "Juan J. Kennedy", phone: "908-910-8893", email: "JuanJKennedy@dayrep.com", quantity: 16},
 }

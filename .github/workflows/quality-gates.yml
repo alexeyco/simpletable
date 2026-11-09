@@ -1,0 +1,64 @@
+name: Quality gates
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Test
+        run: go test ./...
+
+      - name: Build
+        run: go build ./...
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            _example/03-benchmarks-with-others/go.sum
+
+      - name: Lint root module and examples
+        uses: golangci/golangci-lint-action@v9
+        with:
+          args: ./... ./_example/01-styles-demo ./_example/02-ugly-span ./_example/04-multiline ./_example/05-colorize
+
+      - name: Lint benchmark comparison module
+        uses: golangci/golangci-lint-action@v9
+        with:
+          working-directory: _example/03-benchmarks-with-others
+          args: --config=../../.golangci.yml ./...
+
+      - name: Check formatting in root module and examples
+        run: golangci-lint fmt --config .golangci.yml --diff ./... ./_example/01-styles-demo ./_example/02-ugly-span ./_example/04-multiline ./_example/05-colorize
+
+      - name: Check formatting in benchmark comparison module
+        working-directory: _example/03-benchmarks-with-others
+        run: golangci-lint fmt --config ../../.golangci.yml --diff

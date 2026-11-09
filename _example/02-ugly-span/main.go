@@ -1,3 +1,4 @@
+// Package main demonstrates spanning cells.
 package main
 
 import (

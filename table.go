@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Table main table object
+// Table is the main table object.
 type Table struct {
 	Header   *Header
 	Body     *Body
@@ -18,16 +18,16 @@ type Table struct {
 	dividers []*dividerCell
 }
 
-//SetStyle sets table style
+// SetStyle sets the table style.
 func (t *Table) SetStyle(style *Style) {
 	t.style = style
 }
 
-// String returns table as a toString
+// String returns the rendered table as a string.
 func (t *Table) String() string {
 	t.refresh()
 
-	// TODO: protect against wrong spans
+	// Cell spans are assumed to fit the available columns.
 
 	t.initCellContent()
 	t.prepareRows()
@@ -55,17 +55,17 @@ func (t *Table) String() string {
 	return strings.Join(s, "\n")
 }
 
-// Print prints table
+// Print writes the rendered table to standard output.
 func (t *Table) Print() {
 	fmt.Print(t.String())
 }
 
-// Println prints table with new line below
+// Println writes the rendered table to standard output followed by a newline.
 func (t *Table) Println() {
 	fmt.Println(t.String())
 }
 
-// refresh resets table meta data (t.rows, t.columns, t.spanned, t.dividers)
+// refresh resets the table metadata in t.rows, t.columns, t.spanned, and t.dividers.
 func (t *Table) refresh() {
 	t.rows = []*tblRow{}
 	t.columns = []*tblColumn{}
@@ -73,19 +73,19 @@ func (t *Table) refresh() {
 	t.dividers = []*dividerCell{}
 }
 
-// borderTop returns top table border
+// borderTop returns the top table border.
 func (t *Table) borderTop() string {
 	s := t.style.Border
 	return t.line(s.TopLeft, s.Top, s.TopRight, s.TopIntersection)
 }
 
-// borderBottom returns bottom table border
+// borderBottom returns the bottom table border.
 func (t *Table) borderBottom() string {
 	s := t.style.Border
 	return t.line(s.BottomLeft, s.Bottom, s.BottomRight, s.BottomIntersection)
 }
 
-// borderLeftRight returns bordered row as a toString
+// borderLeftRight returns the bordered row as a string slice.
 func (t *Table) borderLeftRight(s []string, d bool) []string {
 	if d {
 		return s
@@ -98,7 +98,7 @@ func (t *Table) borderLeftRight(s []string, d bool) []string {
 	return s
 }
 
-// line returns line (border or divider) as a toString
+// line returns a border or divider line as a string.
 func (t *Table) line(l, c, r, i string) string {
 	b := []string{}
 	for _, col := range t.columns {
@@ -109,7 +109,8 @@ func (t *Table) line(l, c, r, i string) string {
 }
 
 // textSlice2CellSlice casts []*Cell to []cellInterface cause it's not possible do this:
-//     s := append([]cellInterface{}, t...)
+//
+//	s := append([]cellInterface{}, t...)
 func (t *Table) textSlice2CellSlice(c []*Cell) []cellInterface {
 	r := []cellInterface{}
 
@@ -120,7 +121,7 @@ func (t *Table) textSlice2CellSlice(c []*Cell) []cellInterface {
 	return r
 }
 
-// initCellContent loads content for all Cells of table (t.Header.Cells, t.Footer.Cells and t.Body.Cells)
+// initCellContent loads content for all cells in the table header, body, and footer.
 func (t *Table) initCellContent() {
 	t.initContent(t.Header.Cells...)
 
@@ -131,14 +132,14 @@ func (t *Table) initCellContent() {
 	t.initContent(t.Footer.Cells...)
 }
 
-// initContent loads content in a slice of Cell
+// initContent loads content for a slice of cells.
 func (t *Table) initContent(s ...*Cell) {
 	for _, c := range s {
 		c.content = newContent(c.Text)
 	}
 }
 
-// prepareRows fills t.rows slice from t.Header, t.Body and t.Footer
+// prepareRows fills t.rows from the table header, body, and footer.
 func (t *Table) prepareRows() {
 	hlen := len(t.Header.Cells)
 	if hlen > 0 {
@@ -194,7 +195,7 @@ func (t *Table) prepareRows() {
 	}
 }
 
-// prepareColumns fills t.columns slice from t.rows
+// prepareColumns fills t.columns from t.rows.
 func (t *Table) prepareColumns() {
 	m := [][]cellInterface{}
 
@@ -261,7 +262,7 @@ func (t *Table) prepareColumns() {
 	}
 }
 
-// transposeCells transposes cells matrix - needed for t.columns filling
+// transposeCells transposes the cells matrix to fill t.columns.
 func (t *Table) transposeCells(i [][]cellInterface) [][]cellInterface {
 	r := [][]cellInterface{}
 
@@ -278,14 +279,14 @@ func (t *Table) transposeCells(i [][]cellInterface) [][]cellInterface {
 	return r
 }
 
-// resizeColumns calculate column height
+// resizeRows sets each row to the height of its tallest cell.
 func (t *Table) resizeRows() {
 	for _, r := range t.rows {
 		r.resize()
 	}
 }
 
-// resizeColumns calculate column width (text cells and dividers)
+// resizeColumns calculates column widths from text cells and dividers.
 func (t *Table) resizeColumns() {
 	for _, c := range t.columns {
 		c.resize()
@@ -301,7 +302,7 @@ func (t *Table) resizeColumns() {
 	}
 }
 
-// incrementColumns bulk increment columns for specified length
+// incrementColumns increases each column width by the specified length.
 func (t *Table) incrementColumns(c []*tblColumn, length int) {
 	sizes := t.carve(length, len(c))
 
@@ -310,7 +311,7 @@ func (t *Table) incrementColumns(c []*tblColumn, length int) {
 	}
 }
 
-// carve splits length into a slice of integers, the sum of which is equal to length, and the count - equal to parts
+// carve splits length into parts whose values sum to length.
 func (t *Table) carve(length, parts int) []int {
 	r := []int{}
 	step := int(math.Floor(float64(length) / float64(parts)))

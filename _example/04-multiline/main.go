@@ -1,10 +1,11 @@
+// Package main demonstrates multiline table cells.
 package main
 
 import (
 	"github.com/alexeyco/simpletable"
 )
 
-var (
+const (
 	leftAligned = `Multiline content
 left aligned`
 

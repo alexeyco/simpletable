@@ -6,6 +6,7 @@ import (
 	"github.com/alexeyco/simpletable"
 )
 
+// Simpletable renders the sample rows with simpletable.
 func Simpletable() string {
 	table := simpletable.New()
 
@@ -20,17 +21,17 @@ func Simpletable() string {
 	}
 
 	subtotal := 0
-	for _, row := range data {
+	for _, row := range exampleData {
 		r := []*simpletable.Cell{
-			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row[0].(int))},
-			{Text: row[1].(string)},
-			{Text: row[2].(string)},
-			{Text: row[3].(string)},
-			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row[4])},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row.id)},
+			{Text: row.name},
+			{Text: row.phone},
+			{Text: row.email},
+			{Align: simpletable.AlignRight, Text: fmt.Sprintf("%d", row.quantity)},
 		}
 
 		table.Body.Cells = append(table.Body.Cells, r)
-		subtotal += row[4].(int)
+		subtotal += row.quantity
 	}
 
 	table.Footer = &simpletable.Footer{
