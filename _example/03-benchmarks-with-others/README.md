@@ -69,11 +69,4 @@ $ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/03-benchmarks-with-oth
 $ go test -bench=. -benchmem
 ```
 ## Results
-Intel Core i5 (3470), 8Gb DDR3 memory, Windows 10 results:
-```
-BenchmarkSimpletable-4             10000            186476 ns/op           45651 B/op       1330 allocs/op
-BenchmarkTermtables-4              10000            130461 ns/op           27632 B/op       1164 allocs/op
-BenchmarkUITable-4                 10000            229150 ns/op           39425 B/op       1073 allocs/op
-PASS
-ok      github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench        5.559s
-```
+See the [current benchmark results in the root README](../../README.md#benchmarks).
