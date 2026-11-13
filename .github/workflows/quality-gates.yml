@@ -24,10 +24,10 @@ jobs:
           cache: true
 
       - name: Test
-        run: go test ./...
+        run: make test
 
       - name: Build
-        run: go build ./...
+        run: make build
 
   lint:
     name: Lint
@@ -45,20 +45,13 @@ jobs:
             go.sum
             _example/03-benchmarks-with-others/go.sum
 
-      - name: Lint root module and examples
+      - name: Install golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
-          args: ./... ./_example/01-styles-demo ./_example/02-ugly-span ./_example/04-multiline ./_example/05-colorize
+          install-only: true
 
-      - name: Lint benchmark comparison module
-        uses: golangci/golangci-lint-action@v9
-        with:
-          working-directory: _example/03-benchmarks-with-others
-          args: --config=../../.golangci.yml ./...
+      - name: Lint all modules
+        run: make lint
 
-      - name: Check formatting in root module and examples
-        run: golangci-lint fmt --config .golangci.yml --diff ./... ./_example/01-styles-demo ./_example/02-ugly-span ./_example/04-multiline ./_example/05-colorize
-
-      - name: Check formatting in benchmark comparison module
-        working-directory: _example/03-benchmarks-with-others
-        run: golangci-lint fmt --config ../../.golangci.yml --diff
+      - name: Check formatting in all modules
+        run: make fmt-check
