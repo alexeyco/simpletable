@@ -12,9 +12,13 @@ Keep this file focused on agent-specific constraints and repository gotchas. Put
 
 ## Go checks
 
-- The GitHub Actions workflow runs `go test ./...` and `go build ./...`. Run the relevant checks after Go code changes; run both before reporting a code change as verified.
-- The coverage workflow runs `go test -coverprofile=coverage.out ./...` and uploads its report to Coveralls on pushes to `master`.
-- For performance changes, measure a representative baseline and compare with `go test -bench . -benchmem`. Do not claim an optimization without benchmark evidence.
+- Run checks through the `Makefile`; the CI workflows call these same targets, so the Makefile is the single source for gate commands. Use `make help` to list targets. Run `make check` before reporting a code change as verified; run the narrowest relevant target (`make test`, `make lint`, `make fmt-check`, `make openspec-validate`) while iterating.
+- The coverage workflow runs `make cover` (`go test -coverprofile=coverage.out ./...`) and uploads its report to Coveralls on pushes to `master`.
+- For performance changes, measure a representative baseline with `make bench` and compare afterwards. Do not claim an optimization without benchmark evidence. `make bench-compare` runs the third-party comparison benchmarks in `_example/03-benchmarks-with-others`.
+
+## Agent skills
+
+- Project skills are pinned in `skills-lock.json` and installed into `.agents/skills/`, which is gitignored. Run `make skills` to restore them after cloning; run `make skills-update` to refresh them from upstream.
 
 ## Git boundaries
 

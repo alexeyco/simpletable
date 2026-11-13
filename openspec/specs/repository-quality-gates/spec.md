@@ -13,7 +13,7 @@ The `Quality gates` workflow SHALL run Go tests and build the root module for ev
 #### Scenario: Test and build run for supported events
 
 **WHEN** a pull request or version tag push starts the `Quality gates` workflow
-**THEN** the `Test` job runs `go test ./...` and `go build ./...`.
+**THEN** the `Test` job runs `make test` and `make build`, which run `go test` and `go build` over the root module and the example packages in that module.
 
 ### Requirement: Lint policy
 
@@ -26,7 +26,7 @@ The repository SHALL configure golangci-lint with an explicit linter inventory a
 
 ### Requirement: Pull request and tag lint gate
 
-The `Quality gates` workflow SHALL run a blocking `Lint` job for every pull request and version-tag push. The job SHALL lint the root Go module and all six Go example packages and fail when lint or formatting findings remain.
+The `Quality gates` workflow SHALL run a blocking `Lint` job for every pull request and version-tag push. The job SHALL install `golangci-lint` without running it directly, then execute `make lint` and `make fmt-check`, which lint the root Go module and all six Go example packages and fail when lint or formatting findings remain.
 
 #### Scenario: Lint covers the library and examples
 
