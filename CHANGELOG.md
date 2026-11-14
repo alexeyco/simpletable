@@ -1,17 +1,23 @@
 # Changelog
 
-## [Unreleased]
+## 1.2.0
 
 ### Added
 
 - Added a `Makefile` defining all quality-gate commands (`make help` lists targets; `make check` runs tests, build, lint, format checks, and OpenSpec validation) and pinned agent skill management (`make skills`, `make skills-update`).
 - Added project-level agent skills pinned in `skills-lock.json`: Go code style, testing, performance, and error-handling guidelines, plus a two-axis code-review workflow.
+- Added a monthly GitHub Actions workflow that opens an issue reminding maintainers to review and refresh the README comparison.
 
 ### Changed
 
 - Replaced inline commands in the `Quality gates` and `Coveralls` workflows with calls to the shared Makefile targets, making the `Makefile` the single source for gate commands; the `Test` job now also builds and tests the example packages.
+- Repositioned the README around a reusable banner, a concise package summary, a feature comparison with an evidence legend, and a short quick-start example; corrected examples and feature counts to match the package API.
 
-## [1.1.0]
+### Fixed
+
+- Fixed broken row alignment when a spanning cell's content widened shared columns after another spanning cell had already taken its width from them; column growth and spanning-cell width syncing now run as separate passes, so rendered geometry no longer depends on the order of spanning cells (#23).
+
+## 1.1.0
 
 ### Added
 
@@ -24,7 +30,7 @@
 - Updated the Go version to 1.23 and `go-runewidth` to 0.0.31; refreshed README badges and `master` references.
 - Refactored tests to use `testify` against the public package API, converted example benchmark data to typed records, and replaced regular-expression ANSI CSI stripping with a byte-wise scanner.
 
-## [1.0.0]
+## 1.0.0
 
 ### Added
 
