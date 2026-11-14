@@ -292,8 +292,15 @@ func (t *Table) resizeColumns() {
 		c.resize()
 	}
 
+	// Grow columns to fit spanned cells first: increments change the span
+	// width of other spanned cells, so cell widths must be synced in a
+	// separate pass.
 	for _, c := range t.spanned {
-		c.resize()
+		c.growColumns()
+	}
+
+	for _, c := range t.spanned {
+		c.syncColumns()
 	}
 
 	for _, d := range t.dividers {

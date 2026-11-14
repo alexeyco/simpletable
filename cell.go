@@ -66,30 +66,45 @@ func (c *Cell) setColumn(column *tblColumn) {
 	c.column = column
 }
 
-func (c *Cell) resize() {
-	if !c.isSpanned() {
-		return
-	}
-
+// spanWidth returns the total content width of the columns the cell spans,
+// including the inter-column spacing.
+func (c *Cell) spanWidth() int {
 	s := c.column.getWidth()
 	for _, ch := range c.children {
 		s += ch.getColumn().getWidth()
 	}
 
-	s += len(c.children) * 3
+	return s + len(c.children)*3
+}
 
-	if s > c.len() {
-		c.setWidth(s)
-	} else {
-		cols := []*tblColumn{
-			c.column,
-		}
+// growColumns widens the spanned columns when the cell content is longer
+// than their total width.
+func (c *Cell) growColumns() {
+	if !c.isSpanned() {
+		return
+	}
 
+	s := c.spanWidth()
+	if c.len() > s {
+		cols := []*tblColumn{c.column}
 		for _, ch := range c.children {
-			cols = append(cols, ch.column)
+			cols = append(cols, ch.getColumn())
 		}
 
 		c.column.Table.incrementColumns(cols, c.len()-s)
+	}
+}
+
+// syncColumns sets the cell width to the total width of its spanned
+// columns, which may have grown after this cell was processed by
+// growColumns.
+func (c *Cell) syncColumns() {
+	if !c.isSpanned() {
+		return
+	}
+
+	if s := c.spanWidth(); s > c.len() {
+		c.setWidth(s)
 	}
 }
 
