@@ -34,6 +34,34 @@ func TestSpannedCellRendering(t *testing.T) {
 	assertEqualLineWidths(t, output)
 }
 
+func TestSpannedCellsResizeAfterColumnGrowth(t *testing.T) {
+	// Regression for issue #23: a later spanned cell widening the columns
+	// must not leave an earlier spanned cell at its stale narrower width.
+	table := simpletable.New()
+	table.Header.Cells = []*simpletable.Cell{
+		{Text: "FOO"},
+		{Text: "BAR"},
+		{Text: "BAZ"},
+	}
+	table.Body.Cells = [][]*simpletable.Cell{
+		{
+			{Span: 2, Text: "Multiline content\nleft aligned"},
+			{Text: "Single line"},
+		},
+		{
+			{Span: 3, Text: "Multiline content\ncenter aligned but also much longer than the rest of the lines"},
+		},
+		{
+			{Text: "Single line"},
+			{Span: 2, Text: "Multiline content\nright aligned"},
+		},
+	}
+
+	output := table.String()
+	assert.Contains(t, output, "| Multiline content                       | Single line          |")
+	assertEqualLineWidths(t, output)
+}
+
 func TestDividerRendering(t *testing.T) {
 	table := simpletable.New()
 	table.Header.Cells = []*simpletable.Cell{{Text: "AAA"}, {Text: "BBB"}}
