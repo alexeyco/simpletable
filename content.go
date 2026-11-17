@@ -1,8 +1,8 @@
 package simpletable
 
 import (
-	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/mattn/go-runewidth"
 )
@@ -48,13 +48,28 @@ func (c *content) setHeight(h int) {
 
 // lines returns content as a string slice.
 func (c *content) lines(a int) []string {
-	r := []string{}
+	r := make([]string, len(c.c))
 
-	for _, l := range c.c {
-		r = append(r, c.line(l, a))
+	for i, l := range c.c {
+		r[i] = c.line(l, a)
 	}
 
 	return r
+}
+
+// spaceRun is a reusable run of 32 spaces written in slices by writeSpaces,
+// so padding never allocates a fresh string per formatted line.
+const spaceRun = "                                "
+
+// writeSpaces writes n spaces to b, looping over full slices of spaceRun
+// for runs longer than one pass and writing the remainder as the last one.
+func writeSpaces(b *strings.Builder, n int) {
+	for n > len(spaceRun) {
+		_, _ = b.WriteString(spaceRun)
+		n -= len(spaceRun)
+	}
+
+	_, _ = b.WriteString(spaceRun[:n])
 }
 
 // line formats a content line.
@@ -64,44 +79,90 @@ func (c *content) line(l string, a int) string {
 		return l
 	}
 
+	var b strings.Builder
+	b.Grow(len(l) + padding)
+
 	switch a {
 	case AlignLeft:
-		l = fmt.Sprintf("%s%s", l, strings.Repeat(" ", padding))
+		_, _ = b.WriteString(l)
+		writeSpaces(&b, padding)
 
 	case AlignCenter:
 		lft := padding / 2
 		rgt := padding - lft
 
-		left := strings.Repeat(" ", lft)
-		right := strings.Repeat(" ", rgt)
-
-		l = fmt.Sprintf("%s%s%s", left, l, right)
+		writeSpaces(&b, lft)
+		_, _ = b.WriteString(l)
+		writeSpaces(&b, rgt)
 
 	case AlignRight:
-		l = fmt.Sprintf("%s%s", strings.Repeat(" ", padding), l)
+		writeSpaces(&b, padding)
+		_, _ = b.WriteString(l)
+
+	default:
+		return l
 	}
 
-	return l
+	return b.String()
 }
 
-// newContent returns a new content object.
+// contentPool recycles *content objects between renders: initContent
+// returns each cell's previous object to the pool, and newContent takes a
+// reset one from it. Only the Cell.content assignment participates;
+// dividerCell builds a throwaway content inline and emptyCell content is
+// never initialized, so neither uses the pool.
+var contentPool = sync.Pool{
+	New: func() any {
+		return &content{}
+	},
+}
+
+// newContent returns a pooled content object loaded from s. The object is
+// fully reset before it is filled: the c backing slice is reused when its
+// capacity fits the line count and reallocated otherwise, every stale line
+// is cleared, and mw and w are zeroed, so no state of a previous use can
+// leak into the new one.
 func newContent(s string) *content {
-	c := strings.Split(s, "\n")
+	// The discarded ok is safe: the pool's New returns *content and the
+	// only Put site, initContent, never stores a nil object.
+	c, _ := contentPool.Get().(*content)
+
+	// One line per '\n' plus the remainder matches strings.Split(s, "\n"):
+	// "" yields one empty line, and leading, trailing, and interior
+	// newlines yield empty lines.
+	n := strings.Count(s, "\n") + 1
+
+	if cap(c.c) < n {
+		c.c = make([]string, n)
+	} else {
+		// Reuse the backing array and clear it fully, so stale lines from
+		// a previous, longer use are released and cannot resurface
+		// through a later reuse.
+		c.c = c.c[:cap(c.c)]
+		clear(c.c)
+		c.c = c.c[:n]
+	}
+
 	mw := 0
 
-	for i, v := range c {
-		c[i] = strings.TrimSpace(v)
-		w := realLength(c[i])
+	for i := 0; i < n; i++ {
+		l := s
+		if idx := strings.IndexByte(s, '\n'); idx >= 0 {
+			l, s = s[:idx], s[idx+1:]
+		}
 
-		if w > mw {
+		l = strings.TrimSpace(l)
+		c.c[i] = l
+
+		if w := realLength(l); w > mw {
 			mw = w
 		}
 	}
 
-	return &content{
-		c:  c,
-		mw: mw,
-	}
+	c.mw = mw
+	c.w = 0
+
+	return c
 }
 
 // stripAnsiEscape returns a string without ANSI escape sequences, such as color codes.

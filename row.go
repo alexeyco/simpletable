@@ -1,9 +1,6 @@
 package simpletable
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 // tblRow is a metadata row used to render the table.
 type tblRow struct {
@@ -24,22 +21,24 @@ func (r *tblRow) len() int {
 
 // toStringSlice returns the rendered row contents as a string slice.
 func (r *tblRow) toStringSlice() []string {
-	l := [][]string{}
+	l := make([][]string, len(r.Cells))
 
-	for _, c := range r.Cells {
-		l = append(l, c.lines())
+	for i, c := range r.Cells {
+		l[i] = c.lines()
 	}
 
 	l = r.transpose(l)
 
-	ret := []string{}
-	for _, s := range l {
-		row := strings.Join(s, fmt.Sprintf(" %s ", r.Table.style.Cell))
+	ret := make([]string, len(l))
+	sep := " " + r.Table.style.Cell + " "
+
+	for i, s := range l {
+		row := strings.Join(s, sep)
 		if !r.isDivider() {
-			row = fmt.Sprintf(" %s ", row)
+			row = " " + row + " "
 		}
 
-		ret = append(ret, row)
+		ret[i] = row
 	}
 
 	return ret
