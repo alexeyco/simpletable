@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.1
+
+### Added
+
+- Added frozen-output golden tests (`testdata/*.golden`) that pin `Table.String()` byte for byte across all seven built-in styles and multiline, ANSI-colored, CJK-wide, and column-spanned content, plus repeated-render and concurrent-render checks of the recycled cell content.
+
+### Changed
+
+- Reduced per-render allocations in `Table.String()` by about 50 percent, measured on the root `BenchmarkStyle*` suite, by building rendered lines into reused buffers, replacing per-line `fmt.Sprintf` and `strings.Repeat` calls, pre-sizing slices, and pooling internal cell content objects; rendered output and the exported API are unchanged.
+- Refreshed the README benchmark figures from the comparison harness after the allocation reductions.
+
 ## 1.2.0
 
 ### Added
