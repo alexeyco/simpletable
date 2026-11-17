@@ -1,0 +1,11 @@
+╔══════════╤══════════╤═══════════╤══════╤══════╗
+║   ONE    │   TWO    │   THREE   │ FOUR │ FIVE ║
+╟━━━━━━━━━━┼━━━━━━━━━━┼━━━━━━━━━━━┼━━━━━━┼━━━━━━╢
+║ full row span                                 ║
+║ wide spanned text grows columns │ span of two ║
+║ one      │ span of four after a single cell   ║
+║ left span           │ mid       │ right span  ║
+║ a        │ b        │ c         │ d    │ e    ║
+╟━━━━━━━━━━┼━━━━━━━━━━┼━━━━━━━━━━━┼━━━━━━┼━━━━━━╢
+║                               subtotal │    5 ║
+╚══════════╧══════════╧═══════════╧══════╧══════╝
