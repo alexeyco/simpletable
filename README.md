@@ -100,11 +100,11 @@ See the [styles demo](https://github.com/alexeyco/simpletable/tree/master/_examp
 Run these benchmarks using the [benchmark instructions](https://github.com/alexeyco/simpletable/tree/master/_example/03-benchmarks-with-others#run-benchmarks).
 
 ```
-BenchmarkSimpletable-12             31845             37586 ns/op           34903 B/op        760 allocs/op
-BenchmarkTermtables-12              34851             34191 ns/op           24192 B/op        755 allocs/op
-BenchmarkUITable-12                  6452            176884 ns/op           55480 B/op       3070 allocs/op
+BenchmarkSimpletable-12    	   33529	     35658 ns/op	   31001 B/op	     551 allocs/op
+BenchmarkTermtables-12     	   34176	     34871 ns/op	   24255 B/op	     755 allocs/op
+BenchmarkUITable-12        	    6642	    176902 ns/op	   55212 B/op	    2830 allocs/op
 PASS
-ok      github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench        5.172s
+ok  	github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench	4.978s
 ```
 
 </details>

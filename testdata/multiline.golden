@@ -1,0 +1,21 @@
+╔═════════════╤══════════╤═══════════╗
+║    MULTI    │   EDGE   │   NOTE    ║
+║    LINE     │          │           ║
+╟━━━━━━━━━━━━━┼━━━━━━━━━━┼━━━━━━━━━━━╢
+║ padded line │ with     │ row one   ║
+║ second      │ trailing │           ║
+║             │          │           ║
+║             │          │ row two   ║
+║ leading     │          │           ║
+║             │ two      │ row three ║
+║             │          │           ║
+║             │ newlines │           ║
+║             │ center   │ row four  ║
+║             │          │           ║
+║             │ blank    │           ║
+║ lft         │   ctr    │       rgt ║
+║ xx          │    yy    │        zz ║
+╟━━━━━━━━━━━━━┼━━━━━━━━━━┼━━━━━━━━━━━╢
+║         spans          │         5 ║
+║          two           │           ║
+╚═════════════╧══════════╧═══════════╝

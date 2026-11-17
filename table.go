@@ -36,23 +36,37 @@ func (t *Table) String() string {
 	t.resizeRows()
 	t.resizeColumns()
 
-	s := []string{}
+	var b strings.Builder
+	written := false
 
-	b := t.borderTop()
-	if b != "" {
-		s = append(s, b)
+	// writeLine appends one rendered line to b, separating consecutive
+	// lines with a newline exactly as strings.Join would.
+	writeLine := func(line string) {
+		if written {
+			_ = b.WriteByte('\n')
+		}
+
+		written = true
+		_, _ = b.WriteString(line)
+	}
+
+	top := t.borderTop()
+	if top != "" {
+		writeLine(top)
 	}
 
 	for _, r := range t.rows {
-		s = append(s, t.borderLeftRight(r.toStringSlice(), r.isDivider())...)
+		for _, line := range t.borderLeftRight(r.toStringSlice(), r.isDivider()) {
+			writeLine(line)
+		}
 	}
 
-	b = t.borderBottom()
-	if b != "" {
-		s = append(s, b)
+	bottom := t.borderBottom()
+	if bottom != "" {
+		writeLine(bottom)
 	}
 
-	return strings.Join(s, "\n")
+	return b.String()
 }
 
 // Print writes the rendered table to standard output.
@@ -92,7 +106,7 @@ func (t *Table) borderLeftRight(s []string, d bool) []string {
 	}
 
 	for i, v := range s {
-		s[i] = fmt.Sprintf("%s%s%s", t.style.Border.Left, v, t.style.Border.Right)
+		s[i] = t.style.Border.Left + v + t.style.Border.Right
 	}
 
 	return s
@@ -100,12 +114,33 @@ func (t *Table) borderLeftRight(s []string, d bool) []string {
 
 // line returns a border or divider line as a string.
 func (t *Table) line(l, c, r, i string) string {
-	b := []string{}
-	for _, col := range t.columns {
-		b = append(b, strings.Repeat(c, col.getWidth()+2))
+	n := len(l) + len(r)
+
+	for k, col := range t.columns {
+		n += (col.getWidth() + 2) * len(c)
+		if k > 0 {
+			n += len(i)
+		}
 	}
 
-	return fmt.Sprintf("%s%s%s", l, strings.Join(b, i), r)
+	var b strings.Builder
+	b.Grow(n)
+
+	_, _ = b.WriteString(l)
+
+	for k, col := range t.columns {
+		if k > 0 {
+			_, _ = b.WriteString(i)
+		}
+
+		for rep := col.getWidth() + 2; rep > 0; rep-- {
+			_, _ = b.WriteString(c)
+		}
+	}
+
+	_, _ = b.WriteString(r)
+
+	return b.String()
 }
 
 // textSlice2CellSlice casts []*Cell to []cellInterface cause it's not possible do this:
@@ -135,6 +170,15 @@ func (t *Table) initCellContent() {
 // initContent loads content for a slice of cells.
 func (t *Table) initContent(s ...*Cell) {
 	for _, c := range s {
+		// The cell's previous content object is dead once replaced: all
+		// render metadata is rebuilt on every String() call. A cell
+		// rendered for the first time has no content yet, and a typed nil
+		// in the pool would later produce a nil object from Get, so the
+		// nil check guards the Put.
+		if c.content != nil {
+			contentPool.Put(c.content)
+		}
+
 		c.content = newContent(c.Text)
 	}
 }
