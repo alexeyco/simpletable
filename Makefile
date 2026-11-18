@@ -47,8 +47,15 @@ bench: ## Run root-module benchmarks with allocation counts
 	go test -run '^$$' -bench . -benchmem .
 
 .PHONY: bench-compare
-bench-compare: ## Run third-party comparison benchmarks (module 03)
-	cd $(BENCH_DIR) && go test -bench . -benchmem
+bench-compare: ## Run the third-party comparison benchmarks (module 03, bench package)
+	cd $(BENCH_DIR) && go test -run '^$$' -bench . -benchmem ./bench
+
+.PHONY: bench-compare-check
+bench-compare-check: ## Fail unless module 03's bench package lists all three comparison benchmarks
+	@cd $(BENCH_DIR) && listed=$$(go test -list 'Benchmark.*' ./bench); \
+	for b in BenchmarkSimpletable BenchmarkTermtables BenchmarkUITable; do \
+		echo "$$listed" | grep -qx "$$b" || { echo "bench-compare-check: missing benchmark $$b" >&2; exit 1; }; \
+	done
 
 ## OpenSpec
 
@@ -59,7 +66,7 @@ openspec-validate: ## Validate all OpenSpec changes and specs
 ## Aggregates
 
 .PHONY: check
-check: test build lint fmt-check openspec-validate ## Run every local gate: test, build, lint, format, OpenSpec
+check: test build lint fmt-check bench-compare-check openspec-validate ## Run every local gate: test, build, lint, format, benchmark lock, OpenSpec
 
 ## Skills
 
