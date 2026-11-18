@@ -2,9 +2,10 @@
 Benchmarks with others
 
 ## Installation
+Both comparison libraries (`github.com/apcera/termtables` and `github.com/gosuri/uitable`) are pinned as module requirements in this module's `go.mod`. They are fetched automatically from those requirements; to fetch them explicitly, run `go mod download` from this module's directory:
 ```
-$ go get github.com/apcera/termtables
-$ go get github.com/gosuri/uitable
+$ cd _example/03-benchmarks-with-others
+$ go mod download
 ```
 
 ## Show
@@ -64,8 +65,13 @@ github.com/gosuri/uitable:
 ```
 
 ## Run benchmarks
+From the repository root:
 ```
-$ cd $GOPATH/src/github.com/alexeyco/simpletable/_example/03-benchmarks-with-others/bench
+$ make bench-compare
+```
+Or run them manually in the `bench` package of this module, from the repository root:
+```
+$ cd _example/03-benchmarks-with-others/bench
 $ go test -bench=. -benchmem
 ```
 ## Results
